@@ -26,7 +26,13 @@ class fsoExplorer{
 		{
 			var elem=document.createElement('LI');
 			lst.className='fsoexplorer-dir';
-			elem.appendChild(document.createTextNode(data.dirs[d].name));
+			
+			var link=document.createElement('A');
+			link.setAttribute('onclick',tag+"_controller.goto('"+data.dirs[d].link+"')");
+			
+			link.appendChild(document.createTextNode(data.dirs[d].name));
+			elem.appendChild(link);
+			
 			lst.appendChild(elem);
 		}
 		container.appendChild(lst);
@@ -38,7 +44,13 @@ class fsoExplorer{
 		{
 			var elem=document.createElement('LI');
 			lst.className='fsoexplorer-file';
-			elem.appendChild(document.createTextNode(data.files[d].name));
+			
+			var link=document.createElement('A');
+			link.setAttribute('onclick',tag+"_controller.download('"+data.files[d].link+"')");
+			
+			link.appendChild(document.createTextNode(data.files[d].name));
+			elem.appendChild(link);
+			
 			lst.appendChild(elem);
 		}		
 		container.appendChild(lst);
@@ -47,5 +59,10 @@ class fsoExplorer{
 	goto(path)
 	{
 		this.fso.explore(path);
+	}
+	
+	download(path)
+	{
+		this.fso.download(path);
 	}
 }

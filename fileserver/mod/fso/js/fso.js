@@ -17,6 +17,11 @@ class fso{
 		this.explore(path);
 	}
 	
+	download(path)
+	{
+		window.location.assign("mod/fso/api/download.php?path="+path);
+	}
+	
 	
 	back()
 	{

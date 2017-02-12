@@ -14,7 +14,6 @@ abstract class FSO {
     public $error;
     
     public abstract function exists();    
-    public abstract function icon();
     public abstract function delete();
     
     public function __construct($path) {

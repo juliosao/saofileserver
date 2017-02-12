@@ -39,10 +39,6 @@ class FSODir extends FSO {
         return is_dir($this->path);
     }
     
-    public function icon()
-    {
-        return 'img/icons/folder.svg';
-    }
 
     public function childDirs()
     {

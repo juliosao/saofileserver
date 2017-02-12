@@ -23,14 +23,14 @@
     foreach($c as $d)
     {
         $link=FSO::pathFromPath($d->path, $basedir);
-        $dirs[$d->getName()]=array('name'=>$d->getName(),'link'=>base64_encode($link),'icon'=>$d->icon());
+        $dirs[$d->getName()]=array('name'=>$d->getName(),'link'=>base64_encode($link));
     }
     
     $c=$dir->childFiles();    
     foreach($c as $f)
     {
         $link=FSO::pathFromPath($f->path, $basedir);
-        $files[$f->getName()]=array('name'=>$f->getName(),'link'=>base64_encode($link),'icon'=>$f->icon());
+        $files[$f->getName()]=array('name'=>$f->getName(),'link'=>base64_encode($link),'extension'=>$f->extension());
     }
 
     ksort($dirs);

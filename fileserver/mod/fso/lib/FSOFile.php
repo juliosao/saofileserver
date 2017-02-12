@@ -27,50 +27,12 @@ class FSOFile extends FSO{
         return filesize($this->path);
     }
     
-    function icon()
+    function extension()
     {
         $p = strrpos($this->path,'.');
         $ext= ($p===false) ? '' : substr($this->path,$p);
 
-        //error_log($ext);
-
-        switch(strtolower($ext))
-        {
-            case '.avi';
-            case '.mov':
-            case '.ogv':
-            case '.mpg':
-            case '.mpeg':
-            case '.mp4':
-                return 'img/icons/mov.svg';
-            
-            case '.raw':
-            case '.jpg':
-            case '.jpeg':
-            case '.png':
-            case '.svg':
-            case '.bmp':
-                return 'img/icons/jpg.svg';
-
-            case '.mp3':
-            case '.aac':
-            case '.flac':
-            case '.wav':
-            case '.mid':
-                return 'img/icons/mp3.svg';
-
-            case '.doc':
-            case '.docx':
-            case '.odt':
-                return 'img/icons/doc.svg';
-
-            case '.pdf':
-            case '.epub':
-                return 'img/icons/epub.svg';
-
-            default:
-                return 'img/icons/fil.svg';
-        }
+        return $ext;
     }
     
     public function delete()
