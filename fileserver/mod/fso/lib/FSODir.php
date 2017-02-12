@@ -43,7 +43,7 @@ class FSODir extends FSO {
     public function childDirs()
     {
         $result=array();
-        error_log("CHILDIRS:".$this->path);
+        //error_log("CHILDIRS:".$this->path);
         
         $r=opendir($this->path);
         if(!$r)
@@ -67,7 +67,7 @@ class FSODir extends FSO {
     public function childFiles()
     {
         $result=array();
-        error_log("CHILFILES:".$this->path);
+        //error_log("CHILFILES:".$this->path);
         
         $r=opendir($this->path);
         if(!$r)

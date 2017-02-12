@@ -11,13 +11,25 @@
     }
     error_log("Ruta:"+$dirname);
     
-    $dir=new FSODir(fso::joinPath($basedir,$dirname));
+    $dirpath=fso::joinPath($basedir,$dirname);
+    
+    $dir=new FSODir($dirpath);
     if(!$dir->exists()) {
         die(json_encode(false));
     }
 
     $dirs=array();
     $files=array();
+    
+    
+	$parent=$dir->getParent();
+	
+	if(strlen($parent->path)>=strlen($basedir))
+	{
+		$link=FSO::pathFromPath($parent->path, $basedir);
+        $dirs['..']=array('name'=>'..','link'=>base64_encode($link));
+	}
+	
     
     $c=$dir->childDirs();    
     foreach($c as $d)
