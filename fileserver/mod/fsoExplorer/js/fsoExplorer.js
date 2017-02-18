@@ -56,7 +56,7 @@ class fsoExplorer{
 			var del=document.createElement('SPAN');
 			del.classList.add('fsoexplorer-toolbar-icon');
 			del.classList.add('fsoexplorer-del');	
-			del.setAttribute('onclick',tag+"_controller.erase('"+d+"')");	
+			del.setAttribute('onclick',tag+"_controller.erase('"+data.dirs[d].link+"')");	
 			elem.appendChild(del);
 			
 			lst.appendChild(elem);
@@ -91,7 +91,7 @@ class fsoExplorer{
 			var del=document.createElement('SPAN');
 			del.classList.add('fsoexplorer-toolbar-icon');
 			del.classList.add('fsoexplorer-del');	
-			del.setAttribute('onclick',tag+"_controller.erase('"+d+"')");	
+			del.setAttribute('onclick',tag+"_controller.erase('"+data.files[d].link+"')");	
 			elem.appendChild(del);
 			
 			lst.appendChild(elem);
@@ -102,7 +102,7 @@ class fsoExplorer{
 	
 	goto(path)
 	{
-		this.fso.explore(path);
+		this.fso.goto(path);
 	}
 	
 	download(path)
@@ -113,7 +113,7 @@ class fsoExplorer{
 	erase(path)
 	{
 		if(confirm("¿Borrar "+path+"?"))
-			this.fso.erase(this.dirdata[path].link);
+			this.fso.erase(path);
 	}
 	
 	fail(data)

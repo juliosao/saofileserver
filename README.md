@@ -5,6 +5,7 @@ A tiny http file server
 - List files and subdirectories in a base directory
 - Download files
 - Navigate into a base directory childs
+- Delete files into server
 
 ## Install
 - Copy 'fileserver' folder in your server

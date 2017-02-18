@@ -5,7 +5,7 @@
     require_once("../cfg/fso.cfg");
     
     if(isset($_REQUEST['path'])) {
-        $filename=str_replace('..','.', base64_decode($_REQUEST['path']));
+        $filename=str_replace('..','.', $_REQUEST['path']);
     }
     else{
 		die("download what?");

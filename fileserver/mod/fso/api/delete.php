@@ -11,7 +11,7 @@ class delete extends JSONApp{
 		
         $mal=0;
         error_log(json_encode($_POST));
-        $paths=  filter_input(INPUT_POST, "path",FILTER_UNSAFE_RAW,FILTER_REQUIRE_ARRAY);
+        $paths= $_POST["path"];
         $borrado=array();
         
         if(is_null($paths)) {
@@ -20,8 +20,7 @@ class delete extends JSONApp{
                
         foreach($paths as $path)
         {   
-            $real=base64_decode($path);
-            $obj=FSO::fromPath(FSO::joinPath($basedir, $real));        
+            $obj=FSO::fromPath(FSO::joinPath($basedir, $path));        
 
             if($obj==null)
             {

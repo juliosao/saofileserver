@@ -9,7 +9,15 @@
         <meta name="viewport" content="width=480, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="css/fso.css"/>
         <script type="text/javascript">
-            var explorer_controller = new fsoExplorer('explorer')
+			var explorer_controller;
+			try
+			{
+				var explorer_controller = new fsoExplorer('explorer');
+			}
+			catch(err)
+			{
+				alert("Tu navegador es demasiado antiguo, por favor actualizalo Se soportan Chrome 42+, Firefox 45+, Edge 13+ o Safari 9+");				
+			}
 
         </script>
     </head>

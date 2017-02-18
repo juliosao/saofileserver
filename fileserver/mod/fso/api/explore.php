@@ -14,7 +14,7 @@
 			$dirname='.';
 			
 			if(isset($_REQUEST['path'])) {
-				$dirname=str_replace('..','.', base64_decode($_REQUEST['path']));
+				$dirname=str_replace('..','.', $_REQUEST['path']);
 			}
 			error_log("Ruta:".$dirname);
 			
@@ -33,25 +33,25 @@
 			
 			if(strlen($parent->path)>=strlen($basedir))
 			{
-				$dirs['..']=array('name'=>'..','link'=>base64_encode($parent->relativePath($basedir)));
+				$dirs['..']=array('name'=>'..','link'=>$parent->relativePath($basedir));
 			}
 				
 			$c=$dir->childDirs();    
 			foreach($c as $d)
 			{
-				$dirs[$d->getName()]=array('name'=>$d->getName(),'link'=>base64_encode($d->relativePath($basedir)));
+				$dirs[$d->getName()]=array('name'=>$d->getName(),'link'=>$d->relativePath($basedir));
 			}
 			
 			$c=$dir->childFiles();    
 			foreach($c as $f)
 			{
-				$files[$f->getName()]=array('name'=>$f->getName(),'link'=>base64_encode($f->relativePath($basedir)),'extension'=>$f->extension());
+				$files[$f->getName()]=array('name'=>$f->getName(),'link'=>$f->relativePath($basedir),'extension'=>$f->extension());
 			}
 
 			ksort($dirs);
 			ksort($files);
 			
-			$this->setResult('path',$dirnamae);
+			$this->setResult('path',$dirname);
 			$this->setResult('dirs',$dirs);
 			$this->setResult('files',$files);
 			
