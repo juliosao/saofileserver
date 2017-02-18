@@ -1,0 +1,95 @@
+.fso-selected{
+	color: blue;
+}
+
+.fsoexplorer-list{
+	padding: 5px;
+}
+
+.fsoexplorer-list li{	
+	list-style-type: none;	
+	position: relative;
+	width:95%;
+	padding: 5px;
+	border-radius:5px;
+	margin-left:
+}
+
+.fsoexplorer-label{
+	margin-left: 1em;
+	height:48px;
+	vertical-align: middle;
+	display: inline-block;
+	max-width: 70%;
+	word-wrap: break-word;
+}
+
+.fsoexplorer-icon{
+	display: inline-block;	
+	background-repeat: no-repeat;
+	height:48px;
+	width:48px;
+	background-size: 100%;
+}
+
+.fsoexplorer-toolbar-icon{
+	display:inline-block;
+	background-repeat: no-repeat;
+	margin-left: 16px;
+	width: 32px;
+	height: 32px;
+	float: right;
+	background-size: 100%;
+}
+
+.fsoexplorer-dir .fsoexplorer-icon{
+	background-image: url('../img/icons/folder.svg');
+}
+
+.fsoexplorer-list li:hover{
+	background-color: #C7EFFC;
+}
+
+.fsoexplorer-del{
+	background-image: url('../img/toolbar/delete.svg');
+}
+
+.fsoexplorer-selector{
+	display:inline-block;
+	background-image: url('../img/toolbar/add.svg');
+	background-repeat: no-repeat;
+	margin-left: 16px;
+	width: 32px;
+	height: 32px;
+	background-size: 100%;
+
+}
+
+.fso-selected .fsoexplorer-selector{
+	background-image: url('../img/toolbar/sub.svg');
+}
+
+.avi, .mp4, .mpg, .divx, .xvid, .mkv, .mov{
+	background-image: url('../img/icons/mov.svg');
+	
+}
+
+.mp3, .flac, .wav, .pcm, .aac{
+	background-image: url('../img/icons/mp3.svg');
+}
+
+.txt, .doc, .docx, .odt{
+	background-image: url('../img/icons/doc.svg');
+}
+
+.epub{
+	background-image: url('../img/icons/epub.svg');
+}
+
+.ini, .url{
+	background-image: url('../img/icons/ini.svg');
+}
+
+.jpeg, .jpg, .gif, .svg, .png{
+	background-image: url('../img/icons/jpg.svg');
+}

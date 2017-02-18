@@ -115,5 +115,30 @@ class FSODir extends FSO {
             return true;
         }
     }
+	
+	/**
+		\fn isChild($fso)
+		\briefs Returns if $fso is descendant of current dir
+		\param fso FSO Object to check
+		\return true fi fso is inside the current dir
+	*/
+	public function isChild($fso)
+	{
+		$prep = array();
+        $realo= explode(self::$dirSeparator,$this->path);		
+        $realp= explode(self::$dirSeparator,$fso->getParent()->path);
+
+		// While paths components are equal unshift them
+        while(count($realp) && count($realo) && $realp[0]== $realo[0] )
+        {
+            array_shift($realp);
+            array_shift($realo);
+        }
+		
+		if(count($realo)!=0)
+			return False;
+		
+		return True;
+	}
     
 }

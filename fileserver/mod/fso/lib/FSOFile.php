@@ -30,7 +30,7 @@ class FSOFile extends FSO{
     function extension()
     {
         $p = strrpos($this->path,'.');
-        $ext= ($p===false) ? '' : substr($this->path,$p);
+        $ext= ($p===false) ? '' : substr($this->path,$p+1);
 
         return $ext;
     }

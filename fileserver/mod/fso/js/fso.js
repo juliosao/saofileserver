@@ -1,9 +1,8 @@
 class fso{
 
-	constructor(tag,ok,ko){
+	constructor(tag,listener){
 		this.tag=tag;
-		this.okCallBack=ok;
-		this.koCallBack=ko;
+		this.listener=listener;
 		this.stack=[];
 		this.index=-1;
 		
@@ -55,7 +54,7 @@ class fso{
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function(data) {
 			if (this.readyState == 4 && this.status == 200) {
-				me.okCallBack(JSON.parse(this.responseText),me.tag);
+				me.listener.okCallBack(JSON.parse(this.responseText),me.tag);
 			}
 		};
 		xhttp.open("POST", "mod/fso/api/explore.php", true);
@@ -66,13 +65,22 @@ class fso{
 	erase(path)
 	{
 		var data = new FormData();
-		data.append('path', path);
+		
+		if(typeof path=='string')			
+			data.append('path[]', path);
+		else if(typeof path=='object')
+		{
+			for(i in path)
+			{
+				data.append('path[]', path[i]);	
+			}
+		}
 		
 		var me=this;
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function(data) {
 			if (this.readyState == 4 && this.status == 200) {
-				me.okCallBack(JSON.parse(this.responseText),me.tag);
+				me.listener.okCallBack(JSON.parse(this.responseText),me.tag);
 			}
 		};
 		xhttp.open("POST", "mod/fso/api/delete.php", true);
