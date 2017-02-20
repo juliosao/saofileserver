@@ -4,7 +4,8 @@ class Mod{
 	public static function load($mod){
 		try{
 			require_once("mod/$mod/main.php");
-			$result = new $mod(func_get_args());
+			$className='Mod_'.$mod;
+			$result = new $className(func_get_args());
 			return $result;
 		}
 		catch(Exception $e){
@@ -12,14 +13,15 @@ class Mod{
 		}
 	}
 	
-	private $argv;
-	private $scripts;
-	private $apis;
+	protected $argv;
+	protected $scripts;
+	protected $apis;
 	
-	public __construct($argv)
+	public function __construct($argv)
 	{
 		$this->argv=$argv;
 		$this->scripts=array();
+		$this->styles=array();
 		$this->apis=array();
 	}
 	
@@ -31,5 +33,15 @@ class Mod{
 	public function getApis()
 	{
 		return $this->apis;
+	}
+	
+	public function getStyles()
+	{
+		return $this->styles;
+	}
+	
+	public function __toString()
+    {
+		return '{MOD}';
 	}
 }

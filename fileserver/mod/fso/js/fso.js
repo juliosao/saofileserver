@@ -1,51 +1,51 @@
-class fso{
+function fso (tag,listener)
+{
+	this.tag=tag;
+	this.listener=listener;
+	this.stack=[];
+	this.index=-1;
+}
 
-	constructor(tag,listener){
-		this.tag=tag;
-		this.listener=listener;
-		this.stack=[];
-		this.index=-1;
-		
-		this.goto('/');
-	}
+fso.prototype={
+	constructor:fso,
 	
-	goto(path)
+	goto:function(path)
 	{
 		this.stack.splice(this.index+1,this.stack.length-this.index,path)    
 		this.index=this.stack.length-1;
 		this.explore(path);
-	}
+	},
 	
-	download(path)
+	download:function(path)
 	{
 		window.location.assign("mod/fso/api/download.php?path="+path);
-	}
+	},
 	
 	
-	back()
+	back:function()
 	{
 		if(this.index>0)
 		{
 		   this.index--;       
 		}
 		this.explore(this.stack[this.index]);
-	}
+	},
 
-	next()
+	next:function()
 	{
 		if(this.index<(this.stack.length-1))
 		{
 		   this.index++;       
 		}
 		this.explore(this.stack[this.index]);
-	}
+	},
 
-	refresh()
+	refresh:function()
 	{    
 		this.explore(this.stack[this.index]);
-	}
+	},
 
-	explore(path)
+	explore:function(path)
 	{
 		var data = new FormData();
 		data.append('path', path);
@@ -60,9 +60,9 @@ class fso{
 		xhttp.open("POST", "mod/fso/api/explore.php", true);
 		xhttp.send(data);
 			
-	}
+	},
 
-	erase(path)
+	erase:function(path)
 	{
 		var data = new FormData();
 		
