@@ -1,3 +1,4 @@
+//Constructor
 function fso (tag,listener)
 {
 	this.tag=tag;
@@ -6,9 +7,11 @@ function fso (tag,listener)
 	this.index=-1;
 }
 
+//Method definitions
 fso.prototype={
 	constructor:fso,
 	
+	//Moves to directory
 	goto:function(path)
 	{
 		this.stack.splice(this.index+1,this.stack.length-this.index,path)    
@@ -16,12 +19,13 @@ fso.prototype={
 		this.explore(path);
 	},
 	
+	//Downloads a file
 	download:function(path)
 	{
 		window.location.assign("mod/fso/api/download.php?path="+path);
 	},
 	
-	
+	//Goes back
 	back:function()
 	{
 		if(this.index>0)
@@ -31,6 +35,7 @@ fso.prototype={
 		this.explore(this.stack[this.index]);
 	},
 
+	//Goes next path (after using back)
 	next:function()
 	{
 		if(this.index<(this.stack.length-1))
@@ -40,11 +45,13 @@ fso.prototype={
 		this.explore(this.stack[this.index]);
 	},
 
+	//Refresh directory data
 	refresh:function()
 	{    
 		this.explore(this.stack[this.index]);
 	},
 
+	//Gets directory data
 	explore:function(path)
 	{
 		var data = new FormData();
@@ -62,6 +69,7 @@ fso.prototype={
 			
 	},
 
+	//Erases file or directory
 	erase:function(path)
 	{
 		var data = new FormData();

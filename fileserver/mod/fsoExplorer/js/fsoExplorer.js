@@ -1,3 +1,4 @@
+//Constructor
 function fsoExplorer(tag)
 {
 	this.tag=tag;
@@ -5,11 +6,13 @@ function fsoExplorer(tag)
 	this.goto('/');
 	this.dirdata=[];
 }
-			
+
+//Method definitions
 fsoExplorer.prototype={
 
 	constructor:fsoExplorer,
 
+	//Occurs when a succesfull call returns
 	okCallBack:function(data,tag)
 	{
 		if(data.function=='explore')
@@ -18,6 +21,7 @@ fsoExplorer.prototype={
 			this.fso.refresh();
 	},
 	
+	//Renders directory data
 	render:function(data,tag)
 	{
 		this.dirdata=[];
@@ -102,29 +106,33 @@ fsoExplorer.prototype={
 		container.appendChild(lst);
 	},
 	
+	//Moves to directory
 	goto:function(path)
 	{
 		this.fso.goto(path);
 	},
 	
+	//Downloads a file
 	download:function(path)
 	{
 		this.fso.download(path);
 	},
 	
+	//Erases a file or directory
 	erase:function(path)
 	{
 		if(confirm("¿Borrar "+path+"?"))
 			this.fso.erase(path);
 	},
 	
+	//Occurs when a request fails
 	fail:function(data)
 	{
 		alert(data);
 	}
 }
 
-
+//fsoExplorer initialization
 fsoExplorer.setup=function()
 {
 	fsoExplorer.controllers=[];
@@ -146,6 +154,7 @@ fsoExplorer.setup=function()
 	}
 }
 
+//Calls init
 window.addEventListener('load',fsoExplorer.setup);
 
 
