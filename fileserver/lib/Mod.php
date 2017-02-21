@@ -16,13 +16,16 @@ class Mod{
 	protected $argv;
 	protected $scripts;
 	protected $apis;
+	protected $depends;
+	protected $styles;
 	
-	public function __construct($argv)
+	function __construct($argv)
 	{
 		$this->argv=$argv;
 		$this->scripts=array();
 		$this->styles=array();
 		$this->apis=array();
+		$this->depends=array();
 	}
 	
 	public function getScripts()
@@ -38,6 +41,11 @@ class Mod{
 	public function getStyles()
 	{
 		return $this->styles;
+	}
+	
+	public function getDependencies()
+	{
+		return $this->depends;
 	}
 	
 	public function __toString()

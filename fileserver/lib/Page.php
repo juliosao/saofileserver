@@ -17,6 +17,14 @@
 		if($m==null)
 			throw new Exception("MOD NOT FOUND:$mod");
 			
+		$deps=$m->getDependencies();
+		error_log("DEPS: $mod ->".json_encode($deps));
+		foreach($deps as $dep)
+		{
+			$this->addMod($dep);
+		}
+			
+			
 		$this->mods[]=$m;
 		array_splice($this->scripts,count($this->scripts),0,$m->getScripts());
 		array_splice($this->styles,count($this->styles),0,$m->getStyles());
