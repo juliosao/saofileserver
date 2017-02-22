@@ -1,6 +1,8 @@
 <?php 
 
+// Represents a single mod in a page
 class Mod{
+	//Loads a mod by name
 	public static function load($mod){
 		try{
 			require_once("mod/$mod/main.php");
@@ -19,6 +21,7 @@ class Mod{
 	protected $depends;
 	protected $styles;
 	
+	//Constructor
 	function __construct($argv)
 	{
 		$this->argv=$argv;
