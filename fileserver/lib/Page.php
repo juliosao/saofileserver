@@ -16,8 +16,8 @@
 	public function addMod($mod)
 	{
 		//Checks if Mod exiists
-		if( !in_array( $mod in $this->mods ) )
-			return $this
+		if( in_array( $mod, $this->mods ) )
+			return $this;
 	
 		//Loads the mod
 		$m=Mod::load($mod);
