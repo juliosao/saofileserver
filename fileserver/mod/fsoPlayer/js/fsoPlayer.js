@@ -10,18 +10,21 @@ fsoPlayer.prototype={
 
 	onBeginRender:function(source)
 	{
+		//Not used
 	},
 
 	onElementRender:function(source,elem,data,isFile)
 	{
 		if(isFile)
 		{
+			// If file is supported adds a play button
 			if( data.extension=='mp4' || data.extension=='ogv' || data.extension=='webm' )
 			{
-				//Gets toolbar
+				// Gets toolbar
 				var tools=elem.getElementsByClassName('fsoexplorer-toolbar');
 				var toolbar=tools[0];
 
+				// Adds the button
 				var player=document.createElement('SPAN');
 				player.classList.add('fsoexplorer-toolbar-icon');
  				player.classList.add('fsopalyer-icon');
@@ -33,6 +36,7 @@ fsoPlayer.prototype={
 
 	onFinishRender(source)
 	{
+		//Not used
 	}
 
 
@@ -41,6 +45,7 @@ fsoPlayer.prototype={
 //fsoPlayer initialization
 fsoPlayer.setup=function()
 {
+	// Adds plugin to the controllers
 	var explorers=document.getElementsByClassName("fso-explorer");
 	for( var i=0; i<explorers.length; i++ )
 	{
