@@ -3,8 +3,8 @@ function fsoExplorer(tag)
 {
 	this.tag=tag;
 	this.fso=new fso(tag,this);
-	this.goto('/');
 	this.dirdata=[];
+	this.onRenderListeners=[];
 }
 
 //Method definitions
@@ -55,12 +55,20 @@ fsoExplorer.prototype={
 
 		elem.appendChild(link);
 
+		//Puts toolbar
+		var tools=document.createElement('SPAN');
+		tools.classList.add('fsoexplorer-toolbar');
+		elem.appendChild(tools);
+
 		// Puts delbutton
 		var del=document.createElement('SPAN');
 		del.classList.add('fsoexplorer-toolbar-icon');
 		del.classList.add('fsoexplorer-del');
 		del.setAttribute('onclick',"fsoExplorer.controllers['"+this.tag+"'].erase('"+data.link+"')");
-		elem.appendChild(del);
+		tools.appendChild(del);
+
+		for(var i in this.onRenderListeners)
+			this.onRenderListeners[i].onElementRender(this,elem,data,isFile);
 
 		return elem;
 	},
@@ -70,6 +78,9 @@ fsoExplorer.prototype={
 	render:function(data,tag)
 	{
 		this.dirdata=[];
+
+		for(var i in this.onRenderListeners)
+			this.onRenderListeners[i].onBeginRender(this);
 
 		//Buscamos donde cargar los datos
 		var container=document.getElementById(tag);
@@ -100,6 +111,9 @@ fsoExplorer.prototype={
 			this.dirdata[d]=data.files[d];
 		}
 		container.appendChild(lst);
+
+		for(var i in this.onRenderListeners)
+			this.onRenderListeners[i].onFinishRender(this);
 	},
 
 	//Moves to directory
@@ -125,6 +139,10 @@ fsoExplorer.prototype={
 	fail:function(data)
 	{
 		alert(data);
+	},
+
+	appendRenderListener:function(obj){
+		this.onRenderListeners.push(obj);
 	}
 }
 

@@ -16,17 +16,17 @@ class FSOFile extends FSO{
     function __construct($path) {
         parent::__construct(realpath($path));
     }
-    
+
     function exists()
     {
         return is_file($this->path);
     }
-    
+
     function getSize()
     {
         return filesize($this->path);
     }
-    
+
     function extension()
     {
         $p = strrpos($this->path,'.');
@@ -34,8 +34,13 @@ class FSOFile extends FSO{
 
         return $ext;
     }
-    
-    public function delete()
+
+    function mime()
+    {
+		return mime_content_type($this->path);
+    }
+
+	public function delete()
     {
         if ($this->exists()) {
             $res= unlink($this->path);
@@ -46,7 +51,7 @@ class FSOFile extends FSO{
                 return false;
             }
             return true;
-        } else {            
+        } else {
             return true;
         }
     }

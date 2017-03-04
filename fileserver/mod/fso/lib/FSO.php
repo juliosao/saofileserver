@@ -1,21 +1,21 @@
 <?php
 
-require_once('FSODir.php');
-require_once('FSOFile.php');
+require_once(__DIR__.'/FSODir.php');
+require_once(__DIR__.'/FSOFile.php');
 
 /**
  * Description of FileSystem
  *
  * @author julio
  */
-abstract class FSO {    
+abstract class FSO {
     public static $dirSeparator;
     public $path;
     public $error;
-    
-    public abstract function exists();    
+
+    public abstract function exists();
     public abstract function delete();
-    
+
 	/**
 		\brief Constructor
 		\warning DO NOT use directly
@@ -43,10 +43,10 @@ abstract class FSO {
     {
         return new FSODir(dirname($this->path));
     }
-    
+
 	/**
 		\fn init()
-		\brief Initializes lib		
+		\brief Initializes lib
 	*/
     static function init()
     {
@@ -55,8 +55,8 @@ abstract class FSO {
         } else {
             self::$dirSeparator='/';
         }
-    }       
-    
+    }
+
 	/**
 		\fn joinPath($path1,$path2)
 		\brief Join two path components
@@ -68,7 +68,7 @@ abstract class FSO {
     {
         return $path1.self::$dirSeparator.$path2;
     }
-    
+
 	/**
 		\fn pathFromPath($path, $ori, $force=true)
 		\brief Returns the relative path of path from ori.
@@ -89,26 +89,26 @@ abstract class FSO {
             array_shift($realp);
             array_shift($realo);
         }
-        
+
         // If not force we need to add the '..' dir any times we need it
         if(count($realo)>0 && $force==false)
         {
             while(count($realo)>0 )
             {
-                array_unshift($prep, '..');                
-                array_shift($realo);               
+                array_unshift($prep, '..');
+                array_shift($realo);
             }
 
-            
+
             foreach($prep as $p)
             {
                 array_unshift($realp, $p);
-            }            
+            }
         }
-        
-        return implode(self::$dirSeparator,$realp); 
+
+        return implode(self::$dirSeparator,$realp);
     }
-	
+
 	/**
 		\fn relativePath($from)
 		\brief Returns the relative path of a FSO from a base path
@@ -127,36 +127,36 @@ abstract class FSO {
             array_shift($realp);
             array_shift($realo);
         }
-        
+
         // If not force we need to add the '..' dir any times we need it
         if(count($realo)>0 && $force==false)
         {
             while(count($realo)>0 )
             {
-                array_unshift($prep, '..');                
-                array_shift($realo);               
+                array_unshift($prep, '..');
+                array_shift($realo);
             }
 
-            
+
             foreach($prep as $p)
             {
                 array_unshift($realp, $p);
-            }            
+            }
         }
-        
-        return implode(self::$dirSeparator,$realp); 
+
+        return implode(self::$dirSeparator,$realp);
 	}
-    
+
 	/**
 		\fn fromPath($path)
 		\brief gets an FSO objecto from a filesystem path
-		\param $path The path to use 
+		\param $path The path to use
 		\return a FSO Object representing the path
 	*/
     public static function fromPath($path)
     {
         error_log("Buscando $path");
-        
+
         if(is_dir($path))
             return new FSODir($path);
         else if(is_file($path))

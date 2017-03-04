@@ -6,6 +6,7 @@ A tiny http free file server
 - Download files
 - Navigate into a base directory childs
 - Delete files into server
+- Play some video files (Depending on codec of video)
 - LGPL License
 
 ## Install

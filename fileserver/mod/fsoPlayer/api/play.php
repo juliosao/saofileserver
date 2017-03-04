@@ -1,8 +1,8 @@
 <?php
-    require_once("../lib/FSO.php");
-    require_once("../lib/FSODir.php");
-    require_once("../lib/FSOFile.php");
-    require_once("../cfg/fso.cfg");
+    require_once("../../fso/lib/FSO.php");
+    require_once("../../fso/lib/FSODir.php");
+    require_once("../../fso/lib/FSOFile.php");
+    require_once("../../fso/cfg/fso.cfg");
 
     if(isset($_REQUEST['path'])) {
         $filename=str_replace('..','.', $_REQUEST['path']);
@@ -12,6 +12,8 @@
 	}
 
     $file=new FSOFile(fso::joinPath($basedir,$filename));
+    error_log($file->path);
+
     if(!$file->exists()) {
         die($filename." not found in ".$basedir);
     }
