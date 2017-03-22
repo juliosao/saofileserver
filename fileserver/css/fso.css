@@ -9,27 +9,46 @@
 .fsoexplorer-list li{
 	list-style-type: none;
 	position: relative;
-	width:95%;
+	margin-right: 10px;
 	padding: 5px;
-	border-radius:5px;
-	margin-left:
+	border-radius:5px;	
+	height:58px;
+	width: 100%;
+	overflow:hidden;
+	display: flex;
+    flex-direction: row;
+}
+
+.fsoexplorer-list li:hover{
+	background-color: #C7EFFC;
 }
 
 .fsoexplorer-label{
-	margin-left: 1em;
-	height:48px;
 	vertical-align: middle;
-	display: inline-block;
-	max-width: 70%;
 	word-wrap: break-word;
+	margin: 5px;
+	flex: 1;
+	overflow: hidden;
+	/*
+	left: 50px;
+	right: 50px;
+	height:48px;
+	display: inline-block;	
+	
+	vertical-align: top;*/
 }
 
 .fsoexplorer-icon{
-	display: inline-block;
+	display: block;
 	background-repeat: no-repeat;
 	height:48px;
-	width:48px;
+	min-width:48px;
 	background-size: 100%;
+}
+
+.fsoexplorer-toolbar{	
+	display: block;
+	min-width: 32px;
 }
 
 .fsoexplorer-toolbar-icon{
@@ -38,7 +57,7 @@
 	margin-left: 8px;
 	width: 32px;
 	height: 32px;
-	float: right;
+	/*float: right;*/
 	background-size: 100% 100%;
 }
 
@@ -46,9 +65,7 @@
 	background-image: url('../img/icons/folder.svg');
 }
 
-.fsoexplorer-list li:hover{
-	background-color: #C7EFFC;
-}
+
 
 .fsoexplorer-del{
 	background-image: url('../img/toolbar/delete.svg');

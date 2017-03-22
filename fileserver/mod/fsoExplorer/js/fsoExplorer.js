@@ -30,14 +30,7 @@ fsoExplorer.prototype={
 		else
 			elem.classList.add('fsoexplorer-dir');
 
-		elem.id=data.name;
-
-		// Link
-		var link=document.createElement('A');
-		if(isFile)
-			link.setAttribute('onclick',"fsoExplorer.controllers['"+this.tag+"'].download('"+data.link+"')");
-		else
-			link.setAttribute('onclick',"fsoExplorer.controllers['"+this.tag+"'].goto('"+data.link+"')");
+		elem.id=data.name;		
 
 		// Puts icon
 		var img=document.createElement('SPAN');
@@ -45,15 +38,25 @@ fsoExplorer.prototype={
 		if(isFile)
 			img.classList.add(data.extension);
 
-		link.appendChild(img);
+		// Puts link in icon
+		if(isFile)
+			img.setAttribute('onclick',"fsoExplorer.controllers['"+this.tag+"'].download('"+data.link+"')");
+		else
+			img.setAttribute('onclick',"fsoExplorer.controllers['"+this.tag+"'].goto('"+data.link+"')");
+
+		elem.appendChild(img);
 
 		// Puts label
 		var label=document.createElement('SPAN');
-		label.classList.add('fsoexplorer-label');
+		label.className='fsoexplorer-label';
 		label.appendChild(document.createTextNode(data.name));
-		link.appendChild(label);
+		// Puts link in icon
+		if(isFile)
+			label.setAttribute('onclick',"fsoExplorer.controllers['"+this.tag+"'].download('"+data.link+"')");
+		else
+			label.setAttribute('onclick',"fsoExplorer.controllers['"+this.tag+"'].goto('"+data.link+"')");
 
-		elem.appendChild(link);
+		elem.appendChild(label);
 
 		//Puts toolbar
 		var tools=document.createElement('SPAN');
