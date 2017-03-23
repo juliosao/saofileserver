@@ -18,7 +18,7 @@ fsoPlayer.prototype={
 		if(isFile)
 		{
 			// If file is supported adds a play button
-			if( data.extension=='mp4' || data.extension=='ogv' || data.extension=='webm' )
+			if( data.extension=='mp4' || data.extension=='ogv' || data.extension=='webm' || data.extension=='mp3' || data.extension=='ogg' )
 			{
 				// Gets toolbar
 				var tools=elem.getElementsByClassName('fsoexplorer-toolbar');

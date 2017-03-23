@@ -59,16 +59,19 @@ fsoExplorer.prototype={
 		elem.appendChild(label);
 
 		//Puts toolbar
-		var tools=document.createElement('SPAN');
-		tools.classList.add('fsoexplorer-toolbar');
-		elem.appendChild(tools);
+		if(data.name!='..')
+		{
+			var tools=document.createElement('SPAN');
+			tools.classList.add('fsoexplorer-toolbar');
+			elem.appendChild(tools);
 
-		// Puts delbutton
-		var del=document.createElement('SPAN');
-		del.classList.add('fsoexplorer-toolbar-icon');
-		del.classList.add('fsoexplorer-del');
-		del.setAttribute('onclick',"fsoExplorer.controllers['"+this.tag+"'].erase('"+data.link+"')");
-		tools.appendChild(del);
+			// Puts delbutton
+			var del=document.createElement('SPAN');
+			del.classList.add('fsoexplorer-toolbar-icon');
+			del.classList.add('fsoexplorer-del');
+			del.setAttribute('onclick',"fsoExplorer.controllers['"+this.tag+"'].erase('"+data.link+"')");
+			tools.appendChild(del);
+		}
 
 		for(var i in this.onRenderListeners)
 			this.onRenderListeners[i].onElementRender(this,elem,data,isFile);
