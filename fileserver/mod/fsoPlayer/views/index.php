@@ -7,10 +7,9 @@ $pagina=new Page('player');
 $pagina->putHeader();
 ?>
 <body>
-	<h1><?=$_REQUEST['file']?></h1>
+	<h1><?=urldecode($_REQUEST['file'])?></h1>
 	<video width="100%" controls>
-		<source src="../api/play.php?path=<?=rawurlencode($_REQUEST['file'])?>">
-		<!--source src="../../fso/api/download.php?path=<?=rawurlencode($_REQUEST['file'])?>"-->
+		<source src="../api/play.php?path=<?=$_REQUEST['file']?>">
 	</video>
 </body>
 

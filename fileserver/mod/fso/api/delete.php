@@ -20,16 +20,17 @@ class delete extends JSONApp{
                
         foreach($paths as $path)
         {   
-            $obj=FSO::fromPath(FSO::joinPath($basedir, $path));        
+            $p=urldecode($path);
+            $obj=FSO::fromPath(FSO::joinPath($basedir,$p));        
 
             if($obj==null)
             {
-                $this->exitApp(false,"Ruta no encontrada: $path");
+                $this->exitApp(false,"Ruta no encontrada: $p");
             }
 
             if(!$obj->delete())
             {
-                $this->exitApp(false,"Imposible borrar $path: ".$obj->error);
+                $this->exitApp(false,"Imposible borrar $p: ".$obj->error);
             }
         }
         
