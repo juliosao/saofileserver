@@ -53,8 +53,6 @@ fsoPlayer.prototype={
 	{
 		//Not used
 	}
-
-
 }
 
 //fsoPlayer initialization

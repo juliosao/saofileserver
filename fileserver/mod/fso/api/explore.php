@@ -3,7 +3,7 @@
     require_once("../lib/FSO.php");
     require_once("../lib/FSODir.php");
     require_once("../lib/FSOFile.php");   
-    require_once("../cfg/fso.cfg");
+    require_once('../../../cfg/fso.cfg');
 	
 	class Explore extends JSONApp{
 		public function main() {
@@ -20,36 +20,55 @@
 			
 			$dirpath=fso::joinPath($basedir,$dirname);
 			
-			$dir=new FSODir($dirpath);
-			if(!$dir->exists()) {
+			$fso=fso::fromPath($dirpath);
+			if(!$fso===null) {
 				$this->exitApp(false,"Ruta no encontrada :$dirname");
 			}
 
 			$dirs=array();
-			$files=array();
+			$files=array();			
 			
-			
-			$parent=$dir->getParent();
+			$parent=$fso->getParent();
 			
 			if(strlen($parent->path)>=strlen($basedir))
 			{
 				$dirs['..']=array('name'=>'..','link'=>$parent->relativePath($basedir));
 			}
 				
-			$c=$dir->childDirs();    
-			foreach($c as $d)
+			// Puts subfolders
+			if($fso->type==FSODIR)
 			{
-				$dirs[$d->getName()]=array('name'=>$d->getName(),'link'=>urlencode($d->relativePath($basedir)));
+				$c=$fso->childDirs();    
+				foreach($c as $d)
+				{
+					$dirs[$d->getName()]=array(
+						'name'=>$d->getName(),
+						'link'=>urlencode($d->relativePath($basedir)));
+				}
 			}
 			
-			$c=$dir->childFiles();    
-			foreach($c as $f)
+			// Puts files
+			if($fso->type==FSODIR)
 			{
-				$files[$f->getName()]=array('name'=>$f->getName(),'link'=>urlencode($f->relativePath($basedir)),'extension'=>$f->extension());
-			}
+				$c=$fso->childFiles();
+				foreach($c as $f)
+				{
+					$files[$f->getName()]=array(
+						'name'=>$f->getName(),
+						'link'=>urlencode($f->relativePath($basedir)),
+						'extension'=>$f->extension());
+				}
 
-			ksort($dirs);
-			ksort($files);
+				ksort($dirs);
+				ksort($files);
+			}
+			else
+			{
+				$files[$fso->getName()]=array(
+						'name'=>$fso->getName(),
+						'link'=>urlencode($fso->relativePath($basedir)),
+						'extension'=>$fso->extension());
+			}
 			
 			$this->setResult('path',$dirname);
 			$this->setResult('dirs',$dirs);

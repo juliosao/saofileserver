@@ -2,7 +2,7 @@
     require_once("../lib/FSO.php");
     require_once("../lib/FSODir.php");
     require_once("../lib/FSOFile.php");
-    require_once("../cfg/fso.cfg");
+    require_once('../../../cfg/fso.cfg');
 
     if(isset($_REQUEST['path'])) {
         $filename=str_replace('..','.', urldecode($_REQUEST['path']));

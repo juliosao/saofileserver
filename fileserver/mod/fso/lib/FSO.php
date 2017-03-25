@@ -3,6 +3,9 @@
 require_once(__DIR__.'/FSODir.php');
 require_once(__DIR__.'/FSOFile.php');
 
+define('FSODIR',0);
+define('FSOFILE',1);
+
 /**
  * Description of FileSystem
  *
@@ -12,6 +15,7 @@ abstract class FSO {
     public static $dirSeparator;
     public $path;
     public $error;
+    public $type;
 
     public abstract function exists();
     public abstract function delete();
@@ -23,6 +27,7 @@ abstract class FSO {
     protected function __construct($path) {
         $this->path=$path;
         $this->error=null;
+        $this->type=is_dir($path) ? FSODIR : FSOFILE;
     }
 
 	/**
