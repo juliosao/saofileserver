@@ -12,5 +12,5 @@ $pagina->putHeader();
 <body>
 	<div id="explorer" class="fso-explorer" />
 </body>
-
+</html>
 

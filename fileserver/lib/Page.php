@@ -3,7 +3,7 @@
  require_once(__DIR__.'/Mod.php');
 
  //Represents a Page
- class Page{
+ class Page implements ModLoadObsserver{
 	public function __construct($title)
 	{
 		$this->title=$title;
@@ -15,29 +15,19 @@
 	//Adds a Mod to a page
 	public function addMod($mod)
 	{
-		//Checks if Mod exiists
-		if( in_array( $mod, $this->mods ) )
-			return $this;
-
 		//Loads the mod
-		$m=Mod::load($mod);
+		$m=Mod::load($mod,$this);
 		if($m==null)
 			throw new Exception("MOD NOT FOUND:$mod");
-
-		//Loads the mod dependencies
-		$deps=$m->getDependencies();
-		foreach($deps as $dep)
-		{
-			$this->addMod($dep);
-		}
-
-		//Adds the mod to the list
-		$this->mods[]=$m;
-
-		//Adds scripts and styles from mod to the page
-		array_splice($this->scripts,count($this->scripts),0,$m->getScripts());
-		array_splice($this->styles,count($this->styles),0,$m->getStyles());
+		
 		return $this;
+	}
+
+	public function onModLoaded($mod)
+	{
+		//Adds scripts and styles from mod to the page
+		array_splice($this->scripts,count($this->scripts),0,$mod->getScripts());
+		array_splice($this->styles,count($this->styles),0,$mod->getStyles());
 	}
 
 	//Adds a script to a page

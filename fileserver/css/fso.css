@@ -1,11 +1,8 @@
-.fso-selected{
-	color: blue;
-}
-
 .fsoexplorer-list{
 	padding: 5px;
 }
 
+/* Items in file explorer area */
 .fsoexplorer-list li{
 	list-style-type: none;
 	position: relative;
@@ -23,69 +20,30 @@
 	background-color: #C7EFFC;
 }
 
+/* Name of files, folders, etc */
 .fsoexplorer-label{
 	vertical-align: middle;
 	word-wrap: break-word;
 	margin: 5px;
 	flex: 1;
 	overflow: hidden;
-	/*
-	left: 50px;
-	right: 50px;
-	height:48px;
-	display: inline-block;	
-	
-	vertical-align: top;*/
 }
 
+/* Icons in file explorer area */
 .fsoexplorer-icon{
-	display: block;
+	display: inline-block;
 	background-repeat: no-repeat;
 	height:48px;
-	min-width:48px;
-	background-size: 100%;
-}
-
-.fsoexplorer-toolbar{	
-	display: block;
-	min-width: 32px;
-}
-
-.fsoexplorer-toolbar-icon{
-	display:inline-block;
-	background-repeat: no-repeat;
-	margin-left: 8px;
-	width: 32px;
-	height: 32px;
-	/*float: right;*/
+	width:48px;
 	background-size: 100% 100%;
 }
 
-.fsoexplorer-dir .fsoexplorer-icon{
+/* Folder icons */
+.fsoexplorer-dir > .fsoexplorer-icon{
 	background-image: url('../img/icons/folder.svg');
 }
 
-
-
-.fsoexplorer-del{
-	background-image: url('../img/toolbar/delete.svg');
-}
-
-.fsoexplorer-selector{
-	display:inline-block;
-	background-image: url('../img/toolbar/add.svg');
-	background-repeat: no-repeat;
-	margin-left: 16px;
-	width: 32px;
-	height: 32px;
-	background-size: 100%;
-
-}
-
-.fso-selected .fsoexplorer-selector{
-	background-image: url('../img/toolbar/sub.svg');
-}
-
+/* Icons by filetypes */
 .avi, .mp4, .mpg, .divx, .xvid, .mkv, .mov, .ogv, .webm{
 	background-image: url('../img/icons/mov.svg');
 
@@ -109,4 +67,32 @@
 
 .jpeg, .jpg, .gif, .svg, .png{
 	background-image: url('../img/icons/jpg.svg');
+}
+
+/* Item actions for each file */
+.fsoexplorer-toolbar{	
+	display: block;
+	min-width: 32px;
+}
+
+div.fsoexplorer-toolbar{
+	left:0px;
+	top: 0px;	
+	width: 100%;
+	padding: 5px;
+	background-color: gainsboro;
+	box-shadow: 0px 5px 2px darkgrey;
+}
+
+.fsoexplorer-toolbar .fsoexplorer-icon{
+	width: 32px;
+	height: 32px;
+}
+
+.fsoexplorer-del{
+	background-image: url('../img/toolbar/delete.svg');
+}
+
+.fsoexplorer-toolbar h1{
+	font-size: large;
 }

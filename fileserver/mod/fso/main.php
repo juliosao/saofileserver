@@ -1,5 +1,4 @@
 <?php
-
 require_once(__DIR__.'/../../lib/Mod.php');
 
 class Mod_fso extends Mod{
@@ -7,7 +6,8 @@ class Mod_fso extends Mod{
 	{
 		parent::__construct($argv);
 		$this->scripts=array('mod/fso/js/fso.js');
-		$this->libs=array('mod/fso/lib/FSO.php');
+		$this->libs=array('FSO.php');
+			
 	}
 }
 

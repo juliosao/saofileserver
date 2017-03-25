@@ -67,7 +67,7 @@ fsoExplorer.prototype={
 
 			// Puts delbutton
 			var del=document.createElement('SPAN');
-			del.classList.add('fsoexplorer-toolbar-icon');
+			del.classList.add('fsoexplorer-icon');
 			del.classList.add('fsoexplorer-del');
 			del.setAttribute('onclick',"fsoExplorer.controllers['"+this.tag+"'].erase('"+data.link+"')");
 			tools.appendChild(del);
@@ -85,20 +85,30 @@ fsoExplorer.prototype={
 	{
 		this.dirdata=[];
 
-		for(var i in this.onRenderListeners)
-			this.onRenderListeners[i].onBeginRender(this);
-
-		//Buscamos donde cargar los datos
+		//Finds tag
 		var container=document.getElementById(tag);
 		if(container==null)
 			alert("No se encontro "+tag);
-
-		//Borramos contenido
+		
+		//Clears old data
 		while (container.firstChild) {
 			container.removeChild(container.firstChild);
 		}
 
-		//Pintamos directorios
+		//Puts main toolbar
+		var toolbar=document.createElement('DIV');
+		toolbar.className='fsoexplorer-toolbar';
+		
+		var label=document.createElement('H1');
+		label.appendChild(document.createTextNode(data.path));
+		toolbar.appendChild(label);
+
+		for(var i in this.onRenderListeners)
+			this.onRenderListeners[i].onBeginRender(this,toolbar,data);
+
+		container.appendChild(toolbar);
+
+		//Paint dirs
 		var lst=document.createElement('UL');
 		lst.className='fsoexplorer-list';
 		for(var d in data.dirs)
@@ -108,7 +118,7 @@ fsoExplorer.prototype={
 		}
 		container.appendChild(lst);
 
-		//Pintamos archivos
+		//Paint files
 		var lst=document.createElement('UL');
 		lst.className='fsoexplorer-list';
 		for(var d in data.files)
