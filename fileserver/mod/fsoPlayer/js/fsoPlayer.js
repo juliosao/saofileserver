@@ -31,8 +31,14 @@ fsoPlayer.prototype={
 
 	loadCallBack:function(data,tag)
 	{
+		this.putPlayer(this.loadPlayList(data));
+	},
+
+	loadPlayList:function(data)
+	{
 		var video=false;
 		
+		// Gets tracklist
 		this.playlist=[];
 		for(i in data.files)
 		{
@@ -42,25 +48,31 @@ fsoPlayer.prototype={
 			}
 			else if((data.files[i].extension=='mp4' || data.files[i].extension=='ogv' || data.files[i].extension=='webm') && this.playlist.length==0)
 			{
+				// Video only allows to play one file at time
 				this.playlist=[data.files[i].link];
 				video=true;
 				break;
 			}
 		}
-		
 
+		return video;
+	},
+
+	putPlayer:function(video)
+	{
 		if(this.playlist.length>0)
 		{	
+			//  Gets where to put stuff
 			var container=document.getElementById(this.tag);
 			if(container==null)
-			alert("No se encontro "+tag);
+				alert("No se encontro "+tag);
 		
-			//Clears old data
+			// Clears old data
 			while (container.firstChild) {
 				container.removeChild(container.firstChild);
 			}
 
-			
+			// Video and audio have diferent engines
 			if(video)
 			{
 				var player=document.createElement('video');
@@ -79,15 +91,19 @@ fsoPlayer.prototype={
 				container.appendChild(player);
 				
 			}
+
+			// Creates sources
 			var src=document.createElement('source');
 			src.id=this.tag+'-player-src';
 			player.appendChild(src);
 			
+			// Control for track-end
 			var me=this;
 			player.addEventListener("ended", function(){
 				me.play( (me.playIdx+1) % me.playlist.length );
 			}, false);
 
+			// Start playing
 			this.play(this.playIdx);			
 		}
 	},
@@ -107,8 +123,6 @@ fsoPlayer.prototype={
 		}, 500);
 		
 	}
-
-	
 }
 
 
