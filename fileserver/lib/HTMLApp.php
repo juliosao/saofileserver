@@ -1,25 +1,25 @@
 
   <?php
- require_once(__DIR__.'/App.php');
- require_once(__DIR__.'/Mod.php');
 
  //Represents a HTMLApp extends App
- class HTMLApp extends App implements ModLoadObsserver{
+ abstract class HTMLApp extends App implements ModLoadObsserver{
+	public abstract function putBody();
+
 	public function __construct()
 	{
+		parent::__construct();
 		$this->title='HTMLApp';
-		$this->mods=array();
-		
+		$this->mods=array();		
  		$this->styles=array();
 		$this->scripts=array();
 		$this->styles=array();
 	}
 
 	//Adds a Mod to a HTMLApp extends App
-	public function addMod($mod)
+	public function loadMod($mod)
 	{
 		//Loads the mod
-		$m=Mod::load($mod,$this);
+		$m=parent::loadMod($mod,$this);
 		if($m==null)
 			throw new Exception("MOD NOT FOUND:$mod");
 		
@@ -29,10 +29,9 @@
 
 	public function onModLoaded($mod)
 	{
-		//Adds scripts and styles from mod to the HTMLApp extends App
-		
- 		array_splice($this->styles,count($this->styles),0,$mod->getStyles());array_splice($this->scripts,count($this->scripts),0,$mod->getScripts());
-		array_splice($this->styles,count($this->styles),0,$mod->getStyles());
+		//Adds scripts and styles from mod to the HTMLApp extends App		
+ 		array_splice($this->styles,count($this->styles),0,$mod->getStyles());
+		array_splice($this->scripts,count($this->scripts),0,$mod->getScripts());
 	}
 
 	//Adds a script to a HTMLApp extends App
@@ -80,7 +79,7 @@
 		return $this;
 	}
 
-	public abstract function putBody();
+	
 
 	public function putFooter()
 	{
@@ -90,5 +89,12 @@
 		<?php
 	}
 
+	//Runs HTMLApp
+    public function run()
+    {
+        $this->putHeader();
+		$this->putBody();
+		$this->putFooter();
+    }
 
  }

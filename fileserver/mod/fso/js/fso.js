@@ -22,7 +22,7 @@ fso.prototype={
 	//Downloads a file
 	download:function(path)
 	{
-		window.location.assign("mod/fso/api/download.php?path="+path);
+		window.location.assign("index.php?app=fso.download&path="+path);
 	},
 	
 	//Goes back
@@ -64,7 +64,7 @@ fso.prototype={
 				me.listener.okCallBack(JSON.parse(this.responseText),me.tag);
 			}
 		};
-		xhttp.open("POST", "mod/fso/api/explore.php", true);
+		xhttp.open("POST", "index.php?app=fso.explore", true);
 		xhttp.send(data);
 			
 	},
@@ -91,7 +91,7 @@ fso.prototype={
 				me.listener.okCallBack(JSON.parse(this.responseText),me.tag);
 			}
 		};
-		xhttp.open("POST", "mod/fso/api/delete.php", true);
+		xhttp.open("POST", "index.php?app=fso.delete", true);
 		xhttp.send(data);
 			
 	}

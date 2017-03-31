@@ -1,9 +1,13 @@
 <?php
-require_once '../../../lib/JSONApp.php';
-require_once '../lib/FSO.php';
-require_once('../../../cfg/fso.cfg');
+require_once('cfg/fso.cfg');
 
 class delete extends JSONApp{
+    public function __construct()
+    {
+        parent::__construct();
+        $this->loadMod('fso');
+    }
+
     public function main() {
 		global $basedir;
     

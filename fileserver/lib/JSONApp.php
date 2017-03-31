@@ -1,12 +1,13 @@
 <?php
 
 //Represents a http callable mini-application
-abstract class JSONApp {
-    var $result=array();
-    
-    //Overload this function to add functionality. The system will call main() automaticaly
-    abstract function main();
-    
+abstract class JSONApp extends App{
+   
+    public function __construct()
+    {
+         parent::__construct();
+    }
+
     //Runs JSONApp
     public function run()
     {

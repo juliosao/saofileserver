@@ -1,11 +1,15 @@
 <?php
-    require_once '../../../lib/JSONApp.php';
-    require_once("../lib/FSO.php");
-    require_once("../lib/FSODir.php");
-    require_once("../lib/FSOFile.php");   
-    require_once('../../../cfg/fso.cfg');
+    
+    require_once('cfg/fso.cfg');
 	
 	class Explore extends JSONApp{
+		
+		public function __construct()
+		{
+			parent::__construct();
+			$this->loadMod('fso');
+		}
+
 		public function main() {
 			global $basedir;
 			
@@ -73,7 +77,7 @@
 			$this->setResult('path',$dirname);
 			$this->setResult('dirs',$dirs);
 			$this->setResult('files',$files);
-			
+			$this->setResult('fsotype',$fso->type);
 		}
 	}
 		

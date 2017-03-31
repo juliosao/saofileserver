@@ -1,5 +1,4 @@
 <?php
-require_once(__DIR__.'/../../lib/Mod.php');
 
 class Mod_fsoExplorer extends Mod{
 	public function __construct($argv)
