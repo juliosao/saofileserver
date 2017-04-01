@@ -1,3 +1,49 @@
  .fsoplayer-icon{
 	 background-image: url('../img/play.svg');
  }
+
+.fso-player-container h1 {
+	color: white;
+}
+
+.fso-player-container{
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	top: 0px;
+	padding: 5px;
+	background: black;
+}
+
+.fso-player{
+	width: 100%;
+	background: black;
+	color: green;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+
+.fso-player-controls{
+	width: 100%;
+}
+
+.fso-player-playlist{
+	flex: 1;
+	margin-right: 5px;
+	cursor: pointer;
+}
+
+.fso-player-playlist li{
+	font-size: larger;
+	margin: 10px 5px 5px 5px;
+
+}
+
+.fso-player-playlist .selected{
+	color: black;
+	background: green;
+	margin-right: 5px;
+}
+

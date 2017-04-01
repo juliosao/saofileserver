@@ -31,7 +31,22 @@ fsoPlayer.prototype={
 
 	loadCallBack:function(data,tag)
 	{
-		this.putPlayer(this.loadPlayList(data));
+		//  Gets where to put stuff
+		var container=document.getElementById(this.tag);
+		if(container==null)
+			alert("No se encontro "+tag);
+		
+		// Clears old data
+		while (container.firstChild) {
+			container.removeChild(container.firstChild);
+		}
+
+		// Puts UI
+		video=this.loadPlayList(data);
+		this.putPlayer(container,video);
+		if(!video && this.playlist.length>1)
+			this.putPlayList(container);
+		this.play(this.playIdx);
 	},
 
 	loadPlayList:function(data)
@@ -58,27 +73,35 @@ fsoPlayer.prototype={
 		return video;
 	},
 
-	putPlayer:function(video)
+	putPlayList:function(container)
+	{
+		var list=document.createElement('ol');
+		list.className='fso-player-playlist';
+		me=this;
+		for(var i in this.playlist)
+		{
+			var li = document.createElement('li');
+			li.id=this.tag+'-playitem-'+i;
+			li.setAttribute('data-idx',i);
+			li.addEventListener('click',function(e){
+				me.play(parseInt(e.currentTarget.getAttribute('data-idx')));
+			});
+			li.appendChild(document.createTextNode(decodeURIComponent(this.playlist[i])));
+			list.appendChild(li);
+		}
+		container.appendChild(list);
+	},
+
+	putPlayer:function(container,video)
 	{
 		if(this.playlist.length>0)
-		{	
-			//  Gets where to put stuff
-			var container=document.getElementById(this.tag);
-			if(container==null)
-				alert("No se encontro "+tag);
-		
-			// Clears old data
-			while (container.firstChild) {
-				container.removeChild(container.firstChild);
-			}
-
+		{			
 			// Video and audio have diferent engines
 			if(video)
 			{
 				var player=document.createElement('video');
 				player.id=this.tag+'-player';
-				player.setAttribute('width','100%');
-				player.setAttribute('height','100%');
+				player.setAttribute('width','100%');				
 				player.setAttribute('controls','true');
 				container.appendChild(player);
 			}
@@ -91,6 +114,7 @@ fsoPlayer.prototype={
 				container.appendChild(player);
 				
 			}
+			player.className='fso-player-controls';
 
 			// Creates sources
 			var src=document.createElement('source');
@@ -102,9 +126,6 @@ fsoPlayer.prototype={
 			player.addEventListener("ended", function(){
 				me.play( (me.playIdx+1) % me.playlist.length );
 			}, false);
-
-			// Start playing
-			this.play(this.playIdx);			
 		}
 	},
 
@@ -113,6 +134,18 @@ fsoPlayer.prototype={
 		var player=document.getElementById(this.tag+'-player');
 		var src=document.getElementById(this.tag+'-player-src');
 		
+		for(i in this.playlist)
+		{
+			var elem = document.getElementById(this.tag+'-playitem-'+i);
+			if(elem!=null)
+			{
+				if(i==idx)
+					elem.classList.add('selected');
+				else
+					elem.classList.remove('selected');
+			}
+		}
+
 		src.src='index.php?app=fsoPlayer.play&path='+this.playlist[idx];
 		player.load();
 		this.playIdx=idx;
