@@ -1,5 +1,4 @@
-
-  <?php
+<?php
 
  //Represents a HTMLApp extends App
  abstract class HTMLApp extends App implements ModLoadObsserver{

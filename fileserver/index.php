@@ -1,4 +1,5 @@
 <?php
+
 require(__DIR__.'/lib/Util.php');
 require(__DIR__.'/lib/App.php');
 require(__DIR__.'/lib/Mod.php');
@@ -40,6 +41,7 @@ try
     }
 
     require($path);
+
     if(class_exists($tmp[1]))
     {
         $main=new $tmp[1]();

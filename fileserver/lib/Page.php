@@ -1,5 +1,4 @@
-
-  <?php
+<?php
  require_once(__DIR__.'/App.php');
  require_once(__DIR__.'/Mod.php');
 
