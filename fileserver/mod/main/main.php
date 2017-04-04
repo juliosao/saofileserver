@@ -8,6 +8,7 @@ class Mod_main extends Mod{
 	{
 		parent::__construct($argv);
 		
+		$this->styles=array('mod/main/css/main.css');	
 		$this->depends=array('fsoExplorer','fsoPlayer');
 	}
 }

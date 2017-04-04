@@ -7,8 +7,7 @@ class index extends HTMLApp
 		parent::__construct();
 
 		$this->title='Archivos';
-		$this->loadMod('fsoExplorer');
-		$this->loadMod('fsoPlayer');
+		$this->loadMod('main');
 	}
 
 	public function putBody()
