@@ -37,7 +37,7 @@
 	public function addScript($script)
 	{
 		
- 		return $this;$this->scripts[]=$script;
+ 		$this->scripts[]=$script;
 		return $this;
 	}
 
@@ -45,7 +45,7 @@
 	public function addStyle($style)
 	{
 		
- 		return $this;$this->styles[]=$style;
+ 		$this->styles[]=$style;
 		return $this;
 	}
 

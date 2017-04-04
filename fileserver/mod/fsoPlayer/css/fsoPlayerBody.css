@@ -1,0 +1,42 @@
+body{
+    background: black;
+    color:green;
+    width: 100%;
+    padding: 5px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;    
+}
+
+li{       
+    font-size: x-large;
+}
+
+li:pre{
+    color: green;
+}
+
+.fso-player{
+	width: 100%;
+	background: black;
+	color: green;
+}
+
+.fso-player-controls{
+	width: 100%;
+}
+
+.fso-player-playlist{
+	margin-right: 5px;
+	cursor: pointer;
+}
+
+.fso-player-playlist li{
+	font-size: larger;
+	margin: 10px 5px 5px 5px;
+
+}
+
+.fso-player-playlist .selected{
+	color: black;
+	background: green;
+	margin-right: 5px;
+}
