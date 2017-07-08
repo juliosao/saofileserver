@@ -7,7 +7,7 @@
 		public function __construct()
 		{
 			parent::__construct();
-			$this->loadMod('fso');
+			Mod::load('fso');
 		}
 
 		public function main() {
@@ -22,9 +22,9 @@
 			}
 			error_log("Ruta:".$dirname);
 			
-			$dirpath=fso::joinPath($basedir,$dirname);
+			$dirpath=FSO::joinPath($basedir,$dirname);
 			
-			$fso=fso::fromPath($dirpath);
+			$fso=FSO::fromPath($dirpath);
 			if(!$fso===null) {
 				$this->exitApp(false,"Ruta no encontrada :$dirname");
 			}

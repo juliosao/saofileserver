@@ -5,7 +5,7 @@ class delete extends JSONApp{
     public function __construct()
     {
         parent::__construct();
-        $this->loadMod('fso');
+        Mod::load('fso');
     }
 
     public function main() {

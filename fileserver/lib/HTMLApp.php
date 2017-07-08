@@ -1,7 +1,7 @@
 <?php
 
  //Represents a HTMLApp extends App
- abstract class HTMLApp extends App implements ModLoadObsserver{
+ abstract class HTMLApp extends App implements ModLoadObserver{
 	public abstract function putBody();
 
 	public function __construct()
@@ -12,18 +12,7 @@
  		$this->styles=array();
 		$this->scripts=array();
 		$this->styles=array();
-	}
-
-	//Adds a Mod to a HTMLApp extends App
-	public function loadMod($mod)
-	{
-		//Loads the mod
-		$m=parent::loadMod($mod,$this);
-		if($m==null)
-			throw new Exception("MOD NOT FOUND:$mod");
-		
-		 return $this;
-
+		Mod::addObserver($this);
 	}
 
 	public function onModLoaded($mod)
@@ -61,11 +50,13 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 		<?php
-		foreach($this->scripts as $script){
+		foreach($this->scripts as $script)
+		{
 		?>
 			<script type="text/javascript" src="<?=$script ?>" ></script>
 		<?php
 		}
+		
 		foreach($this->styles as $style)
 		{
 		?>

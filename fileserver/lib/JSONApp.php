@@ -27,7 +27,7 @@ abstract class JSONApp extends App{
         $this->result['ok']=$ok;
         $this->result['error']=$error;
         
+        header("content-type: text/json");
         die(json_encode($this->result));
     }
 }
-

@@ -6,7 +6,7 @@ class index extends HTMLApp
 	function __construct()
 	{
 		parent::__construct();
-		$this->loadMod('fsoPlayer');
+		Mod::load('fsoPlayer');
 		$this->title='player';
 		$this->file=urldecode($_REQUEST['file']);
 		$this->addStyle('mod/fsoPlayer/css/fsoPlayerBody.css');

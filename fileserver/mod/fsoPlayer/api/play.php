@@ -6,7 +6,7 @@ class play extends App
     public function __construct()
     {
         parent::__construct();
-        $this->loadMod('fso');
+        Mod::load('fso');
     }
 
     function run()
@@ -20,7 +20,7 @@ class play extends App
             die("download what?");
         }
 
-        $file=new FSOFile(fso::joinPath($basedir,$filename));
+        $file=new FSOFile(FSO::joinPath($basedir,$filename));
         if(!$file->exists()) {
             die($filename." not found in ".$basedir);
         }

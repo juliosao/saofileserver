@@ -7,7 +7,7 @@ class index extends HTMLApp
 		parent::__construct();
 
 		$this->title='Archivos';
-		Mod::load('main');
+		$this->loadMod('main');
 	}
 
 	public function putBody()

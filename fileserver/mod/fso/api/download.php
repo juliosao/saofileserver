@@ -6,7 +6,7 @@ class download extends App
     public function __construct()
     {
         parent::__construct();
-        $this->loadMod('fso');
+        Mod::load('fso');
     }
 
     function run()

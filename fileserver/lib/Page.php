@@ -1,6 +1,4 @@
 <?php
- require_once(__DIR__.'/App.php');
- require_once(__DIR__.'/Mod.php');
 
  //Represents a HTMLApp extends App
  class HTMLApp extends App implements ModLoadObsserver{
