@@ -1,7 +1,7 @@
 <?php
 
  //Represents a HTMLApp extends App
- abstract class HTMLApp extends App implements ModLoadObserver{
+ abstract class HTMLApp extends App{
 	public abstract function putBody();
 
 	public function __construct()
@@ -12,14 +12,6 @@
  		$this->styles=array();
 		$this->scripts=array();
 		$this->styles=array();
-		Mod::addObserver($this);
-	}
-
-	public function onModLoaded($mod)
-	{
-		//Adds scripts and styles from mod to the HTMLApp extends App		
- 		array_splice($this->styles,count($this->styles),0,$mod->getStyles());
-		array_splice($this->scripts,count($this->scripts),0,$mod->getScripts());
 	}
 
 	//Adds a script to a HTMLApp extends App

@@ -1,54 +1,30 @@
 <?php
 
 require(__DIR__.'/lib/Util.php');
-require(__DIR__.'/lib/App.php');
-require(__DIR__.'/lib/Mod.php');
-require(__DIR__.'/lib/HTMLApp.php');
-require(__DIR__.'/lib/JSONApp.php');
 
-try
+class Index extends HTMLApp
 {
-    $tmp=array('main','index');
-    $mode='views';
+	public function __construct()
+	{
+		parent::__construct();
 
-    if (isset($_REQUEST['app']))
-    {
-        $mode='api';
-        $tmp=explode('.',$_REQUEST['app']);
-        if(count($tmp)<2)
-        {
-            $tmp[1]='main';
-        }
-    }
-    else if (isset($_REQUEST['view']))
-    {
-        $tmp=explode('.',$_REQUEST['view']);        
-        if(count($tmp)<2)
-        {
-            $tmp[1]='index';
-        }
-    }
-    else
-    {
-        $tmp=array('main','index');
-    }
+		$this->title='Archivos';
+		$this->addScript('js/fso/fso.js');
+		$this->addScript('js/fsoExplorer/fsoExplorer.js');
+		$this->addScript('js/fsoPlayer/fsoExplorerPlayer.js');
+		$this->addStyle('styles/fsoExplorer/fsoExplorer.css');
+		$this->addStyle('styles/fsoPlayer/fsoExplorerPlayer.css');
+		$this->addStyle('styles/main/main.css');
+	}
 
-    $path=__DIR__.'/mod/'.$tmp[0].'/'.$mode.'/'.$tmp[1].'.php';
-    
-    if(!file_exists($path))
-    {
-        error_die('404',$path);
-    }
-
-    require($path);
-
-    if(class_exists($tmp[1]))
-    {
-        $main=new $tmp[1]();
-        $main->run();
-    }
+	public function putBody()
+	{
+		?>
+		<div id="explorer" class="fso-explorer" />
+		<?php
+	}
 }
-catch(Exception $ex)
-{
-    error_die('500',$ex);
-}
+
+$index = new Index();
+$index->run();
+

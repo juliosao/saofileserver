@@ -6,11 +6,31 @@
  * \brief Clase manejadora de la base de datos
  */
 class Database {    
-    static $defaultPath = 'mysql:host=localhost;dbname=juliopibot;charset=utf8';
-    static $defaultUser = 'juliopibot';
-    static $defaultPass = 'sdfuhk3489';
+    static $defaultPath = 'mysql:host=localhost;dbname=database;charset=utf8';
+    static $defaultUser = 'database';
+    static $defaultPass = 'database';
     
     static $instancia; /**< Aqui guardamos la instancia creada de la clase, solo puede haber una a la vez */
+    static $initialized=false;
+
+    static function init()
+    {        
+        $cfg=file_get_contents(dirname(__DIR__).DIRECTORY_SEPARATOR.'bbdd.cfg');
+        if($cfg)
+        {
+            $data=json_decode($cfg);
+            if(isset($data['database']))
+                Database::$defaultPath=$data['database'];
+
+            if(isset($data['database']))
+                Database::$defaultUser=$data['user'];
+
+            if(isset($data['database']))
+                Database::$defaultPass=$data['pass'];
+        }
+        
+    }
+
 
 	/**
 	 * \fn __construct($path, $usr = null, $passw = null)
@@ -233,3 +253,4 @@ class Database {
     }	
 }
 
+Database::init();
