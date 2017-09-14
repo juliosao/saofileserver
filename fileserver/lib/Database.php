@@ -6,9 +6,9 @@
  * \brief Clase manejadora de la base de datos
  */
 class Database {    
-    static $defaultPath = 'mysql:host=localhost;dbname=database;charset=utf8';
-    static $defaultUser = 'database';
-    static $defaultPass = 'database';
+    static $defaultPath = 'mysql:host=localhost;dbname=fileserver;charset=utf8';
+    static $defaultUser = 'fileserver';
+    static $defaultPass = 'fileserver';
     
     static $instancia; /**< Aqui guardamos la instancia creada de la clase, solo puede haber una a la vez */
     static $initialized=false;

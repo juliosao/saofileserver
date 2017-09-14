@@ -92,6 +92,9 @@ abstract class DBObject
 			$parametros[$key]=$this->$key;
 		}
 		
+		print_r($values);
+		print_r($parametros);
+
 		if(static::$insert===null)
 		{
 			static::$insert='INSERT INTO '.static::$table.'('.implode(',',static::$fields).') VALUES ('.implode(',',$values).')';		
