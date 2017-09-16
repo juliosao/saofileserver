@@ -22,7 +22,6 @@ class Auth extends DBObject
 
     function __construct($src)
     {
-        print_r($src);
         parent::__construct($src);        
     }
 
@@ -46,7 +45,7 @@ class Auth extends DBObject
     {
         $auth=hash('sha256',$pw);
 
-        $lst = Auth::select(array('id'=>$_SESSION['usr'],'auth'=>$auth));
+        $lst = Auth::select(array('id'=>$usr,'auth'=>$auth));
 
         if(count($lst)!=1)
             return false;
@@ -64,6 +63,13 @@ class Auth extends DBObject
     static function set($c)
     {
         self::$current=$c;
+    }
+
+    function save()
+    {
+        $this->session=session_id();
+        parent::replace();
+        error_log("Sesion Guardada.");
     }
 }
 

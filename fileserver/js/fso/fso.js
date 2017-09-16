@@ -22,7 +22,7 @@ fso.prototype={
 	//Downloads a file
 	download:function(path)
 	{
-		window.location.assign("api/fso/download.php?path="+path);
+		window.location.assign("../../api/fso/download.php?path="+path);
 	},
 
 	//Uploads a file
@@ -42,7 +42,7 @@ fso.prototype={
 				me.listener.okCallBack(JSON.parse(this.responseText),me.tag);
 			}
 		};
-		xhttp.open("POST", "api/fso/upload.php", true);
+		xhttp.open("POST", "../../api/fso/upload.php", true);
 		xhttp.send(data);
 	},
 	
@@ -85,7 +85,7 @@ fso.prototype={
 				me.listener.okCallBack(JSON.parse(this.responseText),me.tag);
 			}
 		};
-		xhttp.open("POST", "api/fso/explore.php", true);
+		xhttp.open("POST", "../../api/fso/explore.php", true);
 		xhttp.send(data);
 			
 	},
@@ -112,7 +112,7 @@ fso.prototype={
 				me.listener.okCallBack(JSON.parse(this.responseText),me.tag);
 			}
 		};
-		xhttp.open("POST", "api/fso/delete.php", true);
+		xhttp.open("POST", "../../api/fso/delete.php", true);
 		xhttp.send(data);
 			
 	}

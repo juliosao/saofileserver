@@ -1,6 +1,6 @@
 {
     "app":{
-        "main":"views/fsoExplorer/index.html"
+        "main":"views/fsoExplorer/index.php"
     },
     "bbdd":{
         "database":"mysql:host=localhost;dbname=fileserver;charset=utf8",
