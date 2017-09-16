@@ -1,6 +1,5 @@
 <?php
 require_once('../../lib/Util.php');
-require_once(\App::getAppDir().'cfg/fso.cfg');
 
 class play extends App
 {
@@ -11,7 +10,7 @@ class play extends App
 
     function run()
     {
-        global $basedir;
+        $basedir=Cfg::get()->fso->basedir;
         
         if(isset($_REQUEST['path'])) {
             $filename=str_replace('..','.', urldecode($_REQUEST['path']));

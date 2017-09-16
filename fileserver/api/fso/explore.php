@@ -1,6 +1,5 @@
 <?php
 	require_once('../../lib/Util.php');
-	require_once(\App::getAppDir().'cfg/fso.cfg');
 		
 	class Explore extends JSONApp{
 		
@@ -10,7 +9,7 @@
 		}
 
 		public function main() {
-			global $basedir;
+			$basedir=Cfg::get()->fso->basedir;
 			
 			$this->setResult('function','explore');
 			

@@ -1,6 +1,5 @@
 <?php
 require_once('../../lib/Util.php');
-require_once(\App::getAppDir().'cfg/fso.cfg');
 
 class index extends HTMLApp
 {

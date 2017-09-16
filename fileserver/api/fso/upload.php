@@ -1,6 +1,5 @@
 <?php
 require_once('../../lib/Util.php');
-require_once(\App::getAppDir().'cfg/fso.cfg');
     
 class Upload extends JSONApp
 {
@@ -11,7 +10,7 @@ class Upload extends JSONApp
     }
 
     public function main() {
-        global $basedir;
+        $basedir=Cfg::get()->fso->basedir;
         error_log("Se quiere subir ficheros");
         $path= urldecode($_POST["path"]);
         $dest= fso\FSO::joinPath($basedir,$path);

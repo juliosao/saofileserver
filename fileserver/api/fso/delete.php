@@ -1,6 +1,5 @@
 <?php
 require_once('../../lib/Util.php');
-require_once(\App::getAppDir().'cfg/fso.cfg');
     
 class delete extends JSONApp{
     public function __construct()
@@ -8,9 +7,8 @@ class delete extends JSONApp{
         parent::__construct();
     }
 
-    public function main() {
-		global $basedir;
-    
+    public function main() {   
+        $basedir=Cfg::get()->fso->basedir;
 		$this->setResult('function','delete');
 		
         $mal=0;

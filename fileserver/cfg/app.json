@@ -1,0 +1,13 @@
+{
+    "app":{
+        "main":"views/fsoExplorer/index.html"
+    },
+    "bbdd":{
+        "database":"mysql:host=localhost;dbname=fileserver;charset=utf8",
+        "user":"fileserver",
+        "pass":"fileserver"
+    },
+    "fso":{
+        "basedir":"/var/shared-data"
+    }
+}

@@ -9,7 +9,7 @@ function error_die($err=404,$msg='')
 spl_autoload_register(function ($class) {
 	//error_log("Cargando ".$class);
     $parts = explode('\\', $class);
-
+    //error_log($class);
     require(implode('/',$parts).'.php');
 });
 
