@@ -20,6 +20,7 @@ class Index extends HTMLApp
 	public function putBody()
 	{
 		?>
+		<div id="toolbar" class="app-toolbar" />
 		<div id="explorer" class="fso-explorer" />
 		<?php
 	}

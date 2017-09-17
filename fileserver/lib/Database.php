@@ -14,20 +14,15 @@ class Database {
     static $initialized=false;
 
     static function init()
-    {        
-        $cfg=file_get_contents(dirname(__DIR__).DIRECTORY_SEPARATOR.'bbdd.cfg');
-        if($cfg)
-        {
-            $data=json_decode($cfg);
-            if(isset($data['database']))
-                Database::$defaultPath=$data['database'];
+    {  
+        if(isset(Cfg::get()->bbdd->database))
+            Database::$defaultPath=Cfg::get()->bbdd->database;
 
-            if(isset($data['database']))
-                Database::$defaultUser=$data['user'];
+        if(isset(Cfg::get()->bbdd->user))
+            Database::$defaultUser=Cfg::get()->bbdd->user;
 
-            if(isset($data['database']))
-                Database::$defaultPass=$data['pass'];
-        }
+        if(isset(Cfg::get()->bbdd->pass))
+            Database::$defaultPass=Cfg::get()->bbdd->pass;                    
         
     }
 
