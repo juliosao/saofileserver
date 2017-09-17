@@ -72,7 +72,7 @@
 						'extension'=>$fso->extension());
 			}
 			
-			$this->setResult('path',$dirname);
+			$this->setResult('path',urlencode($dirname));
 			$this->setResult('dirs',$dirs);
 			$this->setResult('files',$files);
 			$this->setResult('fsotype',$fso->type);

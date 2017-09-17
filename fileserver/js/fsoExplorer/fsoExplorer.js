@@ -102,7 +102,7 @@ fsoExplorer.prototype={
 		toolbar.className='fsoexplorer-toolbar';
 		
 		var label=document.createElement('H1');
-		label.appendChild(document.createTextNode(data.path));
+		label.appendChild(document.createTextNode(decodeURIComponent(data.path)));
 		toolbar.appendChild(label);
 
 		for(var i in this.onRenderListeners)

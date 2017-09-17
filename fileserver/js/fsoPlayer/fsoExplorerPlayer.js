@@ -20,7 +20,7 @@ fsoExplorerPlayer.prototype={
 				var player=document.createElement('SPAN');
 				player.classList.add('fsoexplorer-icon');
  				player.classList.add('fsoplayer-icon');
-				player.setAttribute('onclick',"window.open('views/fsoPlayer/index.php?file="+encodeURIComponent(data.path)+"')");
+				player.setAttribute('onclick',"window.open('../../views/fsoPlayer/index.php?file="+data.path+"')");
 				toolbar.appendChild(player);
 				break;
 			}
@@ -43,7 +43,7 @@ fsoExplorerPlayer.prototype={
 				var player=document.createElement('SPAN');
 				player.classList.add('fsoexplorer-icon');
  				player.classList.add('fsoplayer-icon');
-				player.setAttribute('onclick',"window.open('views/fsoPlayer/index.php?file="+encodeURIComponent(data.link)+"')");
+				player.setAttribute('onclick',"window.open('../../views/fsoPlayer/index.php?file="+encodeURIComponent(data.link)+"')");
 				toolbar.appendChild(player);
 			}
 		}
