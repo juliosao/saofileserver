@@ -17,6 +17,7 @@ class Auth extends DBObject
 
     static function init()
     {
+        session_start();
         self::$db=Database::getInstance();
 	}
 
@@ -28,14 +29,17 @@ class Auth extends DBObject
     static function checkSession()
     {
         if(! isset($_SESSION['usr']))
-            return false;
+        {
+return false;
+        }
+            
 
         $lst = Auth::select(array('id'=>$_SESSION['usr']));
 
         if(count($lst)!=1)
             return false;
 
-        if($lst[0]['session']!=session_id())
+        if($lst[0]->session!=session_id())
             return false;
 
         return true;
@@ -62,14 +66,15 @@ class Auth extends DBObject
     
     static function set($c)
     {
+        $_SESSION['usr']=$c->id;
         self::$current=$c;
     }
 
     function save()
     {
         $this->session=session_id();
-        parent::replace();
-        error_log("Sesion Guardada.");
+        $res=parent::replace();
+        error_log("Sesion Guardada:".$res);
     }
 }
 

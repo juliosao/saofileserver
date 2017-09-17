@@ -5,7 +5,7 @@ class download extends App
 {
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct(1);
     }
 
     function run()

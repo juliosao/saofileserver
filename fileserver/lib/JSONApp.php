@@ -3,9 +3,9 @@
 //Represents a http callable mini-application
 abstract class JSONApp extends App{
    
-    public function __construct()
+    public function __construct($doAuth=false)
     {
-         parent::__construct();
+         parent::__construct($doAuth);
     }
 
     //Runs JSONApp

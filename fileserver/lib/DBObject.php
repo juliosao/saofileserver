@@ -126,6 +126,7 @@ abstract class DBObject
 			
 		}
 		
+		error_log(static::$insert);
 		return static::$db->execute(static::$insert,$parametros);		
 	}
 

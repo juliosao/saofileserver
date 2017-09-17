@@ -4,7 +4,7 @@ require_once('../../lib/Util.php');
 class delete extends JSONApp{
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct(1);
     }
 
     public function main() {   

@@ -6,8 +6,17 @@ abstract class App {
 	private static $appURL = null;
     protected $result;
 
-    public function __construct()
+    public function __construct($doAuth=false)
     {
+		if($doAuth)
+		{
+			if(Auth::checkSession()==false)
+			{
+				$redirect=App::getAppURL().'views/login/login.php';
+				header('Location: '.$redirect,true,302);
+				die('Sesion invalida');
+			}
+		}
         $this->result=array();
     }
 

@@ -4,9 +4,9 @@
  abstract class HTMLApp extends App{
 	public abstract function putBody();
 
-	public function __construct()
+	public function __construct($doAuth=false)
 	{
-		parent::__construct();
+		parent::__construct($doAuth);
 		$this->title='HTMLApp';
 		$this->mods=array();		
  		$this->styles=array();

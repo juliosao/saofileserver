@@ -6,7 +6,7 @@ class Index extends HTMLApp
 {
 	public function __construct()
 	{
-		parent::__construct();
+		parent::__construct(1);
 
 		$this->title='Archivos';
 		$this->addScript('../../js/fso/fso.js');

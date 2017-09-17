@@ -5,7 +5,7 @@
 		
 		public function __construct()
 		{
-			parent::__construct();
+			parent::__construct(1);
 		}
 
 		public function main() {
@@ -72,7 +72,7 @@
 						'extension'=>$fso->extension());
 			}
 			
-			$this->setResult('path',urlencode($dirname));
+			$this->setResult('path',rawurlencode($dirname));
 			$this->setResult('dirs',$dirs);
 			$this->setResult('files',$files);
 			$this->setResult('fsotype',$fso->type);
