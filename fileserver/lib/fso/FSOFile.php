@@ -38,7 +38,11 @@ class FSOFile extends FSO{
 
     function mime()
     {
-		return mime_content_type($this->path);
+	//return mime_content_type($this->path);
+	$fi = finfo_open($this->path);
+	$ret = finfo_file($fi);
+	finfo_close($fi);
+	return $ret;
     }
 
 	public function delete()

@@ -10,7 +10,7 @@ abstract class App {
     {
 		if($doAuth)
 		{
-			if(Auth::checkSession()==false)
+			if(auth\Auth::checkSession()==false)
 			{
 				$redirect=App::getAppURL().'views/login/login.php';
 				header('Location: '.$redirect,true,302);

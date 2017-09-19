@@ -7,10 +7,21 @@ function error_die($err=404,$msg='')
 
 // Class autoloader
 spl_autoload_register(function ($class) {
-	//error_log("Cargando ".$class);
+
     $parts = explode('\\', $class);
-    //error_log($class);
-    require(implode('/',$parts).'.php');
+    if(! include(implode('/',$parts).'.php'))
+    {
+        throw new Exception('Class not found: '.$class);
+        /*
+        $stack=debug_backtrace();
+        error_log($ex->getMessage());
+        foreach($stack as $frame)
+        {
+            error_log( sprintf("\ten %s:%d", $frame['file'],$frame['line']));
+        }
+        */
+    }
+    
 });
 
 // Include path for clases, etc
