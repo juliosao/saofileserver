@@ -2,7 +2,7 @@
 
 namespace auth;
 
-class User extends \DBObject
+class User extends \database\DBObject
 {
     static $db=null;
 	static $keys=array('id');
@@ -19,7 +19,7 @@ class User extends \DBObject
 
     static function init()
     {
-        self::$db=\Database::getInstance();
+        self::$db=\database\Database::getInstance();
 	}
 
     function __construct($src)

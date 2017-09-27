@@ -1,7 +1,7 @@
 <?php
 require_once('../../lib/Util.php');
     
-class Upload extends JSONApp
+class Upload extends app\JSONApp
 {
     
     public function __construct()

@@ -1,7 +1,7 @@
 <?php
 require_once('../../lib/Util.php');
 
-class index extends HTMLApp
+class index extends app\HTMLApp
 {
 	function __construct()
 	{

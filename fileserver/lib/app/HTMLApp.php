@@ -1,5 +1,7 @@
 <?php
 
+namespace app;
+
  //Represents a HTMLApp extends App
  abstract class HTMLApp extends App{
 	public abstract function putBody();

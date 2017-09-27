@@ -2,7 +2,7 @@
 
 require_once('../../lib/Util.php');
 
-class Index extends HTMLApp
+class Index extends app\HTMLApp
 {
 	public function __construct()
 	{

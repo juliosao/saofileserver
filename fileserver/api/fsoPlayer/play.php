@@ -1,7 +1,7 @@
 <?php
 require_once('../../lib/Util.php');
 
-class play extends App
+class play extends app\App
 {
     public function __construct()
     {

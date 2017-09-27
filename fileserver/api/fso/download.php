@@ -1,7 +1,7 @@
 <?php
 require_once('../../lib/Util.php');
 
-class download extends App
+class download extends app\App
 {
     public function __construct()
     {

@@ -41,12 +41,16 @@ class Cfg
             {
                 $this->$k = $v;
             }
+        }
+        else
+        {
+            throw new Exception("Configuration not found");
         }      
     }    
 
     static function init()
     {
-        self::$default = new Cfg(App::getAppDir().'/cfg/app.json');
+        self::$default = new Cfg(app\App::getAppDir().'/cfg/app.json');
         
     }
 

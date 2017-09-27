@@ -1,7 +1,7 @@
 <?php
 	require_once('../../lib/Util.php');
 		
-	class Explore extends JSONApp{
+	class Explore extends app\JSONApp{
 		
 		public function __construct()
 		{

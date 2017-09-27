@@ -1,5 +1,7 @@
 <?php
 
+namespace app;
+
 //Represents a http callable mini-application
 abstract class App {
 	private static $appDir = null;
@@ -10,7 +12,7 @@ abstract class App {
     {
 		if($doAuth)
 		{
-			if(auth\Auth::checkSession()==false)
+			if(\auth\Auth::checkSession()==false)
 			{
 				$redirect=App::getAppURL().'views/login/login.php';
 				header('Location: '.$redirect,true,302);
@@ -32,7 +34,7 @@ abstract class App {
 	public static function getAppDir()
 	{
 		if(self::$appDir===null)
-			self::$appDir = dirname(__DIR__).DIRECTORY_SEPARATOR;
+			self::$appDir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR;
 		return self::$appDir;
 	}
 	

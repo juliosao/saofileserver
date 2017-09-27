@@ -1,8 +1,11 @@
 <?php
 
+namespace app;
+
 //Represents a http callable mini-application
 abstract class JSONApp extends App{
-   
+    public abstract function main();
+
     public function __construct($doAuth=false)
     {
          parent::__construct($doAuth);

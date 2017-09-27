@@ -2,7 +2,7 @@
 
 require('../../lib/Util.php');
 
-class Setup extends App
+class Setup extends app\App
 {
 	function __construct()
 	{
@@ -23,7 +23,7 @@ class Setup extends App
 		try
 		{
 			$this->log[]= "<h3>Preparando base de datos...</h3>";
-			$db=new Database("mysql:host=localhost;",$usr,$pwd);
+			$db=new database\Database("mysql:host=localhost;",$usr,$pwd);
 			$this->log[]= "Limpiando bbdd...";
 			$db->execute("DROP DATABASE IF EXISTS fileserver");
 			$this->log[]= "Creando bbdd...";

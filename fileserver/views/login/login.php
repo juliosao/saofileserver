@@ -1,14 +1,14 @@
 <?php
 require_once('../../lib/Util.php');
 
-class login extends HTMLApp
+class login extends app\HTMLApp
 {
 	function __construct()
 	{
 		parent::__construct();
 		$this->title='player';
 		$this->msg="Introduzca usuario y contrase&ntilde;a";
-		$this->redirect=isset($_REQUEST['p']) ? App::getAppURL().$_REQUEST['p'] : App::getAppURL().Cfg::get()->app->main;
+		$this->redirect=isset($_REQUEST['p']) ? app\App::getAppURL().$_REQUEST['p'] : app\App::getAppURL().Cfg::get()->app->main;
 
 		if($this->check()==true)
 		{

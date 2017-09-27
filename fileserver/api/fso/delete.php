@@ -1,7 +1,7 @@
 <?php
 require_once('../../lib/Util.php');
     
-class delete extends JSONApp{
+class delete extends app\JSONApp{
     public function __construct()
     {
         parent::__construct(1);
