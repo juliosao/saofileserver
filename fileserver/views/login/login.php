@@ -54,7 +54,7 @@ class login extends app\HTMLApp
 		?>
 		<h1>Login</h1>
 		<h2><?=$this->msg ?></h2>
-		<form method="POST" action="<?=App::getAppURL().'views/login/login.php' ?>">
+		<form method="POST" action="<?=app\App::getAppURL().'views/login/login.php' ?>">
             <label for="usr">Usuario:</label><input name="usr" />
             <label for="pwd">Password:</label><input type="password" name="pwd" />
 <?php if(isset($_REQUEST['p'])){ ?>
