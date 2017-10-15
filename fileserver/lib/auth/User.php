@@ -6,7 +6,7 @@ class User extends \database\DBObject
 {
     static $db=null;
 	static $keys=array('id');
-	static $fields=array('id','session');
+	static $fields=array('id','session','mail');
 	static $table='users';
 	
 	// Mandatory

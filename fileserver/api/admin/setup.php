@@ -37,7 +37,8 @@ class Setup extends app\App
 			$db->execute("CREATE TABLE users (
 							id VARCHAR(64) PRIMARY KEY,
 							auth VARCHAR(256),
-                            session VARCHAR(256)
+                            session VARCHAR(256),
+							mail VARCHAR(256)
 						)");
 
             $this->log[]= "* groups...";
@@ -54,9 +55,12 @@ class Setup extends app\App
 
 			$this->log[]= "Configurando usuario inicial...";
 			
-			$db->execute("INSERT INTO users (id,auth) VALUES (?,?)",array($appUsr,hash('sha256',$appPwd)));
 			$db->execute("INSERT INTO groups (id) VALUES ('admin')");
-			$db->execute("INSERT INTO user2groups (user,grp) VALUES ('root','admin')");
+			$db->execute("INSERT INTO groups (id) VALUES ('users')");
+
+			$db->execute("INSERT INTO users (id,auth) VALUES (?,?)",array($appUsr,hash('sha256',$appPwd)));
+			
+			$db->execute("INSERT INTO user2groups (user,grp) VALUES (?,'admin')(?,'users')",array($appUsr));
 
 			$this->log[]= "Tareas terminadas";
 		}
