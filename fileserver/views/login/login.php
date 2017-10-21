@@ -37,8 +37,7 @@ class login extends app\HTMLApp
         $usr=auth\Auth::checkPassw($_REQUEST['usr'],$_REQUEST['pwd']);
 
         if($usr)
-        {
-            auth\Auth::set($usr);
+        {            
             return true;
         }
         else
@@ -55,11 +54,12 @@ class login extends app\HTMLApp
 		<h1>Login</h1>
 		<h2><?=$this->msg ?></h2>
 		<form method="POST" action="<?=app\App::getAppURL().'views/login/login.php' ?>">
-            <label for="usr">Usuario:</label><input name="usr" />
-            <label for="pwd">Password:</label><input type="password" name="pwd" />
+            <label for="usr">Usuario:</label><input name="usr" /><br/>
+            <label for="pwd">Password:</label><input type="password" name="pwd" /><br/>
 <?php if(isset($_REQUEST['p'])){ ?>
 			<input type="hidden" name="p" value="<?=$_REQUEST['p'] ?>" />			
 <?php } ?>
+			<br/>
 			<input type="submit" /><input type="reset"/>
         </form>
 		<?php

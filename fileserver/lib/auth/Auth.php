@@ -31,6 +31,7 @@ class Auth
         if($lst[0]->session!=session_id())
             return false;
 
+        self::set($lst[0]);
         return true;
     }
 
@@ -45,10 +46,18 @@ class Auth
             return false;
         }
 
-        $usr->session=session_id();
-        $usr->save();
+        self::set($usr);
 
         return $usr;
+    }
+
+    static function logout()
+    {
+        session_unset();
+        session_destroy();
+        self::$current->session=null;
+        self::$current->save();
+        self::$current=null;
     }
 
     static function get()
@@ -60,6 +69,8 @@ class Auth
     {
         $_SESSION['usr']=$c->id;
         self::$current=$c;
+        $c->session=session_id();
+        $c->save();
     }
 }
 
