@@ -5,6 +5,11 @@ function error_die($err=404,$msg='')
     include (__DIR__.'/../views/error'.$err.'.php');     
 }
 
+function getParam($param,$default=null)
+{
+    return isset($_REQUEST[$param]) ? $_REQUEST[$param] : $default;
+}
+
 // Class autoloader
 spl_autoload_register(function ($class) {
 

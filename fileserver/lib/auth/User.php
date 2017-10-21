@@ -6,7 +6,7 @@ class User extends \database\DBObject
 {
     static $db=null;
 	static $keys=array('id');
-	static $fields=array('id','session','mail');
+	static $fields=array('id','session','auth','mail');
 	static $table='users';
 	
 	// Mandatory
@@ -31,14 +31,27 @@ class User extends \database\DBObject
     {
         $auth=hash('sha256',$pw);
 
-        $lst = User::select(array('id'=>$usr,'auth'=>$auth));
+        $lst = User::select(array('id'=>$usr));
+        error_log(json_encode($lst));
 
         if(count($lst)!=1)
             return false;
 
-        $lst[0]->save();
+        $usr=$lst[0];
 
-        return $lst[0];
+        if($usr->auth!=$auth && $usr->auth!=null)
+            return false;
+        
+        $usr->session=session_id();
+        $usr->save();
+
+        return $usr;
+    }
+
+    function savePw($pw)
+    {
+        $auth=hash('sha256',$pw);
+        return self::$db->execute("UPDATE users SET auth=:auth WHERE id=:id",array('auth'=>$auth,'id'=>$this->id))==1;
     }
 
     function save()

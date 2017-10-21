@@ -2,7 +2,7 @@
 require('../../lib/Util.php');
 
 
-class loadUser extends app\JSONApp
+class saveUser extends app\JSONApp
 {
     public function __construct()
     {
@@ -26,9 +26,34 @@ class loadUser extends app\JSONApp
             $this->exitApp(false,'user not found');
         }
 
+        $usr=$users[0];
+        if(isset($_REQUEST['mail']))
+        {
+            $usr->mail=$_REQUEST['mail'];        
+        }
+        $usr->save();
+
+        $pw=getParam('pw');
+        $pw2=getParam('pw2');
+
+        if($pw!=$pw2)
+        {
+            $this->exitApp(false,'passwords dont match');
+        }
+        else
+        {
+            if($pw!==null)
+            {
+                error_log("Cambiamos pw:$pw");
+                $res=$usr->savePw($pw);
+                error_log("$res");
+            }
+        }
+
+    
         $this->setResult('usr',$users[0]);
     }
 }
 
-$l = new loadUser();
+$l = new saveUser();
 $l->run();

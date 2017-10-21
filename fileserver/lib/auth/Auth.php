@@ -36,17 +36,19 @@ class Auth
 
     static function checkPassw($usr,$pw)
     {
-        $auth=hash('sha256',$pw);
+        error_log("usr:$usr, pw:$pw");
+        $usr = User::checkPassw($usr,$pw);
+        error_log(json_encode($usr));
 
-        $lst = User::select(array('id'=>$usr,'auth'=>$auth));
-
-        if(count($lst)!=1)
+        if($usr===false)
+        {
             return false;
+        }
 
-        $lst[0]->session=session_id();
-        $lst[0]->save();
+        $usr->session=session_id();
+        $usr->save();
 
-        return $lst[0];
+        return $usr;
     }
 
     static function get()
