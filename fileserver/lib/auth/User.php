@@ -27,6 +27,17 @@ class User extends \database\DBObject
         parent::__construct($src);        
     }
 
+    function equals($obj)
+    {
+        if(! $obj instanceof \auth\User )
+            return false;
+        
+        if($obj->id != $this->id)
+            return false;
+
+        return true;
+    }
+
     static function checkPassw($usr,$pw)
     {
         $auth=hash('sha256',$pw);

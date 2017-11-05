@@ -26,6 +26,8 @@ class loadUser extends app\JSONApp
             $this->exitApp(false,'user not found');
         }
 
+        unset($users[0]->auth);
+        unset($users[0]->session);
         $this->setResult('usr',$users[0]);
     }
 }

@@ -14,6 +14,12 @@ namespace app;
  		$this->styles=array();
 		$this->scripts=array();
 		$this->styles=array();
+		$this->onLoad=array();
+	}
+
+	public function addOnload($onload)
+	{
+		$this->onLoad[]=$onload;
 	}
 
 	//Adds a script to a HTMLApp extends App
@@ -35,6 +41,12 @@ namespace app;
 	//Puts HTMLApp extends App header
 	public function putHeader()
 	{
+		error_log(json_encode($this->onLoad));
+		$onload=implode(';',$this->onLoad);
+		if($onload!='')
+		{
+			$onload='onload="'.$onload.';"';
+		}
 		?>
 <!DOCTYPE html>
 <html>
@@ -59,7 +71,9 @@ namespace app;
 		}
 		?>
 	</head>
-	<body><?php
+
+	<body <?=$onload ?> >
+	<?php
 		return $this;
 	}
 
