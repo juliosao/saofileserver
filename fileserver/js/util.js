@@ -98,7 +98,7 @@ class ElementDecorator extends Decorator
     constructor(tag)
     {
         if(typeof tag == 'string')
-            this.tag=document.getElementById(form);
+            this.tag=document.getElementById(tag);
         else
             this.tag=tag; 
 
@@ -138,5 +138,65 @@ class FormDecorator extends ElementDecorator
 
             this.extra[k].decorators.process(data[k]);
         }
+    }
+}
+
+class TableDecorator extends Decorator
+{
+    constructor(form,extra)
+    {
+        super(form);
+        this.extra=extra;
+    }
+
+    process(data)
+    {
+        var table = document.createElement('table');
+        
+        if( typeof extra.columns !== 'undefined' )
+        {
+            var thead = document.createElement('thead');
+            var tr = document.createElement('tr');
+
+            for( k in extra.columns )
+            {
+                var td = document.createElement('th');
+                if( typeof extra.columns[k] == "string" )
+                {
+                    td.appendChild(document.createTextNode(extra.columns[k]))
+                }
+                else
+                {
+                    td.appendChild(document.createTextNode(extra.columns[k].label))
+                }
+                tr.appendChild(td);
+            }
+
+            thead.appendChild(tr);
+            table.appendChild(thead);
+        }
+
+        var tbody = document.createElement('tbody');
+        for( r in data )
+        {
+            var row = document.createElement('tr');
+            for( idx in data[r] )
+            {
+                var th = document.createElement('th');
+                if( typeof extra.columns != 'undefined' )
+                {
+                    if( typeof extra.columns[idx].decorator != 'undefined' )
+                    {
+                        th.appendChild(extra.columns[idx].decorator.process(data));
+                    }
+                    else
+                        th.appendChild(document.createTextNode(data[r][idx]));
+                }
+                else
+                    th.appendChild(document.createTextNode(data[r][idx]));
+            }
+            tbody.appendChild(row);
+        }
+        table.appendChild(tbody);
     }
 }
