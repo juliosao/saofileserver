@@ -117,7 +117,6 @@ class play extends app\App
         $i = $this->start;
         set_time_limit(0);        
 
-        error_log("Iniciamos lectura: ".$this->start."->".$this->end);
         fseek($this->stream,$this->start);
         while(!feof($this->stream) && $i <= $this->end) {            
 
@@ -125,8 +124,6 @@ class play extends app\App
             if(($i+$bytesToRead) > $this->end) {
                 $bytesToRead = $this->end - $i + 1;
             }
-
-            error_log("Leemos en ".$i." ".$bytesToRead);
 
             $data = fread($this->stream, $bytesToRead);
             echo $data;
@@ -138,13 +135,10 @@ class play extends app\App
 
     function run()
     {
-        error_log("Cargando...");
         $this->putHeader();
-        error_log("Enviando...");
         $this->putData();
     }
 }
 
-error_log("EEOOOOO");
 $b= new play();
 $b->run();
