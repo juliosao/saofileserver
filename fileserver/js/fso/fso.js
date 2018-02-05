@@ -42,6 +42,20 @@ fso.prototype={
 				me.listener.okCallBack(JSON.parse(this.responseText),me.tag);
 			}
 		};
+		xhttp.onprogress=function(ev)
+		{
+			if(me.listener.progressCallBack)
+			{
+				if (!ev.lengthComputable) 
+				{
+					me.listener.progressCallBack(-1,-1);
+				}
+				else
+				{
+					me.listener.progressCallBack(ev.loaded,ev.total);
+				}
+			}
+		};
 		xhttp.open("POST", "../../api/fso/upload.php", true);
 		xhttp.send(data);
 	},

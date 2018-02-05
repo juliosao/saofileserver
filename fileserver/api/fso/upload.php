@@ -12,7 +12,15 @@ class Upload extends app\JSONApp
     public function main() {
         $basedir=Cfg::get()->fso->basedir;
         error_log("Se quiere subir ficheros");
+        error_log(json_encode($_FILES));
+        if(count($_POST)==0)
+        {
+            $this->exitApp(false,"File too long");
+        }
+
         $path= urldecode($_POST["path"]);
+
+
         $dest= fso\FSO::joinPath($basedir,$path);
         $dir= new fso\FSODir($dest);
 
@@ -23,20 +31,32 @@ class Upload extends app\JSONApp
             $this->exitApp(false,$path." not found");
         }
 
-        foreach($_FILES as $file)
+        $files=$_FILES['files'];
+        foreach($files['error'] as $idx => $err )
         {
-            error_log(json_encode($file));
-            $newPath = fso\FSO::joinPath($dest,$file['name']);
-            $fsoFile=new fso\FSOFile(newPath);
-            if($fsoFile->exists()) 
+            if($err != null)
             {
-                $this->exitApp(false,$file['name'][0]." allready exists in ".$path);
+                $this->exitApp(false,"Cannot upload ".$files['name'][$idx]);
             }
 
-            error_log("TMPNAME:".json_encode($file['tmp_name'][0]));
+            $newPath = fso\FSO::joinPath($dest,$files['name'][$idx]);
+            $fsoFile=new fso\FSOFile($newPath);
+            if($fsoFile->exists()) 
+            {
+                $this->exitApp(false,$files['name'][$idx]." allready exists in ".$path);
+            }
+
+            error_log("TMPNAME:".json_encode($files['tmp_name'][$idx]));
             error_log("NEWNAME:".json_encode($newPath));
             error_log("FILE:".json_encode($fsoFile));
-            move_uploaded_file($file['tmp_name'][0],$newPath);
+            if(move_uploaded_file($files['tmp_name'][$idx],$newPath))
+            {
+                $this->setResult('function','upload');
+            }
+            else
+            {
+                $this->exitApp(false,"Cannot create ".$files['name'][$idx]);
+            }
         }
     }
 }

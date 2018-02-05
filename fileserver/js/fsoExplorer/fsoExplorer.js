@@ -18,8 +18,24 @@ fsoExplorer.prototype={
 	{
 		if(data.function=='explore')
 			this.render(data,tag);
-		else if (data.function=='delete')
+		else if (data.function=='delete' || data.function=='upload')
 			this.fso.refresh();
+		else
+			alert(data.error);
+			
+		this.progressBar.hidden=true;
+	},
+
+	progressCallBack:function(pos,total)
+	{		
+		if(pos!=-1)
+		{
+			this.progressBar.value=pos/total*100;
+		}
+		else
+		{
+			this.progressBar.value = (this.progressBar.value + 5) % 100;
+		}
 	},
 
 	render_obj:function(data,isFile)
@@ -37,7 +53,10 @@ fsoExplorer.prototype={
 		var img=document.createElement('SPAN');
 		img.className='fsoexplorer-icon';
 		if(isFile)
-			img.classList.add(data.extension);
+		{
+			if(data.extension!='')
+				img.classList.add(data.extension);
+		}
 
 		// Puts link in icon
 		if(isFile)
@@ -98,29 +117,44 @@ fsoExplorer.prototype={
 		}
 
 		//Puts main toolbar
-		var toolbar=document.createElement('DIV');
-		toolbar.className='fsoexplorer-toolbar';
+		this.toolbar=document.createElement('DIV');
+		this.toolbar.className='fsoexplorer-toolbar';
 		
 		var label=document.createElement('H1');
 		var txt=decodeURIComponent(data.path);
 		if(txt=='')
-			txt='/';
+			txt='/';		
 
 		label.appendChild(document.createTextNode(txt));
-		toolbar.appendChild(label);
+
+		this.progressBar=document.createElement('progress');
+		this.progressBar.hidden=true;
+		this.progressBar.id=tag+'-progress';
+		this.progressBar.value=0;
+		this.progressBar.max=100;
+		this.toolbar.appendChild(this.progressBar);
+
+		this.toolbar.appendChild(label);
 
 		for(var i in this.onRenderListeners)
-			this.onRenderListeners[i].onBeginRender(this,toolbar,data);
+			this.onRenderListeners[i].onBeginRender(this,this.toolbar,data);		
 
-		container.appendChild(toolbar);
+		container.appendChild(this.toolbar);
 
 		//Paint dirs
 		var lst=document.createElement('UL');
 		lst.className='fsoexplorer-list';
 		for(var d in data.dirs)
 		{
-			lst.appendChild(this.render_obj(data.dirs[d],false));
-			this.dirdata[d]=data.dirs[d];
+			try
+			{
+				lst.appendChild(this.render_obj(data.dirs[d],false));
+				this.dirdata[d]=data.dirs[d];
+			}
+			catch
+			{
+				data.dirs.splice(d,1) 
+			}
 		}
 		container.appendChild(lst);
 
@@ -189,6 +223,10 @@ fsoExplorer.setup=function()
 
 		var dt = e.dataTransfer;
 		var files = dt.files;
+
+		src.progressBar.hidden=false;
+		src.progressBar.value=1;
+
 
 		src.fso.upload(files, src.path);
 	}
