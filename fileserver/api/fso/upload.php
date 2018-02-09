@@ -10,6 +10,8 @@ class Upload extends app\JSONApp
     }
 
     public function main() {
+	    $ok=array();
+	    $ko=array();
         $basedir=Cfg::get()->fso->basedir;
         error_log("Se quiere subir ficheros");
         error_log(json_encode($_FILES));
@@ -36,29 +38,40 @@ class Upload extends app\JSONApp
         {
             if($err != null)
             {
-                $this->exitApp(false,"Cannot upload ".$files['name'][$idx]);
+                //$this->exitApp(false,"Cannot upload ".$files['name'][$idx]);
+                $ko[]=$files['name'][$idx];
+                continue;
             }
 
             $newPath = fso\FSO::joinPath($dest,$files['name'][$idx]);
             $fsoFile=new fso\FSOFile($newPath);
             if($fsoFile->exists()) 
             {
-                $this->exitApp(false,$files['name'][$idx]." allready exists in ".$path);
+                //$this->exitApp(false,$files['name'][$idx]." allready exists in ".$path);
+                $ko[]=$files['name'][$idx];
+                continue;
             }
 
             error_log("TMPNAME:".json_encode($files['tmp_name'][$idx]));
             error_log("NEWNAME:".json_encode($newPath));
             error_log("FILE:".json_encode($fsoFile));
+            
             if(move_uploaded_file($files['tmp_name'][$idx],$newPath))
-            {
-                $this->setResult('function','upload');
-            }
-            else
-            {
-                $this->exitApp(false,"Cannot create ".$files['name'][$idx]);
-            }
-        }
-    }
+		    {
+		        $ok[]=$files['name'][$idx];
+		    }
+		    else
+		    {
+   		        $ko[]=$files['name'][$idx];
+		    }
+		}            
+        
+        $this->setResult('uploaded',$ok);
+        $this->setResult('failed',$ko);
+        $this->setResult('function','upload');
+ 		
+	    
+	}
 }
 
 $b= new Upload();

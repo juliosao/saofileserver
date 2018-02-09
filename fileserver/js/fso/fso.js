@@ -42,8 +42,9 @@ fso.prototype={
 				me.listener.okCallBack(JSON.parse(this.responseText),me.tag);
 			}
 		};
-		xhttp.onprogress=function(ev)
+		xhttp.upload.onprogress=function(ev)
 		{
+			console.log(ev.toString());
 			if(me.listener.progressCallBack)
 			{
 				if (!ev.lengthComputable) 
