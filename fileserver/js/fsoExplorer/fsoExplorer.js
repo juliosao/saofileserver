@@ -22,12 +22,12 @@ fsoExplorer.prototype={
 			this.fso.refresh();
 		else
 			alert(data.error);
-			
+
 		this.progressBar.hidden=true;
 	},
 
 	progressCallBack:function(pos,total)
-	{		
+	{
 		if(pos!=-1)
 		{
 			this.progressBar.value=pos/total*100;
@@ -41,21 +41,27 @@ fsoExplorer.prototype={
 	render_obj:function(data,isFile)
 	{
 		// List entry
-		var elem=document.createElement('LI');
-		if(isFile)
-			elem.classList.add('fsoexplorer-file');
-		else
-			elem.classList.add('fsoexplorer-dir');
-
-		elem.id=data.name;		
+		var elem=document.createElement('div');
+		elem.classList.add('row');
+		elem.classList.add('media');
+		elem.id=data.name;
 
 		// Puts icon
-		var img=document.createElement('SPAN');
-		img.className='fsoexplorer-icon';
+		var mleft=document.createElement('div');
+		mleft.classList.add('media-left');
+
+		var img = document.createElement('a');
+		img.classList.add('fsoexplorer-icon');
+		img.classList.add('media-object');
+
 		if(isFile)
 		{
 			if(data.extension!='')
 				img.classList.add(data.extension);
+		}
+		else
+		{
+			img.classList.add('folder');
 		}
 
 		// Puts link in icon
@@ -64,20 +70,29 @@ fsoExplorer.prototype={
 		else
 			img.setAttribute('onclick',"fsoExplorer.controllers['"+this.tag+"'].goto('"+data.link+"')");
 
-		elem.appendChild(img);
+		mleft.appendChild(img);
+		elem.appendChild(mleft);
+
+		// Media body with info
+		var body=document.createElement('div');
+		body.classList.add('media-body');
 
 		// Puts label
-		var label=document.createElement('SPAN');
-		label.className='fsoexplorer-label';
+		var label=document.createElement('h3');
+		label.classList.add('mt-0');
 		label.appendChild(document.createTextNode(data.name));
+
 		// Puts link in icon
 		if(isFile)
 			label.setAttribute('onclick',"fsoExplorer.controllers['"+this.tag+"'].download('"+data.link+"')");
 		else
 			label.setAttribute('onclick',"fsoExplorer.controllers['"+this.tag+"'].goto('"+data.link+"')");
 
-		elem.appendChild(label);
+		body.appendChild(label);
 
+		elem.appendChild(body);
+
+		/*
 		//Puts toolbar
 		if(data.name!='..')
 		{
@@ -95,7 +110,7 @@ fsoExplorer.prototype={
 
 		for(var i in this.onRenderListeners)
 			this.onRenderListeners[i].onElementRender(this,elem,data,isFile);
-
+		*/
 		return elem;
 	},
 
@@ -110,7 +125,7 @@ fsoExplorer.prototype={
 		var container=document.getElementById(tag);
 		if(container==null)
 			alert("No se encontro "+tag);
-		
+
 		//Clears old data
 		while (container.firstChild) {
 			container.removeChild(container.firstChild);
@@ -119,11 +134,11 @@ fsoExplorer.prototype={
 		//Puts main toolbar
 		this.toolbar=document.createElement('DIV');
 		this.toolbar.className='fsoexplorer-toolbar';
-		
+
 		var label=document.createElement('H1');
 		var txt=decodeURIComponent(data.path);
 		if(txt=='')
-			txt='/';		
+			txt='/';
 
 		label.appendChild(document.createTextNode(txt));
 
@@ -137,7 +152,7 @@ fsoExplorer.prototype={
 		this.toolbar.appendChild(label);
 
 		for(var i in this.onRenderListeners)
-			this.onRenderListeners[i].onBeginRender(this,this.toolbar,data);		
+			this.onRenderListeners[i].onBeginRender(this,this.toolbar,data);
 
 		container.appendChild(this.toolbar);
 
@@ -151,9 +166,9 @@ fsoExplorer.prototype={
 				lst.appendChild(this.render_obj(data.dirs[d],false));
 				this.dirdata[d]=data.dirs[d];
 			}
-			catch
+			catch(E)
 			{
-				data.dirs.splice(d,1) 
+				data.dirs.splice(d,1)
 			}
 		}
 		container.appendChild(lst);

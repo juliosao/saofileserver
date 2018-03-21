@@ -16,7 +16,7 @@ class login extends app\HTMLApp
 			?>
 <html>
 	<head>
-		<meta http-equiv="refresh" content="2;url=<?=$this->redirect?>/"> 
+		<meta http-equiv="refresh" content="2;url=<?=$this->redirect?>/">
 	</head>
 	<body>Cargando...</body>
 </html>
@@ -28,7 +28,7 @@ class login extends app\HTMLApp
 	function check()
 	{
 		error_log(json_encode($_REQUEST));
-		if(!isset($_REQUEST['usr']) || !isset($_REQUEST['pwd']))		
+		if(!isset($_REQUEST['usr']) || !isset($_REQUEST['pwd']))
 		{
 			$this->msg="Usuario o password no definido";
             return false;
@@ -37,7 +37,7 @@ class login extends app\HTMLApp
         $usr=auth\Auth::checkPassw($_REQUEST['usr'],$_REQUEST['pwd']);
 
         if($usr)
-        {            
+        {
             return true;
         }
         else
@@ -49,19 +49,28 @@ class login extends app\HTMLApp
 
 
 	function putBody()
-	{		
+	{
 		?>
-		<h1>Login</h1>
-		<h2><?=$this->msg ?></h2>
-		<form method="POST" action="<?=app\App::getAppURL().'views/login/login.php' ?>">
-            <label for="usr">Usuario:</label><input name="usr" /><br/>
-            <label for="pwd">Password:</label><input type="password" name="pwd" /><br/>
-<?php if(isset($_REQUEST['p'])){ ?>
-			<input type="hidden" name="p" value="<?=$_REQUEST['p'] ?>" />			
-<?php } ?>
-			<br/>
-			<input type="submit" /><input type="reset"/>
-        </form>
+		<div class="jumbotron col-sm-4 col-sm-offset-4">
+			<h1>Login</h1>
+			<h2><?=$this->msg ?></h2>
+			<form class="form" method="POST" action="<?=app\App::getAppURL().'views/login/login.php' ?>">
+				<div class="form-group">
+					<label for="usr">Usuario:</label>
+					<input class="form-control" name="usr" />
+				</div>
+				<div class="form-group">
+					<label for="pwd">Password:</label>
+					<input class="form-control" type="password" name="pwd" />
+				</div>
+	<?php if(isset($_REQUEST['p'])){ ?>
+				<input type="hidden" name="p" value="<?=$_REQUEST['p'] ?>" />
+	<?php } ?>
+				<div class="form-group">
+					<input type="submit" class="btn btn-primary" /><input type="reset" class="btn" />
+				</div>
+			</form>
+        </div>
 		<?php
 	}
 }

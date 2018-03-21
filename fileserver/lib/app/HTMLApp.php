@@ -10,7 +10,7 @@ namespace app;
 	{
 		parent::__construct($doAuth);
 		$this->title='HTMLApp';
-		$this->mods=array();		
+		$this->mods=array();
  		$this->styles=array();
 		$this->scripts=array();
 		$this->styles=array();
@@ -25,7 +25,7 @@ namespace app;
 	//Adds a script to a HTMLApp extends App
 	public function addScript($script)
 	{
-		
+
  		$this->scripts[]=$script;
 		return $this;
 	}
@@ -33,7 +33,7 @@ namespace app;
 	//Adds a CSS to a HTMLApp extends App
 	public function addStyle($style)
 	{
-		
+
  		$this->styles[]=$style;
 		return $this;
 	}
@@ -55,6 +55,9 @@ namespace app;
 		<meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="<?=self::getAppURL();?>bootstrap/css/bootstrap.min.css" >
+        <link rel="stylesheet" href="<?=self::getAppURL();?>bootstrap/css/bootstrap-theme.min.css" >
+        <script src="<?=self::getAppURL();?>bootstrap/js/bootstrap.min.js" ></script>
 		<?php
 		foreach($this->scripts as $script)
 		{
@@ -62,7 +65,7 @@ namespace app;
 			<script type="text/javascript" src="<?=$script ?>" ></script>
 		<?php
 		}
-		
+
 		foreach($this->styles as $style)
 		{
 		?>
@@ -77,7 +80,7 @@ namespace app;
 		return $this;
 	}
 
-	
+
 
 	public function putFooter()
 	{
