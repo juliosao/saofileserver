@@ -42,13 +42,14 @@ fsoExplorer.prototype={
 	{
 		// List entry
 		var elem=document.createElement('div');
-		elem.classList.add('row');
+		//elem.classList.add('row');
 		elem.classList.add('media');
 		elem.id=data.name;
 
 		// Puts icon
 		var mleft=document.createElement('div');
 		mleft.classList.add('media-left');
+		mleft.classList.add('media-middle');
 
 		var img = document.createElement('a');
 		img.classList.add('fsoexplorer-icon');
