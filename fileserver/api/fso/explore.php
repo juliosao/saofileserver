@@ -47,11 +47,7 @@
 						'name'=>$d->getName(),
 						'link'=>urlencode($d->relativePath($basedir)));
 				}
-			}
 			
-			// Puts files
-			if($fso->type==FSODIR)
-			{
 				$c=$fso->childFiles();
 				foreach($c as $f)
 				{
@@ -63,6 +59,10 @@
 
 				ksort($dirs);
 				ksort($files);
+				
+				
+				$this->setResult('free',$fso->getFreeSpace());
+				$this->setResult('total',$fso->getTotalSpace());
 			}
 			else
 			{
@@ -72,12 +72,10 @@
 						'extension'=>$fso->extension());
 			}
 			
-			$this->setResult('path',rawurlencode($dirname));
+			$this->setResult('path',rawurlencode($dirname));			
+			$this->setResult('fsotype',$fso->type);
 			$this->setResult('dirs',$dirs);
 			$this->setResult('files',$files);
-			$this->setResult('fsotype',$fso->type);
-			$this->setResult('free',$fso->getFreeSpace());
-			$this->setResult('total',$fso->getTotalSpace());
 		}
 	}
 		
