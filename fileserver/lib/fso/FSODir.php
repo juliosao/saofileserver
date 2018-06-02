@@ -139,6 +139,17 @@ class FSODir extends FSO {
 			return False;
 		
 		return True;
-	}
+    }
+
+    public function getFreeSpace()
+    {
+        return disk_free_space($this->path);
+    }
+    
+    public function getTotalSpace()
+    {
+        return disk_total_space($this->path);
+    }
+
     
 }

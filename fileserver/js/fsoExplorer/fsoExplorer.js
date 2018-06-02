@@ -6,12 +6,27 @@ function fsoExplorer(tag)
 	this.dirdata=[];
 	this.onRenderListeners=[];
 	this.path='';
+
+	this.units=['bytes','Kb','Mb','Gb','Tb'];
+	this.baseUnit=Math.log(1000);
 }
+
+
+
 
 //Method definitions
 fsoExplorer.prototype={
 
 	constructor:fsoExplorer,
+
+	toUnits:function(size)
+	{		
+		var idx=Math.trunc(Math.log(size) / this.baseUnit);
+		idx = idx >= this.units.length ? this.units.length-1 : idx;
+		size =  Math.round( 100 * size / Math.pow(1000,idx))/100;
+
+		return ""+size+" "+this.units[idx];
+	},
 
 	//Occurs when a succesfull call returns
 	okCallBack:function(data,tag)
@@ -41,19 +56,14 @@ fsoExplorer.prototype={
 	render_obj:function(data,isFile)
 	{
 		// List entry
-		var elem=document.createElement('div');
-		//elem.classList.add('row');
-		elem.classList.add('media');
+		var elem=document.createElement('tr');
 		elem.id=data.name;
 
 		// Puts icon
-		var mleft=document.createElement('div');
-		mleft.classList.add('media-left');
-		mleft.classList.add('media-middle');
+		var mleft=document.createElement('td');	
 
 		var img = document.createElement('a');
 		img.classList.add('fsoexplorer-icon');
-		img.classList.add('media-object');
 
 		if(isFile)
 		{
@@ -74,13 +84,9 @@ fsoExplorer.prototype={
 		mleft.appendChild(img);
 		elem.appendChild(mleft);
 
-		// Media body with info
-		var body=document.createElement('div');
-		body.classList.add('media-body');
-
 		// Puts label
-		var label=document.createElement('h3');
-		label.classList.add('mt-0');
+		var label=document.createElement('td');
+		label.classList.add('fsoexplorer-object');
 		label.appendChild(document.createTextNode(data.name));
 
 		// Puts link in icon
@@ -89,19 +95,14 @@ fsoExplorer.prototype={
 		else
 			label.setAttribute('onclick',"fsoExplorer.controllers['"+this.tag+"'].goto('"+data.link+"')");
 
-		body.appendChild(label);
+		elem.appendChild(label);
 
-		elem.appendChild(body);
-
-		/*
-		//Puts toolbar
+		// Puts toolbar
+		var tools=document.createElement('td');
 		if(data.name!='..')
-		{
-			var tools=document.createElement('SPAN');
+		{			
 			tools.classList.add('fsoexplorer-toolbar');
-			elem.appendChild(tools);
 
-			// Puts delbutton
 			var del=document.createElement('SPAN');
 			del.classList.add('fsoexplorer-icon');
 			del.classList.add('fsoexplorer-del');
@@ -109,9 +110,11 @@ fsoExplorer.prototype={
 			tools.appendChild(del);
 		}
 
+		elem.appendChild(tools);
+
 		for(var i in this.onRenderListeners)
 			this.onRenderListeners[i].onElementRender(this,elem,data,isFile);
-		*/
+
 		return elem;
 	},
 
@@ -136,12 +139,21 @@ fsoExplorer.prototype={
 		this.toolbar=document.createElement('DIV');
 		this.toolbar.className='fsoexplorer-toolbar';
 
-		var label=document.createElement('H1');
+		var title=document.createElement('div');
+
+		var lblPath=document.createElement('span');
 		var txt=decodeURIComponent(data.path);
 		if(txt=='')
 			txt='/';
+		lblPath.appendChild(document.createTextNode(txt));
 
-		label.appendChild(document.createTextNode(txt));
+		var lblFree=document.createElement("span");
+		lblFree.appendChild(document.createTextNode(this.toUnits(data.free)));
+		lblFree.appendChild(document.createTextNode('/'));
+		lblFree.appendChild(document.createTextNode(this.toUnits(data.total)));
+
+		title.appendChild(lblPath);
+		title.appendChild(lblFree);
 
 		this.progressBar=document.createElement('progress');
 		this.progressBar.hidden=true;
@@ -150,38 +162,48 @@ fsoExplorer.prototype={
 		this.progressBar.max=100;
 		this.toolbar.appendChild(this.progressBar);
 
-		this.toolbar.appendChild(label);
+		this.toolbar.appendChild(title);
 
 		for(var i in this.onRenderListeners)
 			this.onRenderListeners[i].onBeginRender(this,this.toolbar,data);
 
 		container.appendChild(this.toolbar);
 
-		//Paint dirs
-		var lst=document.createElement('UL');
-		lst.className='fsoexplorer-list';
+		//Paint dirs and files
+		var lst=document.createElement('table');
+		lst.classList.add('table-striped')
+		lst.classList.add('table');
+
+		// Table header
+		var hdr = document.createElement('thead');
+
+		var td = document.createElement('th');
+		td.appendChild(document.createTextNode('Nombre'));
+		td.colSpan=2;
+		hdr.appendChild(td);
+
+		td = document.createElement('th');
+		td.appendChild(document.createTextNode('Acciones'));
+		hdr.appendChild(td);
+
+		lst.appendChild(hdr);
+
+		// Table body
+		var tbody=document.createElement('tbody');
 		for(var d in data.dirs)
 		{
-			try
-			{
-				lst.appendChild(this.render_obj(data.dirs[d],false));
-				this.dirdata[d]=data.dirs[d];
-			}
-			catch(E)
-			{
-				data.dirs.splice(d,1)
-			}
+			tbody.appendChild(this.render_obj(data.dirs[d],false));
+			this.dirdata[d]=data.dirs[d];
 		}
-		container.appendChild(lst);
-
-		//Paint files
-		var lst=document.createElement('UL');
-		lst.className='fsoexplorer-list';
+		
+		// Files later
 		for(var d in data.files)
 		{
-			lst.appendChild(this.render_obj(data.files[d],true));
+			tbody.appendChild(this.render_obj(data.files[d],true));
 			this.dirdata[d]=data.files[d];
 		}
+
+		lst.appendChild(tbody);
 		container.appendChild(lst);
 
 		for(var i in this.onRenderListeners)

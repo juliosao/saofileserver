@@ -76,6 +76,8 @@
 			$this->setResult('dirs',$dirs);
 			$this->setResult('files',$files);
 			$this->setResult('fsotype',$fso->type);
+			$this->setResult('free',$fso->getFreeSpace());
+			$this->setResult('total',$fso->getTotalSpace());
 		}
 	}
 		
