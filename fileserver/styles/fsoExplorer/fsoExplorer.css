@@ -70,6 +70,7 @@ div.fsoexplorer-toolbar{
 	padding: 5px;
 	background-color: gainsboro;
 	box-shadow: 0px 5px 2px darkgrey;
+	margin-bottom: 1em;
 }
 
 .fsoexplorer-toolbar .fsoexplorer-icon{
@@ -81,6 +82,13 @@ div.fsoexplorer-toolbar{
 	background-image: url('toolbar/delete.svg');
 }
 
-.fsoexplorer-toolbar h1{
-	font-size: large;
+.fso-explorer tr td:first-child {
+	width: 53px;
+	min-width: 53px;
+	max-width: 53px;
+	word-break: break-all;
+}
+
+.fso-explorer tr {
+	cursor: pointer;
 }

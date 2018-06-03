@@ -3,7 +3,7 @@ function fsoPlayer(tag)
 	this.playIdx=0;
 	this.playlist=[];
 	this.tag=tag;
-
+	this.path='';
 
 }
 
@@ -15,6 +15,8 @@ fsoPlayer.prototype={
 	//Gets directory data
 	load:function(path)
 	{
+		this.path=path;
+
 		var data = new FormData();
 		data.append('path', path);
 		
@@ -43,9 +45,21 @@ fsoPlayer.prototype={
 
 		// Puts UI
 		video=this.loadPlayList(data);
-		this.putPlayer(container,video);
-		if(!video && this.playlist.length>1)
+
+		toolbar=this.putToolBar(container);
+
+		if(video)
+		{
+			this.putPlayer(container,video);
+		}
+		else
+		{
+			this.putPlayer(toolbar,video);			
+		}
+		
+		if(this.playlist.length>1)
 			this.putPlayList(container);
+		
 		this.play(this.playIdx);
 	},
 
@@ -59,12 +73,12 @@ fsoPlayer.prototype={
 		{
 			if(data.files[i].extension=='mp3' || data.files[i].extension=='ogg')
 			{
-				this.playlist.push(data.files[i].link);					
+				this.playlist.push({ link:data.files[i].link, name:data.files[i].name});	
 			}
 			else if((data.files[i].extension=='mp4' || data.files[i].extension=='ogv' || data.files[i].extension=='webm') && this.playlist.length==0)
 			{
 				// Video only allows to play one file at time
-				this.playlist=[data.files[i].link];
+				this.playlist=[{link:data.files[i].link,name:data.files[i].name}];
 				video=true;
 				break;
 			}
@@ -73,9 +87,65 @@ fsoPlayer.prototype={
 		return video;
 	},
 
+	putToolBar:function(container)
+	{
+		var toolbar=document.createElement('div');
+		toolbar.id=this.tag+'-toolbar';
+		toolbar.className='fsoplayer-toolbar';
+		var title=document.createElement('h1');
+		title.appendChild(document.createTextNode(this.path));
+		toolbar.append(title);
+
+		container.appendChild(toolbar);
+		return toolbar;
+	},
+
 	putPlayList:function(container)
 	{
+		//Paint dirs and files
+		var lst=document.createElement('table');
+		lst.classList.add('table-striped')
+		lst.classList.add('table');
+
+		// Table header
+		var hdr = document.createElement('thead');
+		var td = document.createElement('th');
+		td.appendChild(document.createTextNode('Nombre'));
+		td.colSpan=2;
+		hdr.appendChild(td);
+		lst.appendChild(hdr);
+
+		// Table body
+		var tbody=document.createElement('tbody');
+		for(var i in this.playlist)
+		{
+			var me=this;
+			var tr = document.createElement('tr');
+			tr.id=this.tag+'-playitem-'+i;
+			tr.setAttribute('data-idx',i);
+			tr.addEventListener('click',function(e){
+				me.play(parseInt(e.currentTarget.getAttribute('data-idx')));
+			});
+
+			// Number
+			td = document.createElement('td');
+			td.appendChild(document.createTextNode(''+i));
+			tr.appendChild(td);
+
+			// Name
+			td = document.createElement('td');
+			td.appendChild(document.createTextNode(decodeURIComponent(this.playlist[i].name)));
+			tr.appendChild(td);
+
+			tbody.appendChild(tr);
+		}
+		lst.appendChild(tbody);
+		container.appendChild(lst);
+
+
+		/*
 		var list=document.createElement('ol');
+		list.id=this.tag+'-playlist';
 		list.className='fso-player-playlist';
 		me=this;
 		for(var i in this.playlist)
@@ -90,6 +160,7 @@ fsoPlayer.prototype={
 			list.appendChild(li);
 		}
 		container.appendChild(list);
+		*/
 	},
 
 	putPlayer:function(container,video)
@@ -146,7 +217,7 @@ fsoPlayer.prototype={
 			}
 		}
 
-		src.src='../../api/fsoPlayer/play.php?path='+this.playlist[idx];
+		src.src='../../api/fsoPlayer/play.php?path='+this.playlist[idx].link;
 		player.load();
 		this.playIdx=idx;
 

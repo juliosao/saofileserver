@@ -54,7 +54,8 @@
 					$files[$f->getName()]=array(
 						'name'=>$f->getName(),
 						'link'=>urlencode($f->relativePath($basedir)),
-						'extension'=>$f->extension());
+						'extension'=>$f->extension(),
+						'mime'=>$f->mime());
 				}
 
 				ksort($dirs);
@@ -69,7 +70,8 @@
 				$files[$fso->getName()]=array(
 						'name'=>$fso->getName(),
 						'link'=>urlencode($fso->relativePath($basedir)),
-						'extension'=>$fso->extension());
+						'extension'=>$fso->extension(),
+						'mime'=>$fso->mime());
 			}
 			
 			$this->setResult('path',rawurlencode($dirname));			
