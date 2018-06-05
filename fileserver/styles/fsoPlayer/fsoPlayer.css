@@ -24,6 +24,12 @@ div.fsoplayer-toolbar{
 	cursor: pointer;
 }
 
+.fso-player-playlist .selected{
+	color: white !important;
+	background: blue !important;
+	margin-right: 5px;
+}
+
 /*
 body{
     background: black;

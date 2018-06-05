@@ -12,33 +12,35 @@ fsoExplorerPlayer.prototype={
 
 	onBeginRender:function(source,toolbar,data)
 	{		
+		var pvideo=false;
+		var paudio=false;
 		if(this.video==null)	
-					this.video=document.createElement('video');
+			this.video=document.createElement('video');
 
 		for(var i in data.files)
 		{
-			if( data.files[i].extension=='mp4' || data.files[i].extension=='ogv' || data.files[i].extension=='webm' || data.files[i].extension=='avi' )
+			if( pvideo==false && (data.files[i].extension=='mp4' || data.files[i].extension=='ogv' || data.files[i].extension=='webm' || data.files[i].extension=='avi') )
 			{				
-				if(this.video.canPlayType(data.files[i].mime))
+				if( this.video.canPlayType(data.files[i].mime))
 				{
 					// Adds the button
 					var player=document.createElement('SPAN');
 					player.classList.add('fsoexplorer-icon');
-					player.classList.add('fsoplayer-icon');
-					player.setAttribute('onclick',"window.open('../../views/fsoPlayer/index.php?file="+data.path+"')");
+					player.classList.add('fsoplayer-icon-video');
+					player.setAttribute('onclick',"window.open('../../views/fsoPlayer/index.php?file="+data.path+"&mode=video')");
 					toolbar.appendChild(player);
-					break;
+					pvideo=true;
 				}
 			}
-			else if( data.files[i].extension=='mp3' || data.files[i].extension=='ogg' )
+			else if( paudio==false && (data.files[i].extension=='mp3' || data.files[i].extension=='ogg' || data.files[i].extension=='flac') )
 			{								
 				// Adds the button
 				var player=document.createElement('SPAN');
 				player.classList.add('fsoexplorer-icon');
- 				player.classList.add('fsoplayer-icon');
-				player.setAttribute('onclick',"window.open('../../views/fsoPlayer/index.php?file="+data.path+"')");
+ 				player.classList.add('fsoplayer-icon-audio');
+				player.setAttribute('onclick',"window.open('../../views/fsoPlayer/index.php?file="+data.path+"&mode=audio')");
 				toolbar.appendChild(player);
-				break;
+				paudio=true;
 			}			
 		}
 	},
@@ -48,21 +50,21 @@ fsoExplorerPlayer.prototype={
 		if(isFile)
 		{
 			// If file is supported adds a play button
-			if( data.extension=='mp4' || data.extension=='ogg' )
+			if( data.extension=='mp4' || data.extension=='ogg' || data.extension=='flac' ) 
 			{
-				this.putElementPlayer(elem,data);
+				this.putElementPlayer(elem,data,false);
 			}
 			else if( data.extension=='mp4' || data.extension=='ogv' || data.extension=='webm' || data.extension=='avi' )
 			{
 				if(this.video.canPlayType(data.mime))
 				{
-					this.putElementPlayer(elem,data);
+					this.putElementPlayer(elem,data,true);
 				}
 			}
 		}
 	},
 
-	putElementPlayer(elem,data)
+	putElementPlayer(elem,data,video)
 	{
 		// Gets toolbar
 		var tools=elem.getElementsByClassName('fsoexplorer-toolbar');
@@ -71,7 +73,7 @@ fsoExplorerPlayer.prototype={
 		// Adds the button
 		var player=document.createElement('SPAN');
 		player.classList.add('fsoexplorer-icon');
-		player.classList.add('fsoplayer-icon');
+		player.classList.add('fsoplayer-icon-'+ (video ? 'video' : 'audio') );
 		player.setAttribute('onclick',"window.open('../../views/fsoPlayer/index.php?file="+encodeURIComponent(data.link)+"')");
 		toolbar.appendChild(player);
 	},

@@ -71,7 +71,7 @@ fsoPlayer.prototype={
 		this.playlist=[];
 		for(i in data.files)
 		{
-			if(data.files[i].extension=='mp3' || data.files[i].extension=='ogg')
+			if(data.files[i].extension=='mp3' || data.files[i].extension=='ogg' || data.files[i].extension=='flac')
 			{
 				this.playlist.push({ link:data.files[i].link, name:data.files[i].name});	
 			}
@@ -106,6 +106,7 @@ fsoPlayer.prototype={
 		var lst=document.createElement('table');
 		lst.classList.add('table-striped')
 		lst.classList.add('table');
+		lst.classList.add('fso-player-playlist');
 
 		// Table header
 		var hdr = document.createElement('thead');
@@ -129,7 +130,7 @@ fsoPlayer.prototype={
 
 			// Number
 			td = document.createElement('td');
-			td.appendChild(document.createTextNode(''+i));
+			td.appendChild(document.createTextNode(''+(parseInt(i)+1)));
 			tr.appendChild(td);
 
 			// Name
