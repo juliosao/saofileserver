@@ -13,9 +13,10 @@ fsoPlayer.prototype={
 	constructor:fsoPlayer,
 
 	//Gets directory data
-	load:function(path)
+	load:function(path,mode)
 	{
 		this.path=path;
+		this.mode=mode;
 
 		var data = new FormData();
 		data.append('path', path);
@@ -48,16 +49,16 @@ fsoPlayer.prototype={
 
 		toolbar=this.putToolBar(container);
 
-		if(video)
+		if(this.mode!='audio' || this.playlist.length!=1)
 		{
-			this.putPlayer(container,video);
+			this.putPlayer(container,true);
 		}
 		else
 		{
-			this.putPlayer(toolbar,video);			
+			this.putPlayer(toolbar,false);			
 		}
 		
-		if(this.playlist.length>1)
+		if(this.playlist.length!=1)
 			this.putPlayList(container);
 		
 		this.play(this.playIdx);
@@ -69,22 +70,19 @@ fsoPlayer.prototype={
 		
 		// Gets tracklist
 		this.playlist=[];
+
 		for(i in data.files)
 		{
-			if(data.files[i].extension=='mp3' || data.files[i].extension=='ogg' || data.files[i].extension=='flac')
+			if( (data.files[i].extension=='mp3' || data.files[i].extension=='ogg' || data.files[i].extension=='flac') && this.mode!='video')
 			{
 				this.playlist.push({ link:data.files[i].link, name:data.files[i].name});	
 			}
-			else if((data.files[i].extension=='mp4' || data.files[i].extension=='ogv' || data.files[i].extension=='webm') && this.playlist.length==0)
+			else if((data.files[i].extension=='mp4' || data.files[i].extension=='ogv' || data.files[i].extension=='webm') && this.mode!='audio')
 			{
 				// Video only allows to play one file at time
-				this.playlist=[{link:data.files[i].link,name:data.files[i].name}];
-				video=true;
-				break;
+				this.playlist.push({link:data.files[i].link,name:data.files[i].name});
 			}
 		}
-
-		return video;
 	},
 
 	putToolBar:function(container)
@@ -244,7 +242,7 @@ fsoPlayer.setup=function()
 		var player=players[i];
 		var p=new fsoPlayer(player.id);
 		fsoPlayer.players[player.id]=p;
-		p.load(player.getAttribute('data-src'));
+		p.load(player.getAttribute('data-src'),player.getAttribute('data-mode'));
 	}
 }
 

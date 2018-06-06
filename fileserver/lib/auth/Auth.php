@@ -37,7 +37,7 @@ class Auth
 
     static function checkPassw($usr,$pw)
     {
-        error_log("usr:$usr, pw:$pw");
+        //error_log("usr:$usr, pw:$pw");
         $usr = User::checkPassw($usr,$pw);
         error_log(json_encode($usr));
 
