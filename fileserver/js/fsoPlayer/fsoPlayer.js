@@ -47,16 +47,9 @@ fsoPlayer.prototype={
 		// Puts UI
 		video=this.loadPlayList(data);
 
-		toolbar=this.putToolBar(container);
+		this.putToolBar(container);
 
-		if(this.mode!='audio' || this.playlist.length!=1)
-		{
-			this.putPlayer(container,true);
-		}
-		else
-		{
-			this.putPlayer(toolbar,false);			
-		}
+		this.putPlayer(container,this.mode!='audio');				
 		
 		if(this.playlist.length!=1)
 			this.putPlayList(container);
