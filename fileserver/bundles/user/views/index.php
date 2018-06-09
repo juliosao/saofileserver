@@ -1,6 +1,6 @@
 <?php
 
-require_once('../../lib/Util.php');
+require_once('../../../lib/Util.php');
 
 class Index extends app\HTMLApp
 {
@@ -8,8 +8,9 @@ class Index extends app\HTMLApp
 	{
 		parent::__construct(1);
 		
-		$this->addStyle('../../styles/main/main.css');
-		$this->addScript('../../js/auth/User.js');
+		$this->title='Propiedades del usuario';
+		$this->addStyle('../../../styles/main/main.css');
+		$this->addScript('../js/User.js');
 
 		$usr=isset($_REQUEST['usr']) ? $_REQUEST['usr'] : \auth\Auth::get()->id ;
 		$this->addOnload("loadUser('".$usr."')");
@@ -38,11 +39,16 @@ class Index extends app\HTMLApp
 				}
 				
 				usr=data;
-				document.getElementById('user-name').innerText=data.id;
-				document.getElementById('mail').value=data.mail;
+				fillForm()
+				return true;
+			}
+
+			function fillForm()
+			{
+				document.getElementById('user-name').innerText=usr.id;
+				document.getElementById('mail').value=usr.mail;
 				document.getElementById('pw').value='';
 				document.getElementById('pw2').value='';
-				return true;
 			}
 
 			function userSaved(data)
@@ -67,15 +73,24 @@ class Index extends app\HTMLApp
 			}
 		</script>
 		<h1>Propiedades de <span id="user-name"/></h1>
-		<div>
-			<input type="hidden" id="usr" name="usr"  />
-			<label for="mail">Correo:</label><input name="mail" id="mail"  /><br/><br>
-			<label for="mail">Contraseña:</label><input type="password" name="pw" id="pw"  /><br/>
-			<label for="mail">Contraseña (Repetir):</label><input type="password" name="pw2" id="pw2" /><br/>
-			<button onclick="saveUser()">Guardar</button>
+		<input type="hidden" id="usr" name="usr"  />
+
+		<div class="form-group">
+			<label for="mail">Correo:</label>
+			<input class="form-control" name="mail" id="mail"  />
 		</div>
-
-
+		<div class="form-group">
+			<label for="pw">Contraseña:</label>
+			<input class="form-control" type="password" name="pw" id="pw"  />
+		</div>
+		<div class="form-group">
+			<label for="pw2">Contraseña (Repetir):</label>
+			<input class="form-control" type="password" name="pw2" id="pw2" />
+		</div>
+		<div class="form-group">
+			<button class="btn btn-primary" onclick="saveUser()">Guardar</button>
+			<button class="btn" onclick="saveUser()">Restaurar</button>
+		</div>
 		<?php
 	}
 }

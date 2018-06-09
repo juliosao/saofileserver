@@ -27,7 +27,7 @@ class User
 			}
         };
         
-		xhttp.open("POST", "../../api/user/load.php", true);
+		xhttp.open("POST", "../api/load.php", true);
 		xhttp.send(data);
     }
 
@@ -54,7 +54,7 @@ class User
 			}
         };
         
-		xhttp.open("POST", "../../api/user/save.php", true);
+		xhttp.open("POST", "../api/save.php", true);
 		xhttp.send(data);
     }
 
