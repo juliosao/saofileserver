@@ -9,9 +9,8 @@
 		}
 
 		public function main() {
+			$result=array();
 			$basedir=Cfg::get()->fso->basedir;
-			
-			$this->setResult('function','explore');
 			
 			$dirname='.';
 			
@@ -24,7 +23,7 @@
 			
 			$fso=fso\FSO::fromPath($dirpath);
 			if(!$fso===null) {
-				$this->exitApp(false,"Ruta no encontrada :$dirname");
+				$this->exitError(404,"Ruta no encontrada :$dirname");
 			}
 
 			$dirs=array();
@@ -61,9 +60,8 @@
 				ksort($dirs);
 				ksort($files);
 				
-				
-				$this->setResult('free',$fso->getFreeSpace());
-				$this->setResult('total',$fso->getTotalSpace());
+				$result['free']=$fso->getFreeSpace();
+				$result['total']=$fso->getTotalSpace();				
 			}
 			else
 			{
@@ -74,10 +72,13 @@
 						'mime'=>$fso->mime());
 			}
 			
-			$this->setResult('path',rawurlencode($dirname));			
-			$this->setResult('fsotype',$fso->type);
-			$this->setResult('dirs',$dirs);
-			$this->setResult('files',$files);
+			$result['path']=rawurlencode($dirname);	
+			$result['fsotype']=$fso->type;
+			$result['dirs']=$dirs;
+			$result['files']=$files;
+			$result['function']='explore';
+
+			return $result;
 		}
 	}
 		

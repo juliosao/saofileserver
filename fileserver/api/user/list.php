@@ -1,5 +1,5 @@
 <?php
-require('../../../lib/Util.php');
+require('../../lib/Util.php');
 
 
 class listUsers extends app\JSONApp
@@ -17,7 +17,7 @@ class listUsers extends app\JSONApp
 
         $users=auth\User::select($filter);
 
-        $this->setResult('lst',$users);
+        return($users);
     }
 }
 

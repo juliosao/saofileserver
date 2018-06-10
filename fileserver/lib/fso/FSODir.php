@@ -102,6 +102,11 @@ class FSODir extends FSO {
             {
                 error_log("Entrando a ".$f->getName());
                 $ret=$f->delete();
+                if($ret==false)
+                {
+                    $this->error=join('\n',error_get_last());
+                    return false;
+                }
             }
             
             $res= rmdir($this->path);

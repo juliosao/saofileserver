@@ -13,9 +13,7 @@ class User extends \database\DBObject
 	static $select=null;
 	static $insert=null;
 	static $update=null;
-	static $delete=null;
-
-    static $current=null;
+	static $delete=null;    
 
     static function init()
     {
@@ -36,6 +34,11 @@ class User extends \database\DBObject
             return false;
 
         return true;
+    }
+
+    function getGroups()
+    {
+        return self::$db->query("SELECT grp FROM user2groups WHERE user=?", array($this->id));
     }
 
     static function checkPassw($usr,$pw)

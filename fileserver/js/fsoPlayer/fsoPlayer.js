@@ -84,7 +84,11 @@ fsoPlayer.prototype={
 		toolbar.id=this.tag+'-toolbar';
 		toolbar.className='fsoplayer-toolbar';
 		var title=document.createElement('h1');
-		title.appendChild(document.createTextNode(this.path));
+		if(this.path!='')
+			title.appendChild(document.createTextNode(this.path));
+		else
+			title.appendChild(document.createTextNode('/'));
+		
 		toolbar.append(title);
 
 		container.appendChild(toolbar);

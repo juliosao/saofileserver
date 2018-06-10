@@ -1,5 +1,5 @@
 <?php
-require('../../../lib/Util.php');
+require('../../lib/Util.php');
 
 
 class saveUser extends app\JSONApp

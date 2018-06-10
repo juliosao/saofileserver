@@ -6,6 +6,7 @@ namespace app;
 abstract class App {
 	private static $appDir = null;
 	private static $appURL = null;
+	protected static $current = null;
     protected $result;
 
     public function __construct($doAuth=false)
@@ -22,13 +23,26 @@ abstract class App {
         $this->result=array();
     }
 
-    //Runs JSONApp
-    public abstract function run();
+	abstract function main();
 
-
-	public function exitApp($msg)
+	//Runs JSONApp
+	public function run()
 	{
-		die($msg);
+		self::$current=$this;
+		ob_start();		
+		$this->main();
+		ob_flush();
+		die();
+	}
+
+	public function exitError($errNumber=500,$msg='')
+	{
+		ob_clean();
+		http_response_code($errNumber);
+		if($msg!='')
+			echo $msg;
+		ob_flush();
+		die();
 	}
 	
 	public static function getAppDir()

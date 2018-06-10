@@ -16,12 +16,12 @@ class download extends app\App
             $filename=str_replace('..','.', urldecode($_REQUEST['path']));
         }
         else{
-            die("download what?");
+            $this->exitError(400,"download what?");
         }
 
         $file=new fso\FSOFile(fso\FSO::joinPath($basedir,$filename));
         if(!$file->exists()) {
-            die($filename." not found in ".$basedir);
+            $this->exitError(404,"Not found: $filename");
         }
 
         set_time_limit(0);

@@ -91,7 +91,7 @@ namespace app;
 	}
 
 	//Runs HTMLApp
-    public function run()
+    public function main()
     {
         $this->putHeader();
 		$this->putBody();

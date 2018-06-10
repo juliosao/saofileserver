@@ -49,7 +49,7 @@ class Setup extends app\App
             $this->log[]= "* user2groups...";
 			$db->execute("CREATE TABLE user2groups (
 				user VARCHAR(64) REFERENCES users(id),
-				grp VARCHAR(256) REFERENCES groups(id),
+				grp VARCHAR(64) REFERENCES groups(id),
 				PRIMARY KEY (user,grp)
 			)");
 

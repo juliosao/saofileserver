@@ -9,7 +9,7 @@ class delete extends app\JSONApp{
 
     public function main() {   
         $basedir=Cfg::get()->fso->basedir;
-		$this->setResult('function','delete');
+		$result=array('function'=>'delete');
 		
         $mal=0;
         error_log(json_encode($_POST));
@@ -17,7 +17,7 @@ class delete extends app\JSONApp{
         $borrado=array();
         
         if(is_null($paths)) {
-            $this->exitApp(false,'Ruta no encontrada.');
+            $this->exitError(400,"Delete what?");
         }
                
         foreach($paths as $path)
@@ -27,12 +27,12 @@ class delete extends app\JSONApp{
 
             if($obj==null)
             {
-                $this->exitApp(false,"Ruta no encontrada: $p");
+                $this->exitError(404,"Not found: $p");
             }
 
             if(!$obj->delete())
             {
-                $this->exitApp(false,"Imposible borrar $p: ".$obj->error);
+                $this->exitError(500,"Cannot delete $p: ".$obj->error);
             }
         }
         

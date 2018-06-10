@@ -17,11 +17,10 @@ class Upload extends app\JSONApp
         error_log(json_encode($_FILES));
         if(count($_POST)==0)
         {
-            $this->exitApp(false,"File too long");
+            $this->exitError(413,"File too long");
         }
 
         $path= urldecode($_POST["path"]);
-
 
         $dest= fso\FSO::joinPath($basedir,$path);
         $dir= new fso\FSODir($dest);
@@ -30,7 +29,7 @@ class Upload extends app\JSONApp
 
         if(!$dir->exists())
         {
-            $this->exitApp(false,$path." not found");
+            $this->exitErro(404,$path." not found");
         }
 
         $files=$_FILES['files'];
@@ -66,11 +65,7 @@ class Upload extends app\JSONApp
 		    }
 		}            
         
-        $this->setResult('uploaded',$ok);
-        $this->setResult('failed',$ko);
-        $this->setResult('function','upload');
- 		
-	    
+        return array('uploaded'=>$ok, 'failed'=>$ko,'function'=>'upload');
 	}
 }
 

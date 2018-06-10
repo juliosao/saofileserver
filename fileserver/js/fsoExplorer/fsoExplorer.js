@@ -12,8 +12,6 @@ function fsoExplorer(tag)
 }
 
 
-
-
 //Method definitions
 fsoExplorer.prototype={
 
@@ -156,7 +154,7 @@ fsoExplorer.prototype={
 		title.appendChild(lblFree);
 
 		this.progressBar=document.createElement('progress');
-		this.progressBar.hidden=true;
+		//this.progressBar.hidden=true;
 		this.progressBar.id=tag+'-progress';
 		this.progressBar.value=0;
 		this.progressBar.max=100;
