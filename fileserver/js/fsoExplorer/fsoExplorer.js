@@ -169,7 +169,8 @@ fsoExplorer.prototype={
 
 		//Paint dirs and files
 		var lst=document.createElement('table');
-		lst.classList.add('table-striped')
+		lst.classList.add('table-striped');
+		lst.classList.add('table-responsive-sm');
 		lst.classList.add('table');
 
 		// Table header

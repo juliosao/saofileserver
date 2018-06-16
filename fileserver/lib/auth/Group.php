@@ -4,7 +4,7 @@ class Group extends \database\DBObject
 {
     static $db=null;
 	static $keys=array('id');
-	static $fields=array('id');
+	static $fields=array('id','name');
 	static $table='users';
 	
 	// Mandatory

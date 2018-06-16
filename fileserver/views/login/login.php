@@ -51,7 +51,7 @@ class login extends app\HTMLApp
 	function putBody()
 	{
 		?>
-		<div class="jumbotron col-sm-4 col-sm-offset-4">
+		<div class="jumbotron col-sm-6 mx-auto">
 			<h1>Login</h1>
 			<h2><?=$this->msg ?></h2>
 			<form class="form" method="POST" action="<?=app\App::getAppURL().'views/login/login.php' ?>">

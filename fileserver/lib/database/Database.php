@@ -7,9 +7,9 @@ namespace database;
  * \brief Clase manejadora de la base de datos
  */
 class Database {    
-    static $defaultPath = 'mysql:host=localhost;dbname=fileserver;charset=utf8';
-    static $defaultUser = 'fileserver';
-    static $defaultPass = 'fileserver';
+    static $defaultPath = 'mysql:host=localhost;dbname=saofileserver;charset=utf8';
+    static $defaultUser = 'saofileserver';
+    static $defaultPass = 'saofileserver';
     
     static $instancia; /**< Aqui guardamos la instancia creada de la clase, solo puede haber una a la vez */
     static $initialized=false;
@@ -240,12 +240,12 @@ class Database {
 	 */
     static function getInstance() 
     {
-		if(!Database::$instancia)
-		{
-			$maindb = new Database();
-			Database::$instancia=$maindb;
-		}
-		return Database::$instancia;
+        if(!Database::$instancia)
+        {
+            $maindb = new Database();
+            Database::$instancia=$maindb;
+        }  
+        return Database::$instancia;
     }	
 }
 

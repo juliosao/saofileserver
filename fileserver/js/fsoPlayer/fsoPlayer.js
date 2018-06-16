@@ -100,6 +100,7 @@ fsoPlayer.prototype={
 		//Paint dirs and files
 		var lst=document.createElement('table');
 		lst.classList.add('table-striped')
+		lst.classList.add('table-responsive');
 		lst.classList.add('table');
 		lst.classList.add('fso-player-playlist');
 

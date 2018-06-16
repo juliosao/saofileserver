@@ -1,11 +1,12 @@
 {
     "app":{
-        "main":"views/fsoExplorer/index.php"
+        "main":"views/fsoExplorer/index.php",
+        "setup":"bundles/setup/views/index.php"
     },
     "bbdd":{
-        "database":"mysql:host=localhost;dbname=fileserver;charset=utf8",
-        "user":"fileserver",
-        "pass":"fileserver"
+        "database":"mysql:host=localhost;dbname=saofileserver;charset=utf8",
+        "user":"saofileserver",
+        "pass":"saofileserver"
     },
     "fso":{
         "basedir":"/var/shared-data"

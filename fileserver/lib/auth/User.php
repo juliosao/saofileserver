@@ -6,7 +6,7 @@ class User extends \database\DBObject
 {
     static $db=null;
 	static $keys=array('id');
-	static $fields=array('id','session','auth','mail');
+	static $fields=array('id','name','session','auth','mail');
 	static $table='users';
 	
 	// Mandatory
@@ -45,7 +45,7 @@ class User extends \database\DBObject
     {
         $auth=hash('sha256',$pw);
 
-        $lst = User::select(array('id'=>$usr,'auth'=>$auth));
+        $lst = User::select(array('name'=>$usr,'auth'=>$auth));
         error_log(json_encode($lst));
 
         if(count($lst)!=1)
