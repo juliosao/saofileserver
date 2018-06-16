@@ -1,5 +1,5 @@
 <?php
-require_once('../../lib/Util.php');
+require_once('../../../lib/Util.php');
 
 class index extends app\HTMLApp
 {
@@ -9,8 +9,8 @@ class index extends app\HTMLApp
 		$this->title='player';
 		$this->file=urldecode($_REQUEST['file']);
 		$this->mode=isset($_REQUEST['mode']) ? $_REQUEST['mode'] : '';
-		$this->addScript('../../js/fsoPlayer/fsoPlayer.js');
-		$this->addStyle('../../styles/fsoPlayer/fsoPlayer.css');
+		$this->addScript('../js/player.js');
+		$this->addStyle('../styles/player.css');
 	}
 
 	function putBody()

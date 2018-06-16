@@ -28,7 +28,7 @@ fsoPlayer.prototype={
 				me.loadCallBack(JSON.parse(this.responseText),me.tag);
 			}
 		};
-		xhttp.open("POST", "../../api/fso/explore.php", true);
+		xhttp.open("POST", "../../../api/fso/explore.php", true);
 		xhttp.send(data);
 	},
 
@@ -100,7 +100,7 @@ fsoPlayer.prototype={
 		//Paint dirs and files
 		var lst=document.createElement('table');
 		lst.classList.add('table-striped')
-		lst.classList.add('table-responsive');
+		lst.classList.add('table-responsive-sm');
 		lst.classList.add('table');
 		lst.classList.add('fso-player-playlist');
 
@@ -138,26 +138,6 @@ fsoPlayer.prototype={
 		}
 		lst.appendChild(tbody);
 		container.appendChild(lst);
-
-
-		/*
-		var list=document.createElement('ol');
-		list.id=this.tag+'-playlist';
-		list.className='fso-player-playlist';
-		me=this;
-		for(var i in this.playlist)
-		{
-			var li = document.createElement('li');
-			li.id=this.tag+'-playitem-'+i;
-			li.setAttribute('data-idx',i);
-			li.addEventListener('click',function(e){
-				me.play(parseInt(e.currentTarget.getAttribute('data-idx')));
-			});
-			li.appendChild(document.createTextNode(decodeURIComponent(this.playlist[i])));
-			list.appendChild(li);
-		}
-		container.appendChild(list);
-		*/
 	},
 
 	putPlayer:function(container,video)
@@ -214,7 +194,7 @@ fsoPlayer.prototype={
 			}
 		}
 
-		src.src='../../api/fsoPlayer/play.php?path='+this.playlist[idx].link;
+		src.src='../../../api/fso/download.php?path='+this.playlist[idx].link;
 		player.load();
 		this.playIdx=idx;
 

@@ -27,7 +27,7 @@ fsoExplorerPlayer.prototype={
 					var player=document.createElement('SPAN');
 					player.classList.add('fsoexplorer-icon');
 					player.classList.add('fsoplayer-icon-video');
-					player.setAttribute('onclick',"window.open('../../views/fsoPlayer/index.php?file="+data.path+"&mode=video')");
+					player.setAttribute('onclick',"window.open('../../bundles/player/views/index.php?file="+data.path+"&mode=video')");
 					toolbar.appendChild(player);
 					pvideo=true;
 				}
@@ -38,7 +38,7 @@ fsoExplorerPlayer.prototype={
 				var player=document.createElement('SPAN');
 				player.classList.add('fsoexplorer-icon');
  				player.classList.add('fsoplayer-icon-audio');
-				player.setAttribute('onclick',"window.open('../../views/fsoPlayer/index.php?file="+data.path+"&mode=audio')");
+				player.setAttribute('onclick',"window.open('../../bundles/player/views/index.php?file="+data.path+"&mode=audio')");
 				toolbar.appendChild(player);
 				paudio=true;
 			}			
@@ -74,7 +74,7 @@ fsoExplorerPlayer.prototype={
 		var player=document.createElement('SPAN');
 		player.classList.add('fsoexplorer-icon');
 		player.classList.add('fsoplayer-icon-'+ (video ? 'video' : 'audio') );
-		player.setAttribute('onclick',"window.open('../../views/fsoPlayer/index.php?file="+encodeURIComponent(data.link)+"')");
+		player.setAttribute('onclick',"window.open('../../bundles/player/views/index.php?file="+encodeURIComponent(data.link)+"')");
 		toolbar.appendChild(player);
 	},
 

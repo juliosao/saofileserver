@@ -25,13 +25,21 @@ abstract class App {
 
 	abstract function main();
 
+	function setBuffered($mode=true)
+	{
+		$this->buffered=$mode;
+		if($mode==false)
+			ob_end_flush();
+	}
+
 	//Runs JSONApp
 	public function run()
 	{
 		self::$current=$this;
 		ob_start();		
 		$this->main();
-		ob_flush();
+		if($this->buffered)
+			ob_flush();
 		die();
 	}
 

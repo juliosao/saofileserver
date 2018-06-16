@@ -1,5 +1,5 @@
 <?php
-require_once('../../lib/Util.php');
+require_once('../../../lib/Util.php');
 
 class play extends app\App
 {
@@ -109,7 +109,7 @@ class play extends app\App
         header('Pragma: public');
         header("Accept-Ranges: 0-".$this->size-1);
 
-        error_log("Header enviado");
+        $this->setBuffered(false);
     }
 
     function putData()
@@ -133,7 +133,7 @@ class play extends app\App
 
     }
 
-    function run()
+    function main()
     {
         $this->putHeader();
         $this->putData();

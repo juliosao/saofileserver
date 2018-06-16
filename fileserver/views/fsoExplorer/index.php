@@ -11,11 +11,11 @@ class Index extends app\HTMLApp
 		$this->title='Archivos';
 		$this->addScript('../../js/fso/fso.js');
 		$this->addScript('../../js/fsoExplorer/fsoExplorer.js');
-		$this->addScript('../../js/fsoPlayer/fsoExplorerPlayer.js');
+		$this->addScript('../../bundles/player/js/explorer.js');
 		$this->addScript('../../bundles/user/js/explorer.js');
 
 		$this->addStyle('../../styles/fsoExplorer/fsoExplorer.css');
-		$this->addStyle('../../styles/fsoPlayer/fsoExplorerPlayer.css');
+		$this->addStyle('../../bundles/player/styles/explorer.css');
 		$this->addStyle('../../bundles/user/styles/explorer.css');
 		$this->addStyle('../../styles/main/main.css');
 	}

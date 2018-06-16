@@ -45,7 +45,7 @@ class Index extends app\HTMLApp
 
 			function fillForm()
 			{
-				document.getElementById('user-name').innerText=usr.id;
+				document.getElementById('user-name').innerText=usr.name;
 				document.getElementById('mail').value=usr.mail;
 				document.getElementById('pw').value='';
 				document.getElementById('pw2').value='';

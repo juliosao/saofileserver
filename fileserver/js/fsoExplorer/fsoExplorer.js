@@ -139,12 +139,14 @@ fsoExplorer.prototype={
 
 		var title=document.createElement('div');
 
+		// Path
 		var lblPath=document.createElement('span');
 		var txt=decodeURIComponent(data.path);
 		if(txt=='')
 			txt='/';
 		lblPath.appendChild(document.createTextNode(txt));
 
+		// Free space
 		var lblFree=document.createElement("span");
 		lblFree.appendChild(document.createTextNode(this.toUnits(data.free)));
 		lblFree.appendChild(document.createTextNode('/'));
@@ -189,6 +191,8 @@ fsoExplorer.prototype={
 
 		// Table body
 		var tbody=document.createElement('tbody');
+
+		// Directorys first
 		for(var d in data.dirs)
 		{
 			tbody.appendChild(this.render_obj(data.dirs[d],false));

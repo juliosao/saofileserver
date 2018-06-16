@@ -1,14 +1,16 @@
 class User
 {
-    constructor(id,mail)
+    constructor(id,name,mail)
     {
         this.id=id;
+        this.name=name;
         this.mail=mail;
     }
 
-    static parse($data)
+    static parse(data)
     {
-        return new User($data.id,$data.mail);
+        data=JSON.parse(data);
+        return new User(data.id,data.name,data.mail);
     }
 
     static load(id,callback)
@@ -20,14 +22,11 @@ class User
 		xhttp.onreadystatechange = function(data) {
 			if (this.readyState == 4 && this.status == 200) {
                 var res=JSON.parse(this.responseText)
-                if(res.ok)
-                    callback(new User(res.usr.id,res.usr.mail));               
-                else
-                    callback(res);
+                callback(new User(res.id,res.name,res.mail));                
 			}
         };
         
-		xhttp.open("POST", "../api/load.php", true);
+		xhttp.open("POST", "../../../api/user/load.php", true);
 		xhttp.send(data);
     }
 
@@ -48,13 +47,11 @@ class User
 			if (this.readyState == 4 && this.status == 200) {
                 var res=JSON.parse(this.responseText)
                 if(res.ok)
-                    callback(new User(res.usr.id,res.usr.mail));               
-                else
-                    callback(res);
+                    callback(new User(res.id,res.mail));
 			}
         };
         
-		xhttp.open("POST", "../api/save.php", true);
+		xhttp.open("POST", "../../../api/user/save.php", true);
 		xhttp.send(data);
     }
 
