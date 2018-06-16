@@ -27,7 +27,7 @@ class login extends app\HTMLApp
 
 	function check()
 	{
-		error_log(json_encode($_REQUEST));
+		//error_log(json_encode($_REQUEST));
 		if(!isset($_REQUEST['usr']) || !isset($_REQUEST['pwd']))
 		{
 			$this->msg="Usuario o password no definido";
