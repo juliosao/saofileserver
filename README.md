@@ -20,4 +20,5 @@ Julio A. García López (juliosao@gmail.com)
 ## Install
 - Copy 'fileserver' folder in your server
 - Edit fileserver/mod/fso/cfg to set your desired 'basedir' directory
+- Access the saofileserver in order to get a setup screen
 
