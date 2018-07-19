@@ -12,10 +12,22 @@ abstract class JSONApp extends App{
 	//Runs JSONApp
 	public function run()
 	{
-		parent::$current=$this;
-		ob_start();		
-		echo json_encode($this->main());
-		ob_flush();
+		try
+		{
+			parent::$current=$this;
+			ob_start();
+			echo json_encode($this->main());
+			ob_flush();
+		}
+		catch(\FsoException $fsex)
+		{
+			$fsex->abort();
+		}
+		catch(Exception $ex)
+		{
+			error_log("Ummmmm...".$ex->getMessage());
+
+		}
 		die();
 	}
     

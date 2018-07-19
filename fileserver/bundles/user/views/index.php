@@ -12,7 +12,7 @@ class Index extends app\HTMLApp
 		$this->addStyle('../../../styles/main/main.css');
 		$this->addScript('../js/User.js');
 
-		$usr=isset($_REQUEST['usr']) ? $_REQUEST['usr'] : \auth\Auth::get()->id ;
+		$usr=isset($_REQUEST['id']) ? $_REQUEST['id'] : \auth\Auth::get()->id ;
 		$this->addOnload("loadUser('".$usr."')");
 		
 	}
@@ -77,15 +77,15 @@ class Index extends app\HTMLApp
 
 		<div class="form-group">
 			<label for="mail">Correo:</label>
-			<input class="form-control" name="mail" id="mail"  />
+			<input class="form-control" name="mail" id="mail"  autocomplete="off" />
 		</div>
 		<div class="form-group">
 			<label for="pw">Contraseña:</label>
-			<input class="form-control" type="password" name="pw" id="pw"  />
+			<input class="form-control" type="password" name="pw" id="pw" autocomplete="off" />
 		</div>
 		<div class="form-group">
 			<label for="pw2">Contraseña (Repetir):</label>
-			<input class="form-control" type="password" name="pw2" id="pw2" />
+			<input class="form-control" type="password" name="pw2" id="pw2" autocomplete="off" />
 		</div>
 		<div class="form-group">
 			<button class="btn btn-primary" onclick="saveUser()">Guardar</button>

@@ -19,7 +19,7 @@ class loadUser extends app\JSONApp
 
         if(count($users)==0)
         {
-            $this->exitApp(false,'user not found');
+            throw new \auth\UserNotFoundException($filter['id']);
         }
 
         unset($users[0]->auth);

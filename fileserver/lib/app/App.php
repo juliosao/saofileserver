@@ -20,7 +20,8 @@ abstract class App {
 				die('Sesion invalida');
 			}
 		}
-        $this->result=array();
+		$this->result=array();
+		$this->buffered=False;
     }
 
 	abstract function main();
@@ -35,11 +36,18 @@ abstract class App {
 	//Runs JSONApp
 	public function run()
 	{
-		self::$current=$this;
-		ob_start();		
-		$this->main();
-		if($this->buffered)
-			ob_flush();
+		try
+		{
+			self::$current=$this;
+			ob_start();		
+			$this->main();
+			if($this->buffered)
+				ob_flush();
+		}
+		catch(FsoException $fsex)
+		{
+			$fsex->abort();
+		}
 		die();
 	}
 
