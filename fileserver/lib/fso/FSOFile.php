@@ -22,10 +22,37 @@ class FSOFile extends FSO{
     {
         return is_file($this->path);
     }
-
+    
     function getSize()
     {
-        return filesize($this->path);
+        if(!is_file($this->path))
+            return -1;
+
+        $st= filesize($this->path);
+        error_log('ENCONTRADO:'.$st);
+
+        if($st<0)
+        {
+            $f = fopen($this->path,"rb");            
+            
+            $len=1048576;
+            $r=1;
+            $st=PHP_INT_MAX - 1;
+
+            fseek($f,$st);
+            while(!feof($f))
+            {
+                $r=fread($f,$len);
+                //error_log('RECALCULANDO:+'.$len);
+                $st = bcadd($st, $len);                
+            }
+            $st = bcsub($st, $len);
+            $st = bcadd($st, strlen($r));
+
+            
+            fclose($f);
+        }
+        return $st;
     }
 
     function extension()

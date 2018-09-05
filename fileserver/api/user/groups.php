@@ -13,7 +13,7 @@ class loadUser extends app\JSONApp
     {
         if(!isset($_REQUEST['id']))
         {
-            $this->exitApp(false,'id not provided');
+            throw new InvalidRequestException();
         }
 
         $filter=array();
@@ -23,7 +23,7 @@ class loadUser extends app\JSONApp
 
         if(count($users)==0)
         {
-            $this->exitApp(false,'user not found');
+           throw new auth\UserNotFoundException($filter['id']);
         }
 
         $this->setResult('grps',$user->groups());

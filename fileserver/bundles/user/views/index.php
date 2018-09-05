@@ -10,10 +10,11 @@ class Index extends app\HTMLApp
 		
 		$this->title='Propiedades del usuario';
 		$this->addStyle('../../../styles/main/main.css');
-		$this->addScript('../js/User.js');
+		$this->addScript('../../../js/Remote.js');
+		$this->addScript('../../../js/User.js');
 
 		$usr=isset($_REQUEST['id']) ? $_REQUEST['id'] : \auth\Auth::get()->id ;
-		$this->addOnload("loadUser('".$usr."')");
+		$this->addOnload("User.load('".$usr."',userLoaded)");
 		
 	}
 
@@ -77,7 +78,7 @@ class Index extends app\HTMLApp
 
 		<div class="form-group">
 			<label for="mail">Correo:</label>
-			<input class="form-control" name="mail" id="mail"  autocomplete="off" />
+			<input class="form-control" type="email" name="mail" id="mail"  autocomplete="off" />
 		</div>
 		<div class="form-group">
 			<label for="pw">Contraseña:</label>

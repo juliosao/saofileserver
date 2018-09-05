@@ -35,6 +35,23 @@ abstract class DBObject
 	}
 	
 	/**
+	 * Devuelve un nuevo objeto DBObjetct
+	 * Se le debe pasar una lista de argumentos variable en el mismo orden que el campo estatico "$fields" de la clase que herede de esta.
+	 */
+	static function create()
+	{
+		$args=func_get_args();
+		$fields=array();
+
+		$M = min(count($args,static::$fields));
+		for($i=0; $i<$m; $i++)
+		{
+			$fields[static::$fields[$i]]=$args[$i];
+		}
+		return new static($fields);
+	}
+
+	/**
 	 * \fn select($args)
 	 * \brief Obtiene un array con todos los objetos que cumplen un patron en una tabla
 	 * \param args Un array asociativo con los campos que actuaran de filtro

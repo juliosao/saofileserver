@@ -11,6 +11,7 @@ class loadUser extends app\JSONApp
 
     function main()
     {
+        error_log('PETICION:'.json_encode($_REQUEST));
 
         $filter=array();
         $filter['id']= getParam('id',\auth\Auth::get()->id);

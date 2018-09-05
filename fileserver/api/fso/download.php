@@ -18,7 +18,7 @@ class download extends app\App
         else
         {
             error_log("Fichero no definido");            
-            die("play what?");
+            die("what?");
         }
 
         $this->file=new fso\FSOFile(fso\FSO::joinPath($basedir,$filename));

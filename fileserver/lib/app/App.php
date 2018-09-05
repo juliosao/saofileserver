@@ -7,7 +7,8 @@ abstract class App {
 	private static $appDir = null;
 	private static $appURL = null;
 	protected static $current = null;
-    protected $result;
+	protected $result;
+	static $debug = False;
 
     public function __construct($doAuth=false)
     {
@@ -44,10 +45,11 @@ abstract class App {
 			if($this->buffered)
 				ob_flush();
 		}
-		catch(FsoException $fsex)
+		catch(\FsoException $fsex)
 		{
-			$fsex->abort();
+			$fsex->abort(App::$debug);
 		}
+
 		die();
 	}
 

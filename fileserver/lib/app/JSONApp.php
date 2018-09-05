@@ -21,13 +21,9 @@ abstract class JSONApp extends App{
 		}
 		catch(\FsoException $fsex)
 		{
-			$fsex->abort();
+			$fsex->abort(App::$debug);
 		}
-		catch(Exception $ex)
-		{
-			error_log("Ummmmm...".$ex->getMessage());
 
-		}
 		die();
 	}
     

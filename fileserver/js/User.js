@@ -1,10 +1,8 @@
-class User
+class User extends Remote
 {
-    constructor(id,name,mail)
+    constructor(data)
     {
-        this.id=id;
-        this.name=name;
-        this.mail=mail;
+        super(data);
     }
 
     static parse(data)
@@ -14,20 +12,15 @@ class User
     }
 
     static load(id,callback)
+    {       
+        Remote.call("../../../api/user/load.php",{'id':id},function(data){
+                callback(new User(data))
+            });
+    }
+
+    static list()
     {
-        var data = new FormData();
-		data.append('id', id);
-        		
-		var xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function(data) {
-			if (this.readyState == 4 && this.status == 200) {
-                var res=JSON.parse(this.responseText)
-                callback(new User(res.id,res.name,res.mail));                
-			}
-        };
         
-		xhttp.open("POST", "../../../api/user/load.php", true);
-		xhttp.send(data);
     }
 
     save(callback)

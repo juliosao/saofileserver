@@ -73,6 +73,7 @@ class User extends \database\DBObject
         $res=parent::replace();
         error_log("Usuario Guardado:".$res);
     }
+
 }
 
 User::init();

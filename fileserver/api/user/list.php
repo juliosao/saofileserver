@@ -16,6 +16,11 @@ class listUsers extends app\JSONApp
             $filter['id']=$_REQUEST['id'];
 
         $users=auth\User::select($filter);
+        for($i=0; $i<count($users); $i++)
+        {
+            unset($users[$i]->auth);
+            unset($users[$i]->session);
+        }
 
         return($users);
     }

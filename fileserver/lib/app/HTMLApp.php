@@ -25,7 +25,6 @@ namespace app;
 	//Adds a script to a HTMLApp extends App
 	public function addScript($script)
 	{
-
  		$this->scripts[]=$script;
 		return $this;
 	}
