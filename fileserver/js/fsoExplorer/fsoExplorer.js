@@ -32,7 +32,13 @@ fsoExplorer.prototype={
 		if(data.function=='explore')
 			this.render(data,tag);
 		else if (data.function=='delete' || data.function=='upload')
+		{
+			if( typeof(data.failed)!=='undefined' && data.failed.length>0 )
+			{
+				alert(data.error+'\n'+data.failed.join('\n'));
+			}
 			this.fso.refresh();
+		}
 		else
 			alert(data.error);
 

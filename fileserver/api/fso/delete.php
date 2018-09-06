@@ -14,7 +14,11 @@ class delete extends app\JSONApp{
         $mal=0;
         error_log(json_encode($_POST));
         $paths= $_POST["path"];
-        $borrado=array();
+        $ok=array();
+        $ko=array();
+        $err=null;
+        $res=array();
+
         
         if(is_null($paths)) {
             $this->exitError(400,"Delete what?");
@@ -27,15 +31,27 @@ class delete extends app\JSONApp{
 
             if($obj==null)
             {
-                $this->exitError(404,"Not found: $p");
+                $err="Not found:";
+                $ko[]=$obj->relativePath($basedir);
             }
-
-            if(!$obj->delete())
+            else if(!$obj->delete())
             {
-                $this->exitError(500,"Cannot delete $p: ".$obj->error);
+                $err="Cannot delete";
+                $ko[]=$obj->relativePath($basedir);
+            }
+            else
+            {
+                $ok[]=$obj->relativePath($basedir);
             }
         }
         
+        $res=array('deleted'=>$ok, 'failed'=>$ko,'function'=>'delete');
+        if($err!=null)
+        {
+            $res['error']=$err;
+        }
+
+        return $res;
     }
 }
 
