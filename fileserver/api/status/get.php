@@ -2,7 +2,7 @@
 
 require_once('../../lib/Util.php');
     
-class MyApp extends app\JSONApp{
+class MyApp extends JSONApp{
     public function __construct()
     {
         parent::__construct(1);
@@ -36,7 +36,7 @@ class MyApp extends app\JSONApp{
 			}
 		}
 
-		$parentDir=new fso\FSODir(Cfg::get()->fso->basedir);
+		$parentDir=new FSODir(Cfg::get()->fso->basedir);
 		
 		$result['disk_free']=$parentDir->getFreeSpace();
 		$result['disk_total']=$parentDir->getTotalSpace();

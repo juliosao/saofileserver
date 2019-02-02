@@ -2,7 +2,7 @@
 
 require('../../../lib/Util.php');
 
-class Setup extends app\HTMLApp
+class Setup extends HTMLApp
 {
 	function putMsg($description)
 	{
@@ -48,7 +48,7 @@ class Setup extends app\HTMLApp
 		try
 		{
 			echo "<h3>Preparando base de datos...</h3>";
-			$this->db=new database\Database("mysql:host=localhost;",$usr,$pwd);
+			$this->db=new Database("mysql:host=localhost;",$usr,$pwd);
 
 			echo '<ul>';
 

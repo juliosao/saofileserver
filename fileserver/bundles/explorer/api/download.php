@@ -1,7 +1,7 @@
 <?php
 require_once('../../../lib/Util.php');
 
-class play extends App
+class download extends App
 {
     private $buffer = 102400;
 
@@ -18,7 +18,7 @@ class play extends App
         else
         {
             error_log("Fichero no definido");            
-            die("play what?");
+            die("what?");
         }
 
         $this->file=new FSOFile(FSO::joinPath($basedir,$filename));
@@ -140,5 +140,5 @@ class play extends App
     }
 }
 
-$b= new play();
+$b= new download();
 $b->run();

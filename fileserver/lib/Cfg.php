@@ -50,7 +50,7 @@ class Cfg
 
     static function init()
     {
-        self::$default = new Cfg(app\App::getAppDir().'/cfg/app.json');
+        self::$default = new Cfg(App::getAppPath('cfg/app.json'));
         
     }
 

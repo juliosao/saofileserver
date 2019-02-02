@@ -1,7 +1,8 @@
 {
     "app":{
-        "main":"views/fsoExplorer/index.php",
-        "setup":"bundles/setup/views/index.php"
+        "main":"bundles/explorer/index.php",
+        "setup":"bundles/setup/index.php",
+        "loginUrl":"bundles/auth/index.php"
     },
     "bbdd":{
         "database":"mysql:host=localhost;dbname=saofileserver;charset=utf8",
