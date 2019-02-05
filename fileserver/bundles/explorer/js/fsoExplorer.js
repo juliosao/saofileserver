@@ -279,7 +279,7 @@ class fsoExplorer extends FsoListener {
 
 }
 
-fsoExplorer.units = ['Kb','Mb','Gb','Tb'];
+fsoExplorer.units = ['bytes','Kb','Mb','Gb','Tb'];
 fsoExplorer.baseUnit = Math.log(1000);
 
 
