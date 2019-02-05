@@ -104,7 +104,7 @@ class RemoteObject
 // Class implementing generic callbacks
 class RemoteListener
 {    
-    getInstance()
+    static getInstance()
     {
         if(RemoteListener.instance == null)
             RemoteListener.instance = new RemoteListener();

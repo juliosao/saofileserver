@@ -1,105 +1,76 @@
-function fsoExplorerPlayer(tag)
-{
-	this.playlist=[]
-	this.tag=tag;
-}
-
-//Method definitions
-fsoExplorerPlayer.prototype={
-
-	constructor:fsoExplorerPlayer,
-	video:null,
-
-	onBeginRender:function(source,toolbar,data)
-	{		
-		var pvideo=false;
-		var paudio=false;
-		if(this.video==null)	
-			this.video=document.createElement('video');
-
-		for(var i in data.files)
+class fsoExplorerPlayer {
+	constructor(tag) {
+		this.playlist = [];
+		this.tag = tag;
+		this.explorer = document.getElementById(tag);
+		this.canPlay = false;
+		if(typeof fsoExplorerPlayer.video == 'undefined')
 		{
-			if( pvideo==false && (data.files[i].extension=='mp4' || data.files[i].extension=='ogv' || data.files[i].extension=='webm' || data.files[i].extension=='avi') )
-			{				
-				if( this.video.canPlayType(data.files[i].mime))
-				{
-					// Adds the button
-					var player=document.createElement('SPAN');
-					player.classList.add('fsoexplorer-icon');
-					player.classList.add('fsoplayer-icon-video');
-					player.setAttribute('onclick',"window.open('../../bundles/player/views/index.php?file="+data.path+"&mode=video')");
-					toolbar.appendChild(player);
-					pvideo=true;
-				}
-			}
-			else if( paudio==false && (data.files[i].extension=='mp3' || data.files[i].extension=='ogg' || data.files[i].extension=='flac') )
-			{								
-				// Adds the button
-				var player=document.createElement('SPAN');
-				player.classList.add('fsoexplorer-icon');
- 				player.classList.add('fsoplayer-icon-audio');
-				player.setAttribute('onclick',"window.open('../../bundles/player/views/index.php?file="+data.path+"&mode=audio')");
-				toolbar.appendChild(player);
-				paudio=true;
-			}			
+			fsoExplorerPlayer.video = document.createElement('video');
+			fsoExplorerPlayer.audio = document.createElement('audio');
 		}
-	},
+	}
+	//fsoPlayer initialization
+	static setup() {
+		// Adds plugin to the controllers
+		var explorers = document.getElementsByClassName("fso-explorer");
+		for (var i = 0; i < explorers.length; i++) {
+			fsoExplorer.controllers[explorers[i].id].appendRenderListener(new fsoExplorerPlayer(explorers[i].id));
+		}
+	}
 
-	onElementRender:function(source,elem,data,isFile)
+	onBeginRender(explorer)
 	{
-		if(isFile)
+		this.canPlay = false;
+	}
+
+	onElementRender(explorer,elem,src)
+	{
+		if(src instanceof fsoFile)
 		{
 			// If file is supported adds a play button
-			if( data.extension=='mp4' || data.extension=='ogg' || data.extension=='flac' ) 
+			if( (src.data.extension=='mp4' || src.data.extension=='ogv' || src.data.extension=='webm' || src.data.extension=='avi') && fsoExplorerPlayer.video.canPlayType(src.data.mime) )
 			{
-				this.putElementPlayer(elem,data,false);
+				this.putElementPlayer(elem,src.data,true);
+				//TODO: Put a playlist player on main toolbar
+				this.canPlay="video";
 			}
-			else if( data.extension=='mp4' || data.extension=='ogv' || data.extension=='webm' || data.extension=='avi' )
+			else if( ( src.data.extension=='mp4' || src.data.extension=='mp3' || src.data.extension=='ogg' || src.data.extension=='flac' ) && fsoExplorerPlayer.audio.canPlayType(src.data.mime))
 			{
-				if(this.video.canPlayType(data.mime))
-				{
-					this.putElementPlayer(elem,data,true);
-				}
+				this.putElementPlayer(elem,src.data,false);
+				//TODO: Put a playlist player on main toolbar
+				if(!this.canPlay)
+					this.canPlay="audio";
 			}
+			
 		}
-	},
+	}
+
+	onFinishRender(explorer)
+	{
+		if(this.canPlay !== false)
+		{
+			var player=document.createElement('SPAN');
+			player.classList.add('fsoexplorer-icon');
+			player.classList.add('fsoplayer-icon-'+ this.canPlay );
+			player.setAttribute('onclick',"window.open('../player/index.php?data-mode="+this.canPlay+"&file="+encodeURIComponent(explorer.fso.data.link)+"')");
+			explorer.toolbar.appendChild(player);
+		}
+	}
 
 	putElementPlayer(elem,data,video)
 	{
 		// Gets toolbar
-		var tools=elem.getElementsByClassName('fsoexplorer-toolbar');
-		var toolbar=tools[0];
+		var toolbar=elem.tools;
 
 		// Adds the button
 		var player=document.createElement('SPAN');
 		player.classList.add('fsoexplorer-icon');
 		player.classList.add('fsoplayer-icon-'+ (video ? 'video' : 'audio') );
-		player.setAttribute('onclick',"window.open('../../bundles/player/views/index.php?file="+encodeURIComponent(data.link)+"')");
+		player.setAttribute('onclick',"window.open('../player/index.php?data-mode="+(video ? 'video' : 'audio')+"file="+encodeURIComponent(data.link)+"')");
 		toolbar.appendChild(player);
-	},
-
-	onFinishRender(source)
-	{
-		//Not used
-	},
-
-	putPlayer(playerDiv)
-	{
-
 	}
 }
-
-//fsoPlayer initialization
-fsoExplorerPlayer.setup=function()
-{
-	// Adds plugin to the controllers
-	var explorers=document.getElementsByClassName("fso-explorer");
-	for( var i=0; i<explorers.length; i++ )
-	{
-		fsoExplorer.controllers[explorers[i].id].appendRenderListener(new fsoExplorerPlayer(explorers[i].id));
-	}
-}
-
 
 //Calls init
 window.addEventListener('load',fsoExplorerPlayer.setup);

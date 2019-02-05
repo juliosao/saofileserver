@@ -1,26 +1,17 @@
 <?php
-require_once('../../../lib/Util.php');
-
-class index extends HTMLApp
-{
-	function __construct()
-	{
-		parent::__construct(1);
-		$this->title='player';
-		$this->file=urldecode($_REQUEST['file']);
-		$this->mode=isset($_REQUEST['mode']) ? $_REQUEST['mode'] : '';
-		$this->addScript('../js/player.js');
-		$this->addStyle('../styles/player.css');
-	}
-
-	function putBody()
-	{
-		?>
-		<div class="fso-player" id="player" data-src="<?=htmlentities($this->file)?>" data-mode="<?=$this->mode ?>">
+require_once('../../lib/Util.php');
+$file=urldecode($_REQUEST['file']);
+$mode=isset($_REQUEST['data-mode']) ? $_REQUEST['data-mode'] : 'audio';
+?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<?php HTMLApp::putHeaders('SAO-Player'); ?>
+		<script type="text/javascript" src="js/player.js"></script>
+		<link rel="stylesheet" href="styles/player.css">
+	</head>
+	<body>
+		<div class="fso-player" id="player" data-src="<?=htmlentities($file)?>" data-mode="<?=$mode ?>">
 		</div>
-		<?php
-	}
-}
-
-$b= new index();
-$b->run();
+	</body>
+</html>
