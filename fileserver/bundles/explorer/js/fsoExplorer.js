@@ -191,6 +191,7 @@ class fsoExplorer extends FsoListener {
 		elem.label=document.createElement('td');
 		elem.label.classList.add('fsoexplorer-object');
 		elem.label.appendChild(document.createTextNode(obj.data.name));
+		elem.label.setAttribute('onclick',"fsoExplorer.controllers['"+this.tag+"'].fso.data.childs['"+obj.data.name+"'].explore()");
 		elem.appendChild(elem.label);
 
 		// Puts toolbar
