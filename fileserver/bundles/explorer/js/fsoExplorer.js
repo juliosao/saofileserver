@@ -239,15 +239,17 @@ class fsoExplorer extends FsoListener {
 
 		title.appendChild(lblPath);
 		title.appendChild(lblFree);
+		toolbar.appendChild(title);
 
 		toolbar.progressBar=document.createElement('progress');
 		//this.progressBar.hidden=true;
 		toolbar.progressBar.id=this.tag+'-progress';
 		toolbar.progressBar.value=0;
 		toolbar.progressBar.max=100;
+		toolbar.progressBar.hidden=true;
 		toolbar.appendChild(toolbar.progressBar);
 
-		toolbar.appendChild(title);
+		
 		return toolbar;
 
 	}
