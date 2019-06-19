@@ -32,6 +32,7 @@ class Database {
 	 */
     function __construct($path = null, $usr = null, $passw = null) 
     {
+
         if($path===null)
             $path=self::$defaultPath;
 
@@ -42,12 +43,21 @@ class Database {
             $passw=self::$defaultPass;
 
 
+        try
+        {
             $this->db = new \PDO($path,$usr,$passw,
                     array( \PDO::ATTR_PERSISTENT => true )
                     );
 
         
-        $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        }
+        catch(Exception $ex)
+        {
+            error_log($ex);
+            throw new FsoException("$path");
+        }
+
     }
 
     /**

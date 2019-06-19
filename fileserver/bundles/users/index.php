@@ -1,42 +1,24 @@
 <?php
-
-require_once('../../../lib/Util.php');
-
-class Index extends HTMLApp
-{
-	public function __construct()
-	{
-		parent::__construct(1);
-		
-		$this->title='Propiedades del usuario';
-		$this->addStyle('../../../styles/main/main.css');
-		$this->addScript('../../../js/User.js');
-
-		$usr=isset($_REQUEST['id']) ? $_REQUEST['id'] : Auth::get()->id ;
-		$this->addOnload("loadUsers()");
-		
-	}
-
-	public function putBody()
-	{
-		?>
+require_once('../../lib/Util.php');
+$file=urldecode($_REQUEST['file']);
+$mode=isset($_REQUEST['data-mode']) ? $_REQUEST['data-mode'] : 'audio';
+?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<?php HTMLApp::putHeaders('SAO-Player'); ?>
+		<script type="text/javascript" src="../../styles/main/main.css"></script>
+		<script type="text/javascript" src="js/user.js"></script>
+		<link rel="stylesheet" href="styles/player.css">
 		<script type="text/javascript">
-			function ok()
-			{
-
-			}
-
-			function loadUsers()
-			{
-
-			}
-		</script>
-		<h1>Usuarios</h1>
+		function loadUsers()
+		{
 			
-		<?php
-	}
-}
-
-$index = new Index();
-$index->run();
-
+		}
+		</script>
+	</head>
+	<body onload="loadUsers()">
+		<h1>Usuarios</h1>
+		
+	</body>
+</html>

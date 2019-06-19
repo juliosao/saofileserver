@@ -1,10 +1,14 @@
-class User extends Remote
+class User extends RemoteObject
 {
-    constructor(data)
-    {
-        super(data);
+	constructor(data, listener)
+	{
+		if(listener===null)
+		{
+			listener = UserListener.getInstance();
+		}
+		super(data,listener);
     }
-
+    
     static parse(data)
     {
         data=JSON.parse(data);
@@ -13,7 +17,7 @@ class User extends Remote
 
     static load(id,callback)
     {       
-        Remote.call("../../../api/user/load.php",{'id':id},function(data){
+        super.call("../../../api/user/load.php",{'id':id},function(data){
                 callback(new User(data))
             });
     }
@@ -49,4 +53,37 @@ class User extends Remote
     }
 
 
+}
+
+
+
+class UserListener extends RemoteListener
+{
+    static getInstance()
+    {
+        if(UserListener.instance == null)
+            UserListener.instance = new UserListener();
+
+        return UserListener.instance;
+	}
+	
+	onProgress(sender,fraction,total)
+	{
+		console.log("Progress "+sender.name+fraction+"/"+total);
+	}
+
+	onError(sender,message)
+	{
+		alert("Error:"+message);
+	}
+
+	onOk(sender)
+	{
+		console.log("Ok:"+sender.name);
+	}
+
+	onRefresh(sender)
+	{
+		console.log("Refresh:"+sender.data.name);
+	}
 }

@@ -30,7 +30,7 @@ class Setup extends HTMLApp
 		}
 	}
 
-	function putBody()
+	function main()
 	{
 		$this->log=array();
 
