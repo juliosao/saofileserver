@@ -1,9 +1,8 @@
 class fsoExplorerPlayer {
 	constructor(tag) {
 		this.playlist = [];
-		this.tag = tag;
 		this.explorer = document.getElementById(tag);
-		this.canPlay = false;
+		
 		if(typeof fsoExplorerPlayer.video == 'undefined')
 		{
 			fsoExplorerPlayer.video = document.createElement('video');
@@ -11,64 +10,79 @@ class fsoExplorerPlayer {
 		}
 	}
 	//fsoPlayer initialization
-	static setup() {
+	static async setup() {
 		// Adds plugin to the controllers
-		var explorers = document.getElementsByClassName("fso-explorer");
-		for (var i = 0; i < explorers.length; i++) {
-			fsoExplorer.controllers[explorers[i].id].appendRenderListener(new fsoExplorerPlayer(explorers[i].id));
-		}
-	}
-
-	onBeginRender(explorer)
-	{
-		this.canPlay = false;
-	}
-
-	onElementRender(explorer,elem,src)
-	{
-		if(src instanceof fsoFile)
+		for (var i in fsoExplorer.controllers) 
 		{
-			// If file is supported adds a play button
-			if( (src.data.extension=='mp4' || src.data.extension=='ogv' || src.data.extension=='webm' || src.data.extension=='avi') && fsoExplorerPlayer.video.canPlayType(src.data.mime) )
-			{
-				this.putElementPlayer(elem,src.data,true);
-				//TODO: Put a playlist player on main toolbar
-				this.canPlay="video";
-			}
-			else if( ( src.data.extension=='mp4' || src.data.extension=='mp3' || src.data.extension=='ogg' || src.data.extension=='flac' ) && fsoExplorerPlayer.audio.canPlayType(src.data.mime))
-			{
-				this.putElementPlayer(elem,src.data,false);
-				//TODO: Put a playlist player on main toolbar
-				if(!this.canPlay)
-					this.canPlay="audio";
-			}
-			
+			fsoExplorer.controllers[i].addPlugin('player',new fsoExplorerPlayer())
 		}
 	}
 
-	onFinishRender(explorer)
+	start(src)
 	{
-		if(this.canPlay !== false)
+		this.mainToolBar = document.createElement('span');
+		src.extraTools.appendChild(this.mainToolBar);
+	}
+
+	beforeRender(src,dir)
+	{
+		this.canPlayVideos = false;
+		this.canPlayAudios = false;
+		UI.clear(this.mainToolBar);
+	}
+
+	onRender(src,dir)
+	{
+		if(this.canPlayAudios)
 		{
-			var player=document.createElement('SPAN');
-			player.classList.add('fsoexplorer-icon');
-			player.classList.add('fsoplayer-icon-'+ this.canPlay );
-			player.setAttribute('onclick',"window.open('../player/index.php?data-mode="+this.canPlay+"&file="+encodeURIComponent(explorer.fso.data.link)+"')");
-			explorer.toolbar.appendChild(player);
+			let elem = document.createElement('a');
+			let span = document.createElement('span');
+			elem.href='../player/index.php?file='+dir.link;
+			span.classList.add('fsoexplorer-icon','fsoplayer-icon-audio');
+			elem.appendChild(span);
+			this.mainToolBar.appendChild(elem);
+		}
+
+		if(this.canPlayVideos)
+		{
+			let elem = document.createElement('a');
+			let span = document.createElement('span');
+			elem.href='../player/index.php?file='+dir.link+"&data-mode=video";
+			span.classList.add('fsoexplorer-icon','fsoplayer-icon-video');
+			elem.appendChild(span);
+			this.mainToolBar.appendChild(elem);
 		}
 	}
 
-	putElementPlayer(elem,data,video)
+	onRenderFile(src,toolbox,file)
 	{
-		// Gets toolbar
-		var toolbar=elem.tools;
-
-		// Adds the button
-		var player=document.createElement('SPAN');
-		player.classList.add('fsoexplorer-icon');
-		player.classList.add('fsoplayer-icon-'+ (video ? 'video' : 'audio') );
-		player.setAttribute('onclick',"window.open('../player/index.php?data-mode="+(video ? 'video' : 'audio')+"file="+encodeURIComponent(data.link)+"')");
-		toolbar.appendChild(player);
+		if( file.extension=='mp3' || file.extension=='ogg' )
+		{
+			if(fsoExplorerPlayer.audio.canPlayType(file.mime))
+			{
+				let elem = document.createElement('a');
+				let span = document.createElement('span');
+				elem.href='../player/index.php?file='+file.link;
+				span.classList.add('fsoexplorer-icon','fsoplayer-icon-audio');
+				elem.appendChild(span);
+				toolbox.appendChild(elem);
+				this.canPlayAudios=true;
+			}
+		}
+		
+		if( file.extension=='mp4' || file.extension=='ogv' || file.extension=='webm' || file.extension=='avi' )
+		{
+			if(fsoExplorerPlayer.video.canPlayType(file.mime))
+			{
+				let elem = document.createElement('a');
+				let span = document.createElement('span');
+				elem.href='../player/index.php?file='+file.link+"&data-mode=video";
+				span.classList.add('fsoexplorer-icon','fsoplayer-icon-video');
+				elem.appendChild(span);
+				toolbox.appendChild(elem);
+				this.canPlayVideos=true;
+			}
+		}
 	}
 }
 

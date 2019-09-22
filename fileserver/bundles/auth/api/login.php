@@ -9,15 +9,15 @@ class myApp extends JSONApp
         parent::__construct(0);
     }
 
-    public function main() 
+    public function main($args) 
     {
-		error_log("Comprobamos auth:".json_encode($_REQUEST));
-		if(!isset($_REQUEST['usr']) || !isset($_REQUEST['pwd']))
+		error_log("Comprobamos auth:".json_encode($args));
+		if(!isset($args['usr']) || !isset($args['pwd']))
 		{
 			throw new InvalidRequestException();
         }
 
-        $usr=Auth::checkPassw($_REQUEST['usr'],$_REQUEST['pwd']);
+        $usr=Auth::checkPassw($args['usr'],$args['pwd']);
 
         if(!$usr)
         {

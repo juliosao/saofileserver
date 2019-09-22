@@ -133,7 +133,7 @@ class download extends App
 
     }
 
-    function main()
+    function main($args)
     {
         $this->putHeader();
         $this->putData();

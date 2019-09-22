@@ -4,10 +4,10 @@ require('../../../lib/Util.php');
 
 class Setup extends JSONApp
 {
-    function main()
+    function main($args)
     {
-        $usr=getParam('usr','');
-        $pwd=getParam('pwd','');
+        $usr=isset($args['usr']) ? $args['usr'] : null;
+        $pwd=isset($args['pwd']) ? $args['pwd'] : null;
 
         if($usr==null || $pwd==null)
         {

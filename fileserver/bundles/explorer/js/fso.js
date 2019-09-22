@@ -1,68 +1,61 @@
 //Constructor
-class fsoObj extends RemoteObject
+class fsoObj
 {
-	constructor(data, listener)
+	constructor(data)
 	{
-		if(listener===null)
-		{
-			listener = FsoListener.getInstance();
-		}
-		super(data,listener);
+		this.link = data.link;
+		this.name = data.name;
 	}
 
-	static getRoot(listener)
+	async delete()
 	{
-		var root = new fsoObj({name:'/',link:encodeURIComponent('/')},listener);
-		return root;
-	}
-
-	explore()
-	{
-		var self = this;
-		this.jsonRemoteCall("api/explore.php",{path:this.data.link},
-			function(data)
-			{
-				self.data.childs={};
-
-				// Paint folders first
-				for(var i in data.dirs)
-				{
-					self.data.childs[data.dirs[i].name] = new fsoDir(data.dirs[i],self.listener);
-				}
-
-				for(var i in data.files)
-				{
-					self.data.childs[data.files[i].name] = new fsoFile(data.files[i],self.listener);
-				}
-
-				self.data.free = data.free;
-				self.data.total = data.total;
-				self.data.link = data.link;
-				self.data.name = data.name;
-				
-				self.listener.onRefresh(self);
-			}
-		);
-	}
-
-	delete()
-	{
-		var self = this;
-		this.jsonRemoteCall("api/delete.php",{path:this.data.link}, 
-			function(data)
-			{
-				self.listener.onOk(self);
-			}
-			
-		);
+		await App.jsonRemoteCall("api/delete.php",{path:this.link});
 	}
 
 }
 
 class fsoDir extends fsoObj
 {
-	/*
-	upload(files)
+	constructor(data)
+	{
+		super(data);
+		this.childDirs={};
+		this.childFiles={};
+	}
+
+	static async get(path)
+	{
+		var link = encodeURIComponent(path);
+		var name = path.split('/').slice(-1)[0];
+		var dir = new fsoDir({link:link, name:name});
+		await dir.explore();
+		return dir;
+	}
+
+	async explore()
+	{
+		var data = await App.jsonRemoteCall("api/explore.php",{path:this.link});
+		this.childDirs={};
+		this.childFiles={};
+
+		for(var i in data.dirs)
+		{
+			this.childDirs[data.dirs[i].name] = new fsoDir(data.dirs[i]);
+		}
+
+		for(var i in data.files)
+		{
+			this.childFiles[data.files[i].name] = new fsoFile(data.files[i]);
+		}
+
+		this.free = data.free;
+		this.total = data.total;
+		this.link = data.link;
+		this.name = data.name;
+		return this;
+	}
+
+	async upload(files)
 	{
 		var data = new FormData();
 		data.append('path', this.link);
@@ -71,26 +64,33 @@ class fsoDir extends fsoObj
 			data.append('files[]',files[i],files[i].name);
 		}
 		
+		await fetch("api/upload.php",
+			{
+				method: 'POST',
+				body: data
+			}
+		);
+		/*
 		var me=this;
 		var xhttp = new XMLHttpRequest();
 		
 		xhttp.onreadystatechange = function() {
 			if (this.readyState == 4) {
 				if(this.status == 200) 
-					me.listener.onOk(me);
+					listener.onOk(me);
 				else if(this.status>=400)
-					me.listener.onError(me,this.responseText ? this.responseText : this.statusText);
+					listener.onError(me,this.responseText ? this.responseText : this.statusText);
 			}
 		};
 
 		xhttp.upload.onprogress=function(ev)
 		{
 			console.log(ev.toString());
-			if(me.listener.progressCallBack)
+			if(listener.progressCallBack)
 			{
 				if (!ev.lengthComputable) 
 				{
-					me.listener.progressCallBack(me,-1,-1);
+					listener.progressCallBack(me,-1,-1);
 				}
 				else
 				{
@@ -100,51 +100,35 @@ class fsoDir extends fsoObj
 		};
 		xhttp.open("POST", "api/upload.php", true);
 		xhttp.send(data);
+		*/
 	}
-	*/
 
 }
 
 class fsoFile extends fsoObj
 {
+	constructor(data)
+	{
+		super(data);
+		this.extension=data.extension;
+		this.size=data.size;
+		this.mime=data.mime;
+	}
+
 	explore()
 	{
-		window.location.assign("api/download.php?path="+this.data.link);
+		var link = document.createElement('a');
+		link.setAttribute('href', "api/download.php?path="+this.link);
+		link.setAttribute('download', 'Filename.jpg');
+		link.setAttribute('target', '_blank');
+		link.style.display = 'none';
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
 	}
 }
 
-class FsoListener extends RemoteListener
+class uploadListener
 {
-    static getInstance()
-    {
-        if(FsoListener.instance == null)
-			FsoListener.instance = new FsoListener();
-
-        return FsoListener.instance;
-	}
-	
-	onProgress(sender,fraction,total)
-	{
-		console.log("Progress "+sender.name+fraction+"/"+total);
-	}
-
-	onError(sender,message)
-	{
-		alert("Error:"+message);
-		sender.explore();
-	}
-
-	onOk(sender)
-	{
-		console.log("Ok:"+sender.name);
-		sender.explore();
-	}
-
-	onRefresh(sender)
-	{
-		console.log("Refresh:"+sender.data.name);
-	}
+	progressCallBack(src,loaded,total){};
 }
-FsoListener.instance = null;
-
-

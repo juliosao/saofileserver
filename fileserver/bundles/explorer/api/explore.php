@@ -8,14 +8,14 @@
 			parent::__construct(1);
 		}
 
-		public function main() {
+		public function main($args) {
 			$result=array();
 			$basedir=Cfg::get()->fso->basedir;
 			
 			$dirname='.';
 			
-			if(isset($_REQUEST['path'])) {
-				$dirname=str_replace('..','.', urldecode($_REQUEST['path']));
+			if(isset($args['path'])) {
+				$dirname=str_replace('..','.', urldecode($args['path']));
 			}
 			error_log("Buscando ".$dirname);
 			
@@ -46,8 +46,7 @@
 				{
 					$dirs['..']=array('name'=>'..',
 						'name'=>'..',
-						'link'=>$parent->relativePath($basedir),
-						'isDir'=>True					
+						'link'=>$parent->relativePath($basedir),					
 						);
 				}				
 
@@ -57,7 +56,6 @@
 					$dirs[$d->getName()]=array(
 						'name'=>$d->getName(),
 						'link'=>urlencode($d->relativePath($basedir)),
-						'isDir'=>True
 					);
 				}
 				
@@ -69,8 +67,7 @@
 						'name'=>$f->getName(),
 						'link'=>urlencode($f->relativePath($basedir)),
 						'extension'=>$f->extension(),
-						'mime'=>$f->mime(),
-						'isDir'=>False);
+						'mime'=>$f->mime());
 				}
 
 				ksort($dirs);

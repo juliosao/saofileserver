@@ -1,32 +1,77 @@
-//Constructor
-class fsoExplorer extends FsoListener {
-	constructor(tag) {
-		super();
-		this.tag = tag;
-		this.fso = fsoObj.getRoot(this)
-		this.dirdata = [];
-		this.onRenderListeners = [];
-		this.path = '';
+/**
+ * Plugin interface:
+ * fsoExplorer:
+ *  .view : Main div
+ *  .workSpace : Files DIV
+ *  .extraTools : Main toolbar
+ *  .plugins : Other plugins
+ *  .dir : Current dir
+ * plugin:
+ *  .start(src) : Called when a plugin is added
+ *  -beforeRender(src,dir) : Called before render 
+ *  .onRender(src,dir) : Called after render completed
+ *  .onRednderFile(src,file,toolbox) : Called after reder a file
+ *  .onRednderDir(src,dir,toolbox) : Called after reder a file
+ */
+class fsoExplorer  
+{
+	static async setup()
+	{		
+		fsoExplorer.units = ['bytes','Kb','Mb','Gb','Tb','Pb','Eb'];
+		fsoExplorer.baseUnit = Math.log(1000);
+		fsoExplorer.controllers = [];
+
+		var divs = document.getElementsByClassName('fso-explorer');
+		for(var i = 0; i<divs.length; i++)
+		{
+			var fsoE = new fsoExplorer(divs[i]);
+			fsoExplorer.controllers.push(fsoE);
+		}
+	}
+
+	constructor(view)
+	{
+		this.view = view;
+		this.createToolBar();
+		this.workSpace = document.createElement('div');	
+		this.workSpace.classList.add('container','table-responsive');
+		this.view.appendChild(this.workSpace);
+		this.plugins=[];
+
+		var self = this;
+		fsoDir.get('/').then(function (result){
+			self.dir = result;
+			self.render();
+		})
 		
 	}
-	//fsoExplorer initialization
-	static setup() {
 
-		fsoExplorer.controllers = {};
-		var explorers = document.getElementsByClassName("fso-explorer");
-		for (var i = 0; i < explorers.length; i++) {
-			var controller = new fsoExplorer(explorers[i].id);
-			fsoExplorer.controllers[explorers[i].id] = controller;
-			var initial = explorers[i].getAttribute('initial-dir');
-			if (initial == null || initial == '') {
-				initial = '/';
-			}
-			explorers[i].addEventListener("dragover", fsoExplorer.cancel);
-			explorers[i].addEventListener("dragenter", fsoExplorer.cancel);
-			explorers[i].addEventListener("drop", function (ev) { fsoExplorer.upload(ev, controller); });
-			controller.fso.explore();
+	createToolBar()
+	{
+		var self = this;
+		var toolBar = document.createElement('div');
+		toolBar.classList.add('toolbar');
+
+		this.title = document.createElement('h1');
+		toolBar.appendChild(this.title);
+
+		this.spaceleft = document.createElement('h2');
+		toolBar.appendChild(this.spaceleft);
+		
+		this.extraTools = document.createElement('div');
+		this.extraTools.classList.add('fso-explorer-toolbar')
+		toolBar.appendChild(this.extraTools);
+
+
+		let home = document.createElement('span');
+		home.classList.add('fsoexplorer-icon','fsoexplorer-home');
+		home.onclick = function()
+		{
+			self.goto('/');
 		}
-		document.addEventListener('dragover', fsoExplorer.cancel);
+		this.extraTools.appendChild(home);
+
+		this.view.appendChild(toolBar);
 	}
 
 	static toUnits(size)
@@ -38,255 +83,206 @@ class fsoExplorer extends FsoListener {
 		return ""+size+" "+fsoExplorer.units[idx];
 	}
 
-	static cancel(ev) 
+	setTitle(text)
 	{
-		ev.preventDefault();
-		ev.dataTransfer.dropEffect = 'copy';
-		//ev.stopPropagation();
-		return false;
-	};
-
-	static upload(e, src) 
-	{
-		e.preventDefault();
-		e.stopPropagation();
-		var dt = e.dataTransfer;
-		var files = dt.files;
-		src.progressBar.hidden = false;
-		src.progressBar.value = 1;
-		src.fso.upload(files, src.path);
-	};
-
-	/*
-	REACCIONES A LOS EVENTOS DEL FSO
-	*/
-	onError(sender,message)
-	{
-		alert("Error:"+message);
-		console.log("Error:"+sender.name+" at "+sender.name);
-		this.fso.explore();
+		UI.clear(this.title);
+		this.title.appendChild(document.createTextNode(text));
 	}
 
-	onOk(sender)
+	setSpaceLeft(left,total)
 	{
-		console.log("Ok:"+sender.name);
-		this.fso.explore();
+		UI.clear(this.spaceleft);
+		this.spaceleft.appendChild(document.createTextNode('Espacio libre:'+fsoExplorer.toUnits(left)+" / "+fsoExplorer.toUnits(total)));
 	}
 
-	// Mantiene la barra de progreso
-	onProgress(sender,fraction,total)
+	renderActions(obj)
 	{
-		if(pos!=-1)
+		var td = document.createElement('td');
+		if(obj.name!='..')
+		{			
+			td.classList.add('fsoexplorer-element-toolbar');
+			var del=document.createElement('span');
+			del.classList.add('fsoexplorer-icon','fsoexplorer-del');
+
+			let self = this;
+			del.onclick=function()
+			{
+				self.delete(obj);
+			};
+			td.appendChild(del);
+		}
+		return td;
+	}
+
+	renderIcon(obj)
+	{
+		var img = document.createElement('a');
+		if( obj instanceof fsoDir )
 		{
-			this.progressBar.value=fraction/total*100;
+			img.classList.add('fsoexplorer-icon','folder');
 		}
 		else
 		{
-			this.progressBar.value = (this.progressBar.value + 5) % 100;
-		}
-	}
-
-	// Pinta la lista de archivos
-	onRefresh(sender)
-	{
-		this.fso = sender;
-		this.path=sender.data.path;
-
-		//Finds tag
-		var container=document.getElementById(this.tag);
-		if(container==null)
-		{
-			console.log(this.tag+" not found.");
-			return;
-		}
-
-		//Clears old data
-		while (container.firstChild) {
-			container.removeChild(container.firstChild);
-		}
-
-		//Puts main toolbar
-		this.toolbar = this.renderToolBar(sender);
-		
-		for(var i in this.onRenderListeners)
-			this.onRenderListeners[i].onBeginRender(this,sender);
-
-		container.appendChild(this.toolbar);
-
-		//Paint dirs and files
-		var lst=document.createElement('table');
-		lst.classList.add('table-striped');
-		lst.classList.add('table-responsive-sm');
-		lst.classList.add('table');
-
-		// Table header
-		var hdr = document.createElement('thead');
-
-		var td = document.createElement('th');
-		td.appendChild(document.createTextNode('Nombre'));
-		td.colSpan=2;
-		hdr.appendChild(td);
-
-		td = document.createElement('th');
-		td.appendChild(document.createTextNode('Acciones'));
-		hdr.appendChild(td);
-
-		lst.appendChild(hdr);
-
-		// Table body
-		var tbody=document.createElement('tbody');
-
-		// Puts fsos
-		for(var d in this.fso.data.childs)
-		{
-			tbody.appendChild(this.renderObj(this.fso.data.childs[d]));
-		}
-
-		lst.appendChild(tbody);
-		container.appendChild(lst);
-		
-		for(var i in this.onRenderListeners)
-			this.onRenderListeners[i].onFinishRender(this);
-		
-	}
-
-	/**
-	 * 
-	 * @param {*} obj The FsoObject with the data to render.
-	 * @returns A <tr> with the object rendered. We can access these object inside this object:
-	 * 		- img: A image tag indeed for object icon.
-	 * 		- label: A label
-	 * 		- tools: A toolbar span.
-	 */
-	renderObj(obj)
-	{
-		// List Entry
-		var elem=document.createElement('tr');
-		elem.id=obj.data.name;
-
-		// Puts icon
-		var mleft=document.createElement('td');	
-		elem.img = document.createElement('a');
-		elem.img.classList.add('fsoexplorer-icon');
-		mleft.appendChild(elem.img);
-		elem.appendChild(mleft);
-
-		if(obj instanceof fsoDir)
-		{
-			elem.img.classList.add('folder');			
-		}
-		else 
-		{
-			elem.img.classList.add('file');
-			if(obj.data.extension!='')
+			img.classList.add('fsoexplorer-icon','file');
+			if(obj.extension!='')
 			{			
-				elem.img.classList.add(obj.data.extension);
+				img.classList.add(obj.extension);
 			}
 		}
+		return img;
+	}
+
+	renderDir(dir)
+	{
+		let row = document.createElement('tr');
 		
 
-		elem.img.setAttribute('onclick',"fsoExplorer.controllers['"+this.tag+"'].fso.data.childs['"+obj.data.name+"'].explore()");
+		let col = document.createElement('td');
+		col.appendChild(this.renderIcon(dir));
+		row.appendChild(col);
 
-		// Puts label
-		elem.label=document.createElement('td');
-		elem.label.classList.add('fsoexplorer-object');
-		elem.label.appendChild(document.createTextNode(obj.data.name));
-		elem.label.setAttribute('onclick',"fsoExplorer.controllers['"+this.tag+"'].fso.data.childs['"+obj.data.name+"'].explore()");
-		elem.appendChild(elem.label);
+		col = document.createElement('td');
+		col.appendChild(document.createTextNode(dir.name));
+		row.appendChild(col);
 
-		// Puts toolbar
-		elem.tools=document.createElement('td');
-		if(obj.data.name!='..')
-		{			
-			elem.tools.classList.add('fsoexplorer-toolbar');
-			var del=document.createElement('span');
-			del.classList.add('fsoexplorer-icon');
-			del.classList.add('fsoexplorer-del');
-			del.setAttribute('onclick',"fsoExplorer.controllers['"+this.tag+"'].fso.data.childs['"+obj.data.name+"'].delete()");
-			elem.tools.appendChild(del);
+		let toolcol = this.renderActions(dir);
+		row.appendChild(toolcol);
+
+		for(let i in this.plugins )
+		{
+			if( typeof this.plugins[i].onRenderDir !== 'undefined' )
+				typeof this.plugins[i].onRenderDir(this,toolcol,dir);
 		}
 
-		for(var i in this.onRenderListeners)
-			this.onRenderListeners[i].onElementRender(this,elem,obj);
+		let self = this;
+		row.ondblclick=function(){
+			self.goto(dir);
+		};
 
-		elem.appendChild(elem.tools);
-
-		return elem;
+		return row;
 	}
 
-	/**
-	 * Returns a toolbar object
-	 * @param {*} src : The fsoObject firing this event
-	 */
-	renderToolBar(src)
+	renderFile(file)
 	{
-		var toolbar=document.createElement('div');
-		toolbar.className='fsoexplorer-toolbar';
+		let row = document.createElement('tr');
 
-		var title=document.createElement('div');
+		let col = document.createElement('td');
+		col.appendChild(this.renderIcon(file));
+		row.appendChild(col);
 
-		// Path
-		var lblPath=document.createElement('span');
-		var txt=decodeURIComponent(src.data.link);
-		if(txt=='')
-			txt='/';
-		lblPath.appendChild(document.createTextNode(txt));
+		col = document.createElement('td');
+		col.appendChild(document.createTextNode(file.name));
+		row.appendChild(col);
 
-		// Free space
-		var lblFree=document.createElement("span");
-		lblFree.appendChild(document.createTextNode(fsoExplorer.toUnits(src.data.free)));
-		lblFree.appendChild(document.createTextNode('/'));
-		lblFree.appendChild(document.createTextNode(fsoExplorer.toUnits(src.data.total)));
+		let toolcol = this.renderActions(file);
+		row.appendChild(toolcol);
 
-		title.appendChild(lblPath);
-		title.appendChild(lblFree);
-		toolbar.appendChild(title);
+		for(let i in this.plugins )
+		{
+			if( typeof this.plugins[i].onRenderFile !== 'undefined' )
+				typeof this.plugins[i].onRenderFile(this,toolcol,file);
+		}
 
-		toolbar.progressBar=document.createElement('progress');
-		//this.progressBar.hidden=true;
-		toolbar.progressBar.id=this.tag+'-progress';
-		toolbar.progressBar.value=0;
-		toolbar.progressBar.max=100;
-		toolbar.progressBar.hidden=true;
-		toolbar.appendChild(toolbar.progressBar);
+		row.ondblclick=function(){
+			file.explore();
+		};
 
+		return row;
+	}
+
+	render()
+	{
+		this.setTitle("Contenido de "+this.dir.name);
+		this.setSpaceLeft(this.dir.free,this.dir.total);
+		UI.clear(this.workSpace);
+
+		let table = document.createElement('table');
+		table.classList.add('table');
+
+		let thead = document.createElement('thead');
+		let tr = document.createElement('tr');
+		let td = document.createElement('td');
+		td.appendChild(document.createTextNode('Fichero'))
+		td.colSpan=2;
+		tr.appendChild(td);
 		
-		return toolbar;
+		td = document.createElement('td');
+		td.appendChild(document.createTextNode('Acciones'))
+		tr.appendChild(td);
+		thead.appendChild(tr);
+		table.appendChild(thead);
 
+		for(let i in this.plugins )
+		{
+			if( typeof this.plugins[i].beforeRender !== 'undefined' )
+				typeof this.plugins[i].beforeRender(this,this.dir);
+		}
+
+		let tbody = document.createElement('tbody');
+		for(let i in this.dir.childDirs)
+		{
+			tbody.appendChild(this.renderDir(this.dir.childDirs[i]));
+		}
+		for(let i in this.dir.childFiles)
+		{
+			tbody.appendChild(this.renderFile(this.dir.childFiles[i]));
+		}
+		table.appendChild(tbody);
+		this.workSpace.appendChild(table);
+
+		for(let i in this.plugins )
+		{
+			if( typeof this.plugins[i].onRender !== 'undefined' )
+				typeof this.plugins[i].onRender(this,this.dir);
+		}
 	}
+
+	async goto(dir)
+	{
+		let result = null;
+
+		if(typeof dir == 'string')
+		{
+			result = await fsoDir.get('/');
+		}
+		else
+		{
+			result = await dir.explore();
+		}
+		
+		if(result != null)
+		{
+			this.dir = result;
+			this.render();
+		}
+	}
+
+	async delete(what)
+	{
+		if(confirm("Seguro que desea borrar '"+what.name+"'? (Esta operación no se puede deshacer)"))
+		{
+			try
+			{
+				await what.delete();
+				await this.dir.explore();
+			}
+			catch(ex)
+			{
+				alert(''+ex);
+			}
+			
+		}
+		this.render();
+	}
+
+	addPlugin(id,plugin)
+	{
+		this.plugins[id]=plugin;
+		if(typeof plugin.start !== 'undefined')
+			plugin.start(this);
+	}
+
 	
-
-
-	//Moves to directory
-	goto(p)
-	{
-		this.fso.data.childs[p].explore();
-	}
-
-	//Downloads a file
-	download(p)
-	{
-		this.fso.data.childs[p].explore();
-	}
-
-	//Erases a file or directory
-	erase(p)
-	{
-		this.fso.data.childs[p].delete();
-	}
-
-	appendRenderListener(obj)
-	{
-		this.onRenderListeners.push(obj);
-	}
-
 }
 
-fsoExplorer.units = ['bytes','Kb','Mb','Gb','Tb'];
-fsoExplorer.baseUnit = Math.log(1000);
-
-
-//Calls init
 window.addEventListener('load',fsoExplorer.setup);
-
-

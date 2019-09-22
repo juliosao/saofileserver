@@ -1,127 +1,111 @@
-class RemoteObject
-{
-    // Generic constructor
-    constructor(data,listener)
-    {
-        this.data = data;
-
-        if(typeof listener == 'undefined')
-            this.listener = RemoteListener.getInstance();
-        else
-            this.listener = listener;
-    }
-
-    loadData(data)
-    {
-        this.data=data;
-    }
-
-    parseParameters(dataSrc)
-    {
-        var data = null;
-        if(typeof data != 'undefined')
-        {
-            var data = new FormData();
-            for(var prop in dataSrc)
-            {
-                data.append(prop,dataSrc[prop]);
-            }
-        }
-        return data;
-    }
-
-    doCallBack(data,func)
-    {
-        if(typeof func == 'string')
-            this.listener[func](data);
-        else if(typeof func  == 'function')
-            func(data);
-        else
-            throw 'Invalid function callback';
-    }
-
-    // Generic remote function call
-    plainRemoteCall(url, data, onOk)
-    {
-        var objData = this.parseParameters(data);
-        var self = this;
-        var xhttp = new XMLHttpRequest();
-        
-        xhttp.onreadystatechange = function()
-        {
-            if (this.readyState == 4)
-            {
-                if(this.status == 200 && typeof onOk != 'undefined')
-                {
-                    self.doCallBack(this.responseText, onOk);
-                }
-                else if(this.status==401 && typeof App.loginUrl!== undefined)
-                {
-                    window.location.href=App.loginUrl;
-                }
-                else if(this.status>=400)
-                {
-                    self.listener.onError(self,this.responseText ? this.responseText : this.statusText);
-                }
-			}
-        };
-		
-		xhttp.open("POST", url, true);
-        xhttp.send(objData);
-    }
-
-    // Function used for call server expecting a json response
-    jsonRemoteCall(url, dataSrc, onOk)
-    {
-        var data = this.parseParameters(dataSrc);
-        var self = this;
-        var xhttp = new XMLHttpRequest();
-        
-        xhttp.onreadystatechange = function()
-        {
-            if (this.readyState == 4)
-            {
-                if(this.status == 200 && typeof onOk != 'undefined')
-                {
-                    self.doCallBack(JSON.parse(this.responseText),onOk);
-                }
-                else if(this.status==401 && typeof App.loginUrl!== undefined)
-                {
-                    window.location.href=App.loginUrl;
-                }
-                else if(this.status>=400)
-                {
-                    self.listener.onError(self,this.responseText ? this.responseText : this.statusText);
-                }
-			}
-        };
-		
-		xhttp.open("POST", url, true);
-        xhttp.send(data);
-    }
-}
-
-// Class implementing generic callbacks
-class RemoteListener
-{    
-    static getInstance()
-    {
-        if(RemoteListener.instance == null)
-            RemoteListener.instance = new RemoteListener();
-
-        return RemoteListener.instance;
-    }
-
-    onError(sender,data)
-    {
-        console.log(data);
-        alert(data);
-    }
-}
-RemoteListener.instance = null;
-
-// This void class is a container for some usefull data
+// Needed for some stuff. Do not remove
 class App
 {
+	static async jsonRemoteCall(url,data)
+	{
+		const response = await fetch(
+			url,
+			{
+				method:'POST',
+				body: JSON.stringify(data),
+				headers:{
+					'Content-Type': 'application/json'
+				},
+				credentials:'include'
+			}
+		)
+		
+		if(!response.ok)
+		{
+			if(response.status == 401) //Unauthorized
+				App.login();
 
+			throw new RemoteException(response.status,response.statusText);
+		}
+	
+		return response.json();
+	};
+	
+	static async blobRemoteCall(url,data)
+	{
+		const response = await fetch(
+			url,
+			{
+				method:'POST',
+				body: data,
+				headers:{
+					'Content-Type': 'application/octect-stream'
+				},
+				credentials:'include'
+			}
+		)
+		
+		if(!response.ok)
+		{
+			if(response.status == 401) //Unauthorized
+				App.login();
+			throw new RemoteException(response.status,response.statusText);
+		}
+	
+		return response.blob();
+	};
+	
+	static async plainRemoteCall(url,data)
+	{
+		const response = await fetch(
+			url,
+			{
+				method:'POST',
+				body: data,
+				headers:{
+					'Content-Type': 'text/plain'
+				},
+				credentials:'include'
+			}
+		)
+		
+		if(!response.ok)
+		{
+			if(response.status == 401) //Unauthorized
+				App.login();
+
+			throw new RemoteException(response.status,response.statusText);
+		}
+	
+		return response.text();
+	};
+	
+	/*
+	{
+	App.baseUrl = "<?=self::getAppUrl();?>";
+	App.main = "<?=App::getAppURL(Cfg::get()->app->main);?>";			
+	App.loginUrl = "<?=App::getAppURL(Cfg::get()->app->loginUrl);?>";
+	*/
+	static login()
+	{
+		window.location.href = App.base;
+	}
+
+	static setup()
+	{
+		var current = document.currentScript.src;
+		var base = current.split('/').slice(0,-2);
+		App.baseUrl = base.join('/')
+	}
 }
+
+class RemoteException 
+{
+	constructor(code,msg)
+	{
+		this.code=code;
+		this.msg=msg;
+	}
+
+	toString()
+	{
+		return "Error "+this.code+":"+this.msg;
+	}
+}
+
+App.setup();

@@ -62,6 +62,10 @@
 	background-image: url('icons/jpg.svg');
 }
 
+.fso-explorer table{
+	width: 100%;
+}
+
 /* Item actions for each file */
 .fsoexplorer-toolbar{
 	display: block;
@@ -96,4 +100,8 @@ div.fsoexplorer-toolbar{
 
 .fso-explorer tr {
 	cursor: pointer;
+}
+
+.fsoexplorer-home {
+	background-image: url('toolbar/home.svg');
 }

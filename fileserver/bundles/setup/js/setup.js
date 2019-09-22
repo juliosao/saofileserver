@@ -1,32 +1,27 @@
 //Constructor
-class setup extends RemoteObject
+class Setup
 {
-	createDataBase(user,pass)
+	constructor(user,pass)
 	{
-		var self = this;
-		this.jsonRemoteCall("api/createDatabase.php",{usr:user,pwd:pass},
-			function(data)
-			{
-				self.data.childs={};
+		this.user=user;
+		this.pass=pass;
+	}
 
-				// Paint folders first
-				for(var i in data.dirs)
-				{
-					self.data.childs[data.dirs[i].name] = new fsoDir(data.dirs[i],self.listener);
-				}
+	async createDataBase()
+	{
+		let res = await App.jsonRemoteCall("api/createDatabase.php",{usr:this.user,pwd:this.pass});
+		return res;
+	}
 
-				for(var i in data.files)
-				{
-					self.data.childs[data.files[i].name] = new fsoFile(data.files[i],self.listener);
-				}
+	async createTables()
+	{
+		let res = await App.jsonRemoteCall("api/createTables.php",{usr:this.user,pwd:this.pass});
+		return res;
+	}
 
-				self.data.free = data.free;
-				self.data.total = data.total;
-				self.data.link = data.link;
-				self.data.name = data.name;
-				
-				self.listener.onRefresh(self);
-			}
-		);
+	async createUser(appUser,appUserPw)
+	{
+		let res = await App.jsonRemoteCall("api/createFirstUser.php",{usr:this.user,pwd:this.pass,appUsr:appUser,appPwd:appUserPw});
+		return res;
 	}
 }

@@ -7,13 +7,13 @@ class delete extends JSONApp{
         parent::__construct(1);
     }
 
-    public function main() {   
+    public function main($args) {   
         $basedir=Cfg::get()->fso->basedir;
 		$result=array('function'=>'delete');
 		
         $mal=0;
-        error_log(json_encode($_POST));
-        $paths= $_POST["path"];
+        error_log(json_encode($args));
+        $paths= $args["path"];
         $ok=array();
         $ko=array();
         $err=null;

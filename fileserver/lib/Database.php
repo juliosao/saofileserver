@@ -55,7 +55,7 @@ class Database {
         catch(Exception $ex)
         {
             error_log($ex);
-            throw new FsoException("$path");
+            throw new DatabaseException($ex->getMessage());
         }
 
     }
@@ -85,12 +85,19 @@ class Database {
      */
     function query($consulta, $campos = array()) 
     {	
-        error_log($consulta);
-        $stm = $this->db->prepare($consulta);
-        $stm->execute($campos);
-        $res=$stm->fetchAll();
-        $stm->closeCursor();
-        return $res;
+        try
+        {
+            error_log($consulta);
+            $stm = $this->db->prepare($consulta);
+            $stm->execute($campos);
+            $res=$stm->fetchAll();
+            $stm->closeCursor();
+            return $res;
+        }
+        catch(Exception $ex)
+        {
+            throw new DatabaseException($ex->getMessage());
+        }
 
     }
     
@@ -105,11 +112,18 @@ class Database {
      */
     function execute($consulta, $campos = array()) 
     {	
-        $stm = $this->db->prepare($consulta);
-        $stm->execute($campos);
-        $res=$stm->rowCount();	
-        $stm->closeCursor();
-        return $res;
+        try
+        {
+            $stm = $this->db->prepare($consulta);
+            $stm->execute($campos);
+            $res=$stm->rowCount();	
+            $stm->closeCursor();
+            return $res;
+        }
+        catch(Exception $ex)
+        {
+            throw new DatabaseException($ex->getMessage());
+        }
     }
 
 	/**
@@ -133,7 +147,7 @@ class Database {
 
         $consulta = 'INSERT INTO ' . $table . ' (' . $campos . ') VALUES (' . $valores . ')';        
 
-        return $this->ejecutar($consulta,$obj);
+        return $this->execute($consulta,$obj);
     }
 
 	/**
@@ -158,7 +172,7 @@ class Database {
 
         $consulta = 'REPLACE INTO ' . $table . ' (' . $campos . ') VALUES (' . $valores . ')';
 
-        return $this->ejecutar($consulta,$obj);
+        return $this->execute($consulta,$obj);
     }
 
 	/**
@@ -194,7 +208,7 @@ class Database {
             }
         }
 		
-        return $this->ejecutar($consulta,$dict);
+        return $this->execute($consulta,$dict);
     }
 
 	/**
@@ -219,7 +233,7 @@ class Database {
             }
         }
 		
-        return $this->ejecutar($consulta,$dict);
+        return $this->execute($consulta,$dict);
     }
 
 	/**

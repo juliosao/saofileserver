@@ -1,20 +1,21 @@
-class fsoPlayer extends RemoteObject
+class fsoPlayer
 {
 	constructor(tag) {
-		super({'tag':tag});
+		this.tag = tag;
 		this.playIdx = 0;
 		this.playlist = [];
 		this.container=document.getElementById(tag);
 		this.path = '';
 	}
+
 	//fsoPlayer initialization
 	static setup() {
 		fsoPlayer.players = [];
 		// Adds plugin to the controllers
-		var players = document.getElementsByClassName("fso-player");
-		for (var i = 0; i < players.length; i++) {
-			var player = players[i];
-			var p = new fsoPlayer(player.id);
+		let players = document.getElementsByClassName("fso-player");
+		for (let i = 0; i < players.length; i++) {
+			let player = players[i];
+			let p = new fsoPlayer(player.id);
 			fsoPlayer.players[player.id] = p;
 			p.load(player.getAttribute('data-src'), player.getAttribute('data-mode'));
 		}
@@ -23,12 +24,12 @@ class fsoPlayer extends RemoteObject
 	//Gets directory data
 	load(path,mode)
 	{
-		this.data.path=path;
-		this.data.mode=mode;
+		this.path=path;
+		this.mode=mode;
 		
-		var self=this;
+		let self=this;
 
-		this.jsonRemoteCall("../explorer/api/explore.php",{path:this.data.path},
+		App.jsonRemoteCall("../explorer/api/explore.php",{path:this.path}).then(
 			function(data)
 			{		
 				// Clears old data
@@ -38,15 +39,14 @@ class fsoPlayer extends RemoteObject
 
 				// Puts UI
 				self.loadPlayList(data);
-
 				self.putToolBar();
-
-				self.putPlayer(self.data.mode!='audio');				
+				self.putPlayer(self.mode!='audio');				
 				
 				if(self.playlist.length!=1)
 					self.putPlayList();
 				
-				self.play(self.playIdx);
+				if(self.playlist.length>0)
+					self.play(self.playIdx);
 			}
 		);
 	}
@@ -58,7 +58,7 @@ class fsoPlayer extends RemoteObject
 
 		if(data.isDir)
 		{
-			for(var i in data.files)
+			for(let i in data.files)
 			{
 				if( (data.files[i].extension=='mp3' || data.files[i].extension=='ogg' || data.files[i].extension=='flac') && this.mode!='video')
 				{
@@ -87,12 +87,12 @@ class fsoPlayer extends RemoteObject
 
 	putToolBar()
 	{
-		var toolbar=document.createElement('div');
+		let toolbar=document.createElement('div');
 		toolbar.id=this.tag+'-toolbar';
 		toolbar.className='fsoplayer-toolbar';
-		var title=document.createElement('h1');
-		if(this.data.path!='')
-			title.appendChild(document.createTextNode(this.data.path));
+		let title=document.createElement('h1');
+		if(this.path!='')
+			title.appendChild(document.createTextNode(this.path));
 		else
 			title.appendChild(document.createTextNode('/'));
 		
@@ -105,31 +105,31 @@ class fsoPlayer extends RemoteObject
 	putPlayList()
 	{
 		//Paint dirs and files
-		var lst=document.createElement('table');
+		let lst=document.createElement('table');
 		lst.classList.add('table-striped')
 		lst.classList.add('table-responsive-sm');
 		lst.classList.add('table');
 		lst.classList.add('fso-player-playlist');
 
 		// Table header
-		var hdr = document.createElement('thead');
-		var td = document.createElement('th');
+		let hdr = document.createElement('thead');
+		let td = document.createElement('th');
 		td.appendChild(document.createTextNode('Nombre'));
 		td.colSpan=2;
 		hdr.appendChild(td);
 		lst.appendChild(hdr);
 
 		// Table body
-		var tbody=document.createElement('tbody');
-		for(var i in this.playlist)
+		let tbody=document.createElement('tbody');
+		for(let i in this.playlist)
 		{
-			var me=this;
-			var tr = document.createElement('tr');
+			let me=this;
+			let tr = document.createElement('tr');
 			tr.id=this.tag+'-playitem-'+i;
 			tr.setAttribute('data-idx',i);
-			tr.addEventListener('click',function(e){
+			tr.onclick=function(e){
 				me.play(parseInt(e.currentTarget.getAttribute('data-idx')));
-			});
+			};
 
 			// Number
 			td = document.createElement('td');
@@ -167,18 +167,18 @@ class fsoPlayer extends RemoteObject
 			this.player.appendChild(this.src);
 			
 			// Control for track-end
-			var me=this;
-			this.player.addEventListener("ended", function(){
+			let me=this;
+			this.player.onended=function(){
 				me.play( (me.playIdx+1) % me.playlist.length );
-			}, false);
+			};
 		}
 	}
 
 	play(idx)
 	{		
-		for(var i in this.playlist)
+		for(let i in this.playlist)
 		{
-			var elem = document.getElementById(this.tag+'-playitem-'+i);
+			let elem = document.getElementById(this.tag+'-playitem-'+i);
 			if(elem!=null)
 			{
 				if(i==idx)

@@ -15,10 +15,9 @@ abstract class HTMLApp extends App
         <link rel="stylesheet" href="<?=self::getAppUrl('bootstrap/css/bootstrap.min.css');?>" >
         <script src="<?=self::getAppUrl('bootstrap/js/bootstrap.min.js');?>" ></script>
 		<script src="<?=self::getAppUrl('js/App.js');?>" ></script>
+		<script src="<?=self::getAppUrl('js/Ui.js');?>" ></script>
 		<script type="text/javascript" >
-			App.baseUrl = "<?=self::getAppUrl();?>";
-			App.main = "<?=App::getAppURL(Cfg::get()->app->main);?>";			
-			App.loginUrl = "<?=App::getAppURL(Cfg::get()->app->loginUrl);?>";
+			App.main = "<?=App::getAppURL(Cfg::get()->app->main);?>";
 		</script>
 		<?php
 	}

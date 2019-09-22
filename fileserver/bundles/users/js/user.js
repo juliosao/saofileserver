@@ -1,4 +1,4 @@
-class User extends RemoteObject
+class User extends App
 {
 	constructor(data, listener)
 	{
@@ -17,14 +17,18 @@ class User extends RemoteObject
 
     static load(id,callback)
     {       
-        super.call("../../../api/user/load.php",{'id':id},function(data){
+        super.jsonRemoteCall("../../../api/user/load.php",{'id':id},function(data){
                 callback(new User(data))
             });
     }
 
-    static list()
+    static list(listener)
     {
-        
+        var tmp = new App(null,null);
+        tmp.jsonRemoteCall("./api/list.php", null, function(data)
+        {
+            alert(data);
+        });
     }
 
     save(callback)
@@ -85,5 +89,10 @@ class UserListener extends RemoteListener
 	onRefresh(sender)
 	{
 		console.log("Refresh:"+sender.data.name);
-	}
+    }
+
+    onList(data)
+    {
+        console.log("List:"+data);
+    }
 }

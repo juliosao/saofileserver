@@ -1,7 +1,5 @@
 <?php
 require_once('../../lib/Util.php');
-$file=urldecode($_REQUEST['file']);
-$mode=isset($_REQUEST['data-mode']) ? $_REQUEST['data-mode'] : 'audio';
 ?>
 <!DOCTYPE html>
 <html>
@@ -13,7 +11,7 @@ $mode=isset($_REQUEST['data-mode']) ? $_REQUEST['data-mode'] : 'audio';
 		<script type="text/javascript">
 		function loadUsers()
 		{
-			
+			User.list(null);
 		}
 		</script>
 	</head>

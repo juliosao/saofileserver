@@ -1,47 +1,14 @@
-class Auth extends RemoteObject
+class Auth extends App
 {
-    constructor(listener)
+    static async login(user,pass)
     {
-        if(typeof listener == 'undefined')
-            listener = AuthListener.getInstance();
-
-        super(null,listener);
+        var data = await App.jsonRemoteCall("bundles/auth/api/login.php",{'usr':user, 'pwd':pass});
+        return new Auth(data);
     }
 
-    login(user,pass)
+    async logout()
     {
-        var data = {'usr':user, 'pwd':pass};
-        this.jsonRemoteCall("api/login.php",data,'onLogin');
-    }
-
-    logout()
-    {
-		this.jsonRemoteCall("api/logout.php",null,'onLogout');
+        var result = await App.jsonRemoteCall("bundles/auth/api/logout.php",null);
+        return result;
     }
 }
-
-class AuthListener extends RemoteListener
-{
-    static getInstance()
-    {
-        if(AuthListener.instance == null)
-            AuthListener.instance = new AuthListener();
-
-        return AuthListener.instance;
-    }
-
-    onLogin()
-    {
-        window.location.href=App.main;
-    }
-
-    onLogout()
-    {
-    }
-
-    onError(msg)
-    {
-        alert(msg);
-    }
-}
-AuthListener.instance = null;

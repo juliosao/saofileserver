@@ -31,7 +31,7 @@ abstract class App {
 		
     }
 
-	abstract function main();
+	abstract function main($args);
 
 	function setBuffered($mode=true)
 	{

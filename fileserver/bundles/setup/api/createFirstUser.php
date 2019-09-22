@@ -1,0 +1,51 @@
+<?php
+
+require('../../../lib/Util.php');
+
+class Setup extends JSONApp
+{
+    function main($args)
+    {
+        $usr=isset($args['usr']) ? $args['usr'] : null;
+        $pwd=isset($args['pwd']) ? $args['pwd'] : null;
+        $appUsr=isset($args['appUsr']) ? $args['appUsr'] : null;
+		$appPwd=isset($args['appPwd']) ? $args['appPwd'] : null;
+
+        if($usr==null || $pwd==null)
+        {
+            throw new UnauthorizedException();
+        }
+
+        $db=new Database(null,$usr,$pwd);
+
+        $res=$db->execute("INSERT INTO groups (id,name) VALUES (0,'admin')");
+        if($res<0)
+        {
+            throw new FsoException("Admin group");
+        }
+
+        $res=$db->execute("INSERT INTO groups (id,name) VALUES (1,'users')");
+        if($res<0)
+        {
+            throw new FsoException("Users group");
+        }
+        
+        $res=$db->execute("INSERT INTO users (id,name,auth) VALUES (?,?,?)",array(0,$appUsr,hash('sha256',$appPwd)));
+        if($res<0)
+        {
+            throw new FsoException("First user");
+        }
+
+        $res=$db->execute("INSERT INTO user2groups (user,grp) VALUES (0,0),(0,1)",array($appUsr));
+        if($res<0)
+        {
+            throw new FsoException("First user");
+        }
+            
+        return True;
+    }
+}
+
+
+$setup=new Setup();
+$setup->run();

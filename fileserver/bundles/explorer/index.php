@@ -12,7 +12,6 @@ require_once('../../lib/Util.php');
 		<link rel="stylesheet" href="../player/styles/explorer.css">
 	</head>
 	<body>
-		<div id="toolbar" class="app-toolbar" ></div>
 		<div id="explorer" class="fso-explorer" ></div>
 	</body>
 </html>

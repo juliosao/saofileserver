@@ -1,8 +1,7 @@
 {
     "app":{
         "main":"bundles/explorer/index.php",
-        "setup":"bundles/setup/index.php",
-        "loginUrl":"bundles/auth/index.php"
+        "setup":"bundles/setup/index.php"
     },
     "bbdd":{
         "database":"mysql:host=localhost;dbname=saofileserver;charset=utf8",
