@@ -1,12 +1,10 @@
-class User extends App
+class User
 {
-	constructor(data, listener)
+	constructor(id,name,mail)
 	{
-		if(listener===null)
-		{
-			listener = UserListener.getInstance();
-		}
-		super(data,listener);
+        this.id = id;
+        this.name = name;
+        this.mail = mail;
     }
     
     static parse(data)
@@ -15,84 +13,38 @@ class User extends App
         return new User(data.id,data.name,data.mail);
     }
 
-    static load(id,callback)
+    async static get(id)
     {       
-        super.jsonRemoteCall("../../../api/user/load.php",{'id':id},function(data){
-                callback(new User(data))
-            });
+        let data = await App.jsonRemoteCall("./api/load.php",{'id':id});
+        return User.parse(data);
     }
 
-    static list(listener)
-    {
-        var tmp = new App(null,null);
-        tmp.jsonRemoteCall("./api/list.php", null, function(data)
-        {
-            alert(data);
-        });
+    static async list()
+    {        
+        let data = await App.jsonRemoteCall("./api/list.php");
+        let result=[];
+        for(let i; i<data.length; i++)
+            result.push(User.parse(data[i]));
+
+        return result;
     }
 
-    save(callback)
+    async save()
     {
-        var data = new FormData();
-		data.append('id', this.id);
-        data.append('mail', this.mail);
+        let data = {id: this.id, name:this.name, mail:this.mail };
 
         if( typeof this.pw != 'undefined' && this.pw != "")
-            data.append('pw',this.pw);
+            data['pw']=this.pw;
 
         if( typeof this.pw2 != 'undefined' && this.pw2 != "")
-            data.append('pw2',this.pw2);
-        		
-		var xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function(data) {
-			if (this.readyState == 4 && this.status == 200) {
-                var res=JSON.parse(this.responseText)
-                if(res.ok)
-                    callback(new User(res.id,res.mail));
-			}
-        };
-        
-		xhttp.open("POST", "../../../api/user/save.php", true);
-		xhttp.send(data);
+            data['pw2']=this.pw2;
+
+        let result = await App.jsonRemoteCall("./api/load.php",data);
+
+        return result;		
     }
 
 
 }
 
 
-
-class UserListener extends RemoteListener
-{
-    static getInstance()
-    {
-        if(UserListener.instance == null)
-            UserListener.instance = new UserListener();
-
-        return UserListener.instance;
-	}
-	
-	onProgress(sender,fraction,total)
-	{
-		console.log("Progress "+sender.name+fraction+"/"+total);
-	}
-
-	onError(sender,message)
-	{
-		alert("Error:"+message);
-	}
-
-	onOk(sender)
-	{
-		console.log("Ok:"+sender.name);
-	}
-
-	onRefresh(sender)
-	{
-		console.log("Refresh:"+sender.data.name);
-    }
-
-    onList(data)
-    {
-        console.log("List:"+data);
-    }
-}
