@@ -1,5 +1,5 @@
 <?php
-require('../../lib/Util.php');
+require('../../../lib/Util.php');
 
 
 class saveUser extends JSONApp
@@ -9,49 +9,58 @@ class saveUser extends JSONApp
         parent::__construct(1);
     }
 
-    function main()
+    function main($argv)
     {
-        if(!isset($_REQUEST['id']))
+        Auth::checkSession();
+        $currentUsr = Auth::get();        
+
+        // Check for user to modify
+        $saveUsr=$currentUsr;
+        if(isset($argv['id']))
         {
-            $this->exitApp(false,'id not provided');
-        }
-
-        $filter=array();
-        $filter['id']=$_REQUEST['id'];
-
-        $users=User::select($filter);
-
-        if(count($users)==0)
-        {
-            $this->exitApp(false,'user not found');
-        }
-
-        $usr=$users[0];
-        if(isset($_REQUEST['mail']))
-        {
-            $usr->mail=$_REQUEST['mail'];        
-        }
-        $usr->save();
-
-        $pw=getParam('pw');
-        $pw2=getParam('pw2');
-
-        if($pw!=$pw2)
-        {
-            $this->exitApp(false,'passwords dont match');
-        }
-        else
-        {
-            if($pw!==null)
+            $users=User::select(array('id'=>$argv['id']));
+            if(count($users)==0)
             {
-                error_log("Cambiamos pw:$pw");
-                $res=$usr->savePw($pw);
-                error_log("$res");
+                throw new UserNotFoundException();
+            }
+            $saveUsr=$users[0];
+        }        
+
+        // Check for authorization to modify the user
+        if($currentUsr->id == $saveUsr->id )
+        {
+            if(!User::checkPassw($saveUsr->name,$argv['cpw']))
+            {
+                throw new InvalidRequestException("Please type current password");
             }
         }
+        else if(!$currentUsr->isFromGroup('admin'))
+        {
+            throw new InvalidRequestException("You are not an admin");
+        }
 
+        // Modify mail?
+        if(isset($argv['mail']))
+        {
+            $usr->mail=$argv['mail'];        
+        }        
+
+        // Modify Passwords?
+        $pw=$this->getParam('pw');
+        $pw2=$this->getParam('pw2');
+        if($pw !== '' || $pw2 !== '')
+        {
+            if($pw!==$pw2)
+            {
+                throw new InvalidRequestException("Passwords don't match");
+            }
+            error_log('Cambiando pw!');
+            $saveUsr->setPw($pw);
+        }
+
+        $saveUsr->save();
     
-        $this->setResult('usr',$users[0]);
+        return $users[0];
     }
 }
 

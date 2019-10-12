@@ -1,5 +1,5 @@
 <?php
-require('../../lib/Util.php');
+require('../../../lib/Util.php');
 
 
 class loadUser extends JSONApp
@@ -9,12 +9,12 @@ class loadUser extends JSONApp
         parent::__construct(1);
     }
 
-    function main()
+    function main($args)
     {
         error_log('PETICION:'.json_encode($_REQUEST));
 
         $filter=array();
-        $filter['id']= getParam('id',Auth::get()->id);
+        $filter['id']= isset($args['id']) ? $args['id'] : Auth::get()->id;
 
         $users=User::select($filter);
 

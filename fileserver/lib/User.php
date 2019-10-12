@@ -36,7 +36,19 @@ class User extends DBObject
 
     function getGroups()
     {
-        return self::$db->query("SELECT grp FROM user2groups WHERE user=?", array($this->id));
+        $res=array();
+        $groups = self::$db->query("SELECT grp FROM user2groups INNER JOIN groups ON user2groups.grp = groups.id WHERE user=?", array($this->id));
+        foreach($groups as $grp)
+        {
+            $res[]=new Group($grp);
+        }
+        return $res;
+    }
+
+    function isFromGroup($groupName)
+    {
+        $groups = self::$db->query("SELECT grp FROM user2groups INNER JOIN groups ON user2groups.grp = groups.id WHERE user=? AND groups.name=?", array($this->id,$groupName));
+        return count($groups)>0;
     }
 
     static function checkPassw($usr,$pw)
@@ -60,10 +72,10 @@ class User extends DBObject
         return $usr;
     }
 
-    function savePw($pw)
+    function setPw($pw)
     {
         $auth=hash('sha256',$pw);
-        return self::$db->execute("UPDATE users SET auth=:auth WHERE id=:id",array('auth'=>$auth,'id'=>$this->id))==1;
+        $this->auth=$auth;
     }
 
     function save()

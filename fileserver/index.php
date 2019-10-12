@@ -8,7 +8,7 @@ try
 catch(Exception $ex)
 {
     error_log("Tenemos que hacer setup");
-    header('Location: '.App::getAppURL().Cfg::get()->app->setup,true,302);
+    header('Location: '.App::getAppURL().Cfg::get()->app->setup,true,302);   
 }
 ?>
 <!DOCTYPE html>

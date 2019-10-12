@@ -13,7 +13,7 @@ class App
 				},
 				credentials:'include'
 			}
-		)
+		);
 		
 		if(!response.ok)
 		{
@@ -38,7 +38,7 @@ class App
 				},
 				credentials:'include'
 			}
-		)
+		);
 		
 		if(!response.ok)
 		{
@@ -62,7 +62,7 @@ class App
 				},
 				credentials:'include'
 			}
-		)
+		);
 		
 		if(!response.ok)
 		{
@@ -83,7 +83,7 @@ class App
 	*/
 	static login()
 	{
-		window.location.href = App.base;
+		window.location.href = App.baseUrl;
 	}
 
 	static setup()

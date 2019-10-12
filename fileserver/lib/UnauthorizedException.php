@@ -4,8 +4,11 @@ class UnauthorizedException extends FsoException
 {
 	static $errNumber=401;
 
-	public function __construct()
+	public function __construct($msg='')
 	{
-		parent::__construct("Unauthorized");		
+		if($msg=='')
+			parent::__construct("Unauthorized");
+		else
+			parent::__construct("Unauthorized: ".$msg);
 	}
 }

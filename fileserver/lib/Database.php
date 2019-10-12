@@ -87,7 +87,6 @@ class Database {
     {	
         try
         {
-            error_log($consulta);
             $stm = $this->db->prepare($consulta);
             $stm->execute($campos);
             $res=$stm->fetchAll();

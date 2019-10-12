@@ -59,6 +59,12 @@ abstract class App {
 		die();
 	}
 
+	function getParam($param,$default=null)
+	{
+		return isset($_REQUEST[$param]) ? $_REQUEST[$param] : $default;
+	}
+
+	/*
 	public function exitError($errNumber=500,$msg='')
 	{
 		ob_clean();
@@ -68,6 +74,7 @@ abstract class App {
 		ob_flush();
 		die();
 	}
+	*/
 
 	public static function getAppPath($file='')
 	{
