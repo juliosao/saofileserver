@@ -17,19 +17,29 @@ class FSODir extends FSO {
         parent::__construct(realpath($path));
     }
     
-    public function make()
+    public function mkdir($newdir,$force=false)
     {
-        if($this->exists()) {
-            return true;
-        } else {
-            $res= mkdir($this->path,0777,true);
-            if($res==false)
+        $newPath=FSO::joinPath($this->path,$newdir,true);
+        error_log("resultado: $newPath");
+
+        $present=FSO::fromPath($newPath);
+        if($present!==null)
+        {
+            if($force==false || !$present instanceof FSODir)
             {
-                $this->error=error_get_last();
-                return false;
+                throw new FsoException(error_get_last());
             }
+
             return true;
         }
+
+        $res= mkdir($newPath,0777,true);
+        if($res==false)
+        {
+            throw new FsoException(error_get_last()['message']);
+        }
+
+        return true;
     }
     
     public function exists()

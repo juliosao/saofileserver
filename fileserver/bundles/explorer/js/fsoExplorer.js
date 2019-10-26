@@ -21,12 +21,23 @@ class fsoExplorer
 		fsoExplorer.baseUnit = Math.log(1000);
 		fsoExplorer.controllers = [];
 
-		var divs = document.getElementsByClassName('fso-explorer');
-		for(var i = 0; i<divs.length; i++)
+		let divs = document.getElementsByClassName('fso-explorer');
+		for(let i = 0; i<divs.length; i++)
 		{
-			var fsoE = new fsoExplorer(divs[i]);
+			let fsoE = new fsoExplorer(divs[i]);
 			fsoExplorer.controllers.push(fsoE);
 		}
+
+		document.addEventListener('dragover',fsoExplorer.cancel);
+		document.addEventListener('drop',fsoExplorer.cancel);
+	}
+
+	static cancel(ev)
+	{
+		ev.preventDefault();
+		ev.dataTransfer.dropEffect = 'copy';
+		ev.stopPropagation();
+		return false;
 	}
 
 	constructor(view)
@@ -43,13 +54,19 @@ class fsoExplorer
 			self.dir = result;
 			self.render();
 		})
+
+		view.addEventListener("dragover", fsoExplorer.cancel);
+        view.addEventListener("dragenter", fsoExplorer.cancel);
+        view.addEventListener("drop", function(ev){
+			self.upload(ev)
+		} );
 		
 	}
 
 	createToolBar()
 	{
-		var self = this;
-		var toolBar = document.createElement('div');
+		let self = this;
+		let toolBar = document.createElement('div');
 		toolBar.classList.add('toolbar');
 
 		this.title = document.createElement('h1');
@@ -71,12 +88,25 @@ class fsoExplorer
 		}
 		this.extraTools.appendChild(home);
 
+
+		let mkdir = document.createElement('span');
+		mkdir.classList.add('fsoexplorer-icon','fsoexplorer-folder-add');
+		mkdir.onclick = function()
+		{
+			self.mkdir(prompt("Nombre para la nueva carpeta","nueva carpeta"));
+		}
+		this.extraTools.appendChild(mkdir);
+
+		this.progressBar=document.createElement('progress');
+		this.progressBar.hidden=true;
+		toolBar.appendChild(this.progressBar);
+
 		this.view.appendChild(toolBar);
 	}
 
 	static toUnits(size)
 	{		
-		var idx=Math.trunc(Math.log(size) / fsoExplorer.baseUnit);
+		let idx=Math.trunc(Math.log(size) / fsoExplorer.baseUnit);
 		idx = idx >= fsoExplorer.units.length ? fsoExplorer.units.length-1 : idx;
 		size =  Math.round( 100 * size / Math.pow(1000,idx))/100;
 
@@ -97,11 +127,11 @@ class fsoExplorer
 
 	renderActions(obj)
 	{
-		var td = document.createElement('td');
+		let td = document.createElement('td');
 		if(obj.name!='..')
 		{			
 			td.classList.add('fsoexplorer-element-toolbar');
-			var del=document.createElement('span');
+			let del=document.createElement('span');
 			del.classList.add('fsoexplorer-icon','fsoexplorer-del');
 
 			let self = this;
@@ -116,7 +146,7 @@ class fsoExplorer
 
 	renderIcon(obj)
 	{
-		var img = document.createElement('a');
+		let img = document.createElement('a');
 		if( obj instanceof fsoDir )
 		{
 			img.classList.add('fsoexplorer-icon','folder');
@@ -237,6 +267,46 @@ class fsoExplorer
 		}
 	}
 
+	async upload(e)
+	{
+		try
+		{
+			e.preventDefault();
+			e.stopPropagation();
+
+			this.progressBar.hidden=false;
+			this.progressBar.value=50;
+            this.progressBar.max=100;
+
+			var dt = e.dataTransfer;
+			var files = dt.files;
+
+			this.progressBar.hidden=false;
+			this.progressBar.value=1;
+
+			let self = this;
+			await this.dir.upload(files, function(loaded,total){
+				if(loaded>0 && total>0)
+				{
+					this.progressBar.max=total;
+					this.progressBar.value=loaded;
+				}
+				else
+				{
+					this.progressBar.pulsate();
+				}
+			});
+		}
+		catch(ex)
+		{
+			alert(""+ex);
+		}
+
+		this.progressBar.hidden=true;
+		this.refresh();
+		return false;
+	}
+
 	async goto(dir)
 	{
 		let result = null;
@@ -257,14 +327,19 @@ class fsoExplorer
 		}
 	}
 
+	async refresh()
+	{
+		await this.dir.explore();
+		this.render();
+	}
+
 	async delete(what)
 	{
 		if(confirm("Seguro que desea borrar '"+what.name+"'? (Esta operación no se puede deshacer)"))
 		{
 			try
 			{
-				await what.delete();
-				await this.dir.explore();
+				await what.delete();				
 			}
 			catch(ex)
 			{
@@ -272,7 +347,29 @@ class fsoExplorer
 			}
 			
 		}
-		this.render();
+		this.refresh();
+	}
+
+	async mkdir(dir)
+	{
+		if(dir===null || dir==='')
+			return;
+
+		if(dir=='.' || dir=='..')
+		{
+			alert("Nombre de carpeta invalida")
+			return;
+		}
+
+		try
+		{
+			await this.dir.mkdir(dir);
+		}
+		catch(ex)
+		{
+			alert(''+ex);
+		}
+		this.refresh();
 	}
 
 	addPlugin(id,plugin)

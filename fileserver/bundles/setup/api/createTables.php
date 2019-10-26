@@ -35,8 +35,7 @@ class Setup extends JSONApp
             grp INT REFERENCES groups(id),
             PRIMARY KEY (user,grp)
         )');
-
-
+                
         return True;
     }
 }

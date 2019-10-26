@@ -55,7 +55,12 @@ class fsoDir extends fsoObj
 		return this;
 	}
 
-	async upload(files)
+	async mkdir(newDir)
+	{
+		await App.jsonRemoteCall("api/mkdir.php",{path:this.link,name:encodeURIComponent(newDir)});
+	}
+
+	async upload(files,progressCallBack)
 	{
 		var data = new FormData();
 		data.append('path', this.link);
@@ -64,43 +69,48 @@ class fsoDir extends fsoObj
 			data.append('files[]',files[i],files[i].name);
 		}
 		
-		await fetch("api/upload.php",
-			{
-				method: 'POST',
-				body: data
-			}
-		);
-		/*
 		var me=this;
 		var xhttp = new XMLHttpRequest();
 		
-		xhttp.onreadystatechange = function() {
-			if (this.readyState == 4) {
-				if(this.status == 200) 
-					listener.onOk(me);
-				else if(this.status>=400)
-					listener.onError(me,this.responseText ? this.responseText : this.statusText);
-			}
-		};
-
-		xhttp.upload.onprogress=function(ev)
+		/*
+		if(typeof onFinishCallBack !== 'undefined')
 		{
-			console.log(ev.toString());
-			if(listener.progressCallBack)
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4) {
+					if(this.status == 200) 
+						onFinishCallBack(true,JSON.parse(this.responseText));
+					else if(this.status>=400)
+						onFinishCallBack(false,this.responseText ? this.responseText : this.statusText);
+				}
+			};
+		}
+		*/
+
+		if(typeof progressCallBack !== 'undefined')
+		{
+			xhttp.upload.onprogress=function(ev)
 			{
 				if (!ev.lengthComputable) 
 				{
-					listener.progressCallBack(me,-1,-1);
+					progressCallBack(-1,-1);
 				}
 				else
 				{
-					me.listener.progressCallBack(me,ev.loaded,ev.total);
+					progressCallBack(ev.loaded,ev.total);
 				}
-			}
-		};
-		xhttp.open("POST", "api/upload.php", true);
+				
+			};
+		}
+
+		xhttp.open("POST", "api/upload.php", false);
 		xhttp.send(data);
-		*/
+
+		if(xhttp.status == 200) 
+			return JSON.parse(xhttp.responseText)
+		else if (xhttp.status >= 200)
+			throw (xhttp.responseText ? xhttp.responseText : xhttp.statusText);
+
+		
 	}
 
 }

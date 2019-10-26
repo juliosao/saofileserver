@@ -1,7 +1,7 @@
 <?php
 require_once('../../../lib/Util.php');
     
-class Upload extends JSONApp
+class Upload extends App
 {
     
     public function __construct()
@@ -9,7 +9,7 @@ class Upload extends JSONApp
         parent::__construct(1);
     }
 
-    public function main() {
+    public function main($argv) {
 	    $ok=array();
 	    $ko=array();
         $basedir=Cfg::get()->fso->basedir;
@@ -38,34 +38,27 @@ class Upload extends JSONApp
             if($err != null)
             {
                 //$this->exitApp(false,"Cannot upload ".$files['name'][$idx]);
-                $ko[]=$files['name'][$idx];
-                continue;
+                throw FsoException("Cannot upload:".$files['name'][$idx]);
             }
 
             $newPath = FSO::joinPath($dest,$files['name'][$idx]);
             $fsoFile=new FSOFile($newPath);
             if($fsoFile->exists()) 
             {
-                //$this->exitApp(false,$files['name'][$idx]." allready exists in ".$path);
-                $ko[]=$files['name'][$idx];
-                continue;
+                throw InvalidRequestException("File exists:".$files['name'][$idx]);
             }
 
             error_log("TMPNAME:".json_encode($files['tmp_name'][$idx]));
             error_log("NEWNAME:".json_encode($newPath));
             error_log("FILE:".json_encode($fsoFile));
             
-            if(move_uploaded_file($files['tmp_name'][$idx],$newPath))
+            if(!move_uploaded_file($files['tmp_name'][$idx],$newPath))
 		    {
-		        $ok[]=$files['name'][$idx];
-		    }
-		    else
-		    {
-   		        $ko[]=$files['name'][$idx];
+                throw FsoException("Cannot move:".$files['name'][$idx]);
 		    }
 		}            
         
-        return array('uploaded'=>$ok, 'failed'=>$ko,'function'=>'upload');
+        echo json_encode(true);
 	}
 }
 

@@ -91,6 +91,10 @@ div.fsoexplorer-toolbar{
 	background-image: url('toolbar/delete.svg');
 }
 
+.fsoexplorer-folder-add{
+	background-image: url('toolbar/folder-add.svg');
+}
+
 .fso-explorer tr td:first-child {
 	width: 53px;
 	min-width: 53px;
