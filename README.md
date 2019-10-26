@@ -9,6 +9,7 @@ Julio A. García López (juliosao@gmail.com)
 - List files and subdirectories in a base directory
 - Download files
 - Upload files
+- Create folders
 - Navigate into a base directory childs
 - Delete files into server
 - Play some video files (Depending on codec of video)
