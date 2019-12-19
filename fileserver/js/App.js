@@ -92,6 +92,11 @@ class App
 		var base = current.split('/').slice(0,-2);
 		App.baseUrl = base.join('/')
 	}
+
+	static goBundle(bundle)
+	{
+		window.location.href = App.baseUrl+"bundles/"+bundle;
+	}
 }
 
 class RemoteException 

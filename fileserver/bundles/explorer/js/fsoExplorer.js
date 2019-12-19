@@ -45,7 +45,7 @@ class fsoExplorer
 		this.view = view;
 		this.createToolBar();
 		this.workSpace = document.createElement('div');	
-		this.workSpace.classList.add('container','table-responsive');
+		this.workSpace.classList.add('w3-container');
 		this.view.appendChild(this.workSpace);
 		this.plugins=[];
 
@@ -67,7 +67,7 @@ class fsoExplorer
 	{
 		let self = this;
 		let toolBar = document.createElement('div');
-		toolBar.classList.add('toolbar');
+		toolBar.classList.add('w3-panel');
 
 		this.title = document.createElement('h1');
 		toolBar.appendChild(this.title);
@@ -227,7 +227,7 @@ class fsoExplorer
 		UI.clear(this.workSpace);
 
 		let table = document.createElement('table');
-		table.classList.add('table');
+		table.classList.add('w3-responsive');
 
 		let thead = document.createElement('thead');
 		let tr = document.createElement('tr');

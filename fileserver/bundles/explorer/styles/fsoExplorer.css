@@ -38,28 +38,28 @@
 }
 
 .avi, .mp4, .mpg, .divx, .xvid, .mkv, .mov, .ogv, .webm{
-	background-image: url('icons/mov.svg');
+	background-image: url('icons/mov.svg')!important;
 
 }
 
 .mp3, .flac, .wav, .pcm, .aac, .ogg{
-	background-image: url('icons/mp3.svg');
+	background-image: url('icons/mp3.svg')!important;
 }
 
 .txt, .doc, .docx, .odt{
-	background-image: url('icons/doc.svg');
+	background-image: url('icons/doc.svg')!important;
 }
 
 .epub{
-	background-image: url('icons/epub.svg');
+	background-image: url('icons/epub.svg')!important;
 }
 
 .ini, .url{
-	background-image: url('icons/ini.svg');
+	background-image: url('icons/ini.svg')!important;
 }
 
 .jpeg, .jpg, .gif, .svg, .png{
-	background-image: url('icons/jpg.svg');
+	background-image: url('icons/jpg.svg')!important;
 }
 
 .fso-explorer table{

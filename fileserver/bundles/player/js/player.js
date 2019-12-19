@@ -106,15 +106,14 @@ class fsoPlayer
 	{
 		//Paint dirs and files
 		let lst=document.createElement('table');
-		lst.classList.add('table-striped')
-		lst.classList.add('table-responsive-sm');
-		lst.classList.add('table');
+		lst.classList.add('w3-striped','w3-responsive','w3-large')		
 		lst.classList.add('fso-player-playlist');
 
 		// Table header
 		let hdr = document.createElement('thead');
 		let td = document.createElement('th');
 		td.appendChild(document.createTextNode('Nombre'));
+		td.classList.add('w3-padding');
 		td.colSpan=2;
 		hdr.appendChild(td);
 		lst.appendChild(hdr);
@@ -134,11 +133,13 @@ class fsoPlayer
 			// Number
 			td = document.createElement('td');
 			td.appendChild(document.createTextNode(''+(parseInt(i)+1)));
+			td.classList.add('w3-padding');
 			tr.appendChild(td);
 
 			// Name
 			td = document.createElement('td');
 			td.appendChild(document.createTextNode(decodeURIComponent(this.playlist[i].name)));
+			td.classList.add('w3-padding');
 			tr.appendChild(td);
 
 			tbody.appendChild(tr);
