@@ -22,7 +22,7 @@ class User
     {        
         let data = await App.jsonRemoteCall("../users/api/list.php");
         let result=[];
-        for(let i; i<data.length; i++)
+        for(let i in data)
             result.push(User.parse(data[i]));
 
         return result;

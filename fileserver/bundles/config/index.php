@@ -13,15 +13,11 @@ Auth::checkSession();
 	</head>
 	<body>
 		<h1>Configuracion</h1>
-		<div class="container">
-            <table class="table">
-                <thead>
-                    <tr><th>Elemento</th><th></th></tr>                    
-                </thead>
-                <tbody>
-                    <tr onclick="App.goBundle('users');"><td><a class="fsoexplorer-icon config-users"></td><td>Configurar usuarios</td></tr>
-                </tbody>
-            </table>
+		<div class="w3-container">
+            <ul class="w3-ul w3-border fsoexplorer-list">
+                <li class="w3-padding" onclick="App.goBundle('users');"><div class="fsoexplorer-icon config-users"></div><div class="fsoexplorer-name">Configurar usuarios</div></li>
+            </ul>
+            
         </div>
 	</body>
 </html>

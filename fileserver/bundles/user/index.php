@@ -50,32 +50,32 @@ Auth::checkSession();
 	</head>
 	<body onload="loadUser()">
 		<h1>Configuracion de usuario</h1>
-		<div class="container">
+		<div class="w3-container">
             <input type="hidden" id="id" value="<?=Auth::$current->id?>">
             <div class="form">
-                <div class="row">
-                    <label class="col-md-3" for="name">Nombre</label>
-                    <input class="input col-md-9" id="name" readonly="true" >
+                <div class="w3-row w3-margin">
+                    <label class="w3-col m3" for="name">Nombre</label>
+                    <div class="w3-col m5"><input class="w3-input" id="name" readonly="true" ></div>
                 </div>
-                <div class="row">
-                    <label class="col-md-3" for="mail">Mail</label>
-                    <input class="input col-md-9" id="mail"  type="email">
+                <div class="w3-row w3-margin">
+                    <label class="w3-col m3" for="mail">Mail</label>
+                    <div class="w3-col m5"><input class="w3-input" id="mail"  type="email"></div>
                 </div>
 
-                <div class="row">
-                    <label class="col-md-3" for="cpwd">Password (Actual)</label>
-                    <input class="input col-md-9" id="cpw" value="" type="password">
+                <div class="w3-row w3-margin">
+                    <label class="w3-col m3" for="cpwd">Password (Actual)</label>
+                    <div class="w3-col m5"><input class="w3-input" id="cpw" value="" type="password"></div>
                 </div>
-                <div class="row">
-                    <label class="col-md-3" for="cpwd">Password (Nuevo)</label>
-                    <input class="input col-md-9" id="pw" value="" type="password">
+                <div class="w3-row w3-margin">
+                    <label class="w3-col m3" for="cpwd">Password (Nuevo)</label>
+                    <div class="w3-col m5"><input class="w3-input" id="pw" value="" type="password"></div>
                 </div>
-                <div class="row">
-                    <label class="col-md-3" for="cpwd">Password (Nuevo,Repetir)</label>
-                    <input class="input col-md-9" id="pw2" value="" type="password">
+                <div class="w3-row w3-margin">
+                    <label class="w3-col m3" for="cpwd">Password (Nuevo,Repetir)</label>
+                    <div class="w3-col m5"><input class="w3-input" id="pw2" value="" type="password"></div>
                 </div>
-                <div class="row">
-                    <button class="btn btn-primary" onclick=save()>Guardar</button>
+                <div class="w3-row w3-margin">
+                    <button class="w3-btn w3-blue" onclick=save()>Guardar</button>
                 </div>
             </div>
         </div>

@@ -15,16 +15,10 @@ class MainCfg {
 
 	start(src)
 	{
-        this.mainToolBar = document.createElement('span');
-
-        let elem = document.createElement('a');
-        let span = document.createElement('span');
-        elem.href='../config/index.php'
-        span.classList.add('fsoexplorer-icon','fsoexplorer-icon-config');
-        elem.appendChild(span);
-        this.mainToolBar.appendChild(elem);
-
-		src.extraTools.appendChild(this.mainToolBar);
+		let btn = document.createElement('button');
+		btn.classList.add('fsoexplorer-icon','fsoexplorer-icon-config','w3-button');
+		btn.onclick=(() => window.open('../config/index.php'));
+		src.extraTools.appendChild(btn);
 	}
 }
 

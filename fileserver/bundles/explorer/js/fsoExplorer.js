@@ -80,21 +80,14 @@ class fsoExplorer
 		toolBar.appendChild(this.extraTools);
 
 
-		let home = document.createElement('span');
-		home.classList.add('fsoexplorer-icon','fsoexplorer-home');
-		home.onclick = function()
-		{
-			self.goto('/');
-		}
+		let home = document.createElement('button');
+		home.classList.add('fsoexplorer-icon','fsoexplorer-home','w3-button');
+		home.onclick = (() => this.goHome());
 		this.extraTools.appendChild(home);
 
-
-		let mkdir = document.createElement('span');
-		mkdir.classList.add('fsoexplorer-icon','fsoexplorer-folder-add');
-		mkdir.onclick = function()
-		{
-			self.mkdir(prompt("Nombre para la nueva carpeta","nueva carpeta"));
-		}
+		let mkdir = document.createElement('button');
+		mkdir.classList.add('fsoexplorer-icon','fsoexplorer-folder-add','w3-button');
+		mkdir.onclick = (() => this.mkdir());
 		this.extraTools.appendChild(mkdir);
 
 		this.progressBar=document.createElement('progress');
@@ -127,12 +120,12 @@ class fsoExplorer
 
 	renderActions(obj)
 	{
-		let td = document.createElement('td');
+		let td = document.createElement('div');
+		td.classList.add('fsoexplorer-tools');
 		if(obj.name!='..')
-		{			
-			td.classList.add('fsoexplorer-element-toolbar');
-			let del=document.createElement('span');
-			del.classList.add('fsoexplorer-icon','fsoexplorer-del');
+		{						
+			let del=document.createElement('button');
+			del.classList.add('fsoexplorer-icon','fsoexplorer-del','w3-button');
 
 			let self = this;
 			del.onclick=function()
@@ -145,8 +138,11 @@ class fsoExplorer
 	}
 
 	renderIcon(obj)
-	{
-		let img = document.createElement('a');
+	{	
+		let td = document.createElement('div');
+		td.classList.add('fsoexplorer-tools');
+
+		let img = document.createElement('div');
 		if( obj instanceof fsoDir )
 		{
 			img.classList.add('fsoexplorer-icon','folder');
@@ -159,21 +155,25 @@ class fsoExplorer
 				img.classList.add(obj.extension);
 			}
 		}
-		return img;
+		td.appendChild(img);
+		
+		return td;
+	}
+
+	renderName(obj)
+	{
+		let spn = document.createElement('div');
+		spn.classList.add('fsoexplorer-name');
+		spn.appendChild(document.createTextNode(obj.name));
+		return spn;
 	}
 
 	renderDir(dir)
 	{
-		let row = document.createElement('tr');
-		
-
-		let col = document.createElement('td');
-		col.appendChild(this.renderIcon(dir));
-		row.appendChild(col);
-
-		col = document.createElement('td');
-		col.appendChild(document.createTextNode(dir.name));
-		row.appendChild(col);
+		let row = document.createElement('li');
+		row.classList.add('w3-padding');
+		row.appendChild(this.renderIcon(dir));
+		row.appendChild(this.renderName(dir));
 
 		let toolcol = this.renderActions(dir);
 		row.appendChild(toolcol);
@@ -194,15 +194,12 @@ class fsoExplorer
 
 	renderFile(file)
 	{
-		let row = document.createElement('tr');
+		let row = document.createElement('li');
+		row.classList.add('w3-padding');
 
-		let col = document.createElement('td');
-		col.appendChild(this.renderIcon(file));
-		row.appendChild(col);
-
-		col = document.createElement('td');
-		col.appendChild(document.createTextNode(file.name));
-		row.appendChild(col);
+		
+		row.appendChild(this.renderIcon(file));
+		row.appendChild(this.renderName(file));
 
 		let toolcol = this.renderActions(file);
 		row.appendChild(toolcol);
@@ -226,21 +223,8 @@ class fsoExplorer
 		this.setSpaceLeft(this.dir.free,this.dir.total);
 		UI.clear(this.workSpace);
 
-		let table = document.createElement('table');
-		table.classList.add('w3-responsive');
-
-		let thead = document.createElement('thead');
-		let tr = document.createElement('tr');
-		let td = document.createElement('td');
-		td.appendChild(document.createTextNode('Fichero'))
-		td.colSpan=2;
-		tr.appendChild(td);
-		
-		td = document.createElement('td');
-		td.appendChild(document.createTextNode('Acciones'))
-		tr.appendChild(td);
-		thead.appendChild(tr);
-		table.appendChild(thead);
+		let list = document.createElement('ul');
+		list.classList.add('w3-ul','w3-border','fsoexplorer-list');		
 
 		for(let i in this.plugins )
 		{
@@ -248,17 +232,16 @@ class fsoExplorer
 				typeof this.plugins[i].beforeRender(this,this.dir);
 		}
 
-		let tbody = document.createElement('tbody');
 		for(let i in this.dir.childDirs)
 		{
-			tbody.appendChild(this.renderDir(this.dir.childDirs[i]));
+			list.appendChild(this.renderDir(this.dir.childDirs[i]));
 		}
 		for(let i in this.dir.childFiles)
 		{
-			tbody.appendChild(this.renderFile(this.dir.childFiles[i]));
+			list.appendChild(this.renderFile(this.dir.childFiles[i]));
 		}
-		table.appendChild(tbody);
-		this.workSpace.appendChild(table);
+
+		this.workSpace.appendChild(list);
 
 		for(let i in this.plugins )
 		{
@@ -307,6 +290,11 @@ class fsoExplorer
 		return false;
 	}
 
+	goHome()
+	{
+		this.goto('/');
+	}
+
 	async goto(dir)
 	{
 		let result = null;
@@ -350,8 +338,10 @@ class fsoExplorer
 		this.refresh();
 	}
 
-	async mkdir(dir)
+	async mkdir()
 	{
+		let dir = prompt("Nombre para la nueva carpeta","nueva carpeta");
+		
 		if(dir===null || dir==='')
 			return;
 

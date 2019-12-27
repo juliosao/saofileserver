@@ -35,22 +35,18 @@ class fsoExplorerPlayer {
 	{
 		if(this.canPlayAudios)
 		{
-			let elem = document.createElement('a');
-			let span = document.createElement('span');
-			elem.href='../player/index.php?file='+dir.link;
-			span.classList.add('fsoexplorer-icon','fsoplayer-icon-audio');
-			elem.appendChild(span);
-			this.mainToolBar.appendChild(elem);
+			let btn = document.createElement('button');
+			btn.classList.add('fsoexplorer-icon','fsoplayer-icon-audio','w3-button');
+			btn.onclick=(() => window.open('../player/index.php?file='+dir.link));
+			this.mainToolBar.appendChild(btn);
 		}
 
 		if(this.canPlayVideos)
 		{
-			let elem = document.createElement('a');
-			let span = document.createElement('span');
-			elem.href='../player/index.php?file='+dir.link+"&data-mode=video";
-			span.classList.add('fsoexplorer-icon','fsoplayer-icon-video');
-			elem.appendChild(span);
-			this.mainToolBar.appendChild(elem);
+			let btn = document.createElement('button');
+			btn.classList.add('fsoexplorer-icon','fsoplayer-icon-video','w3-button');
+			btn.onclick=(() => window.open('../player/index.php?file='+dir.link+"&data-mode=video"));
+			this.mainToolBar.appendChild(btn);
 		}
 	}
 
@@ -63,21 +59,23 @@ class fsoExplorerPlayer {
 				let elem = document.createElement('a');
 				let span = document.createElement('span');
 				elem.href='../player/index.php?file='+file.link;
-				span.classList.add('fsoexplorer-icon','fsoplayer-icon-audio');
+				elem.target='_blank';
+				span.classList.add('fsoexplorer-icon','fsoplayer-icon-audio','w3-button');
 				elem.appendChild(span);
 				toolbox.appendChild(elem);
 				this.canPlayAudios=true;
 			}
 		}
 		
-		if( file.extension=='mp4' || file.extension=='ogv' || file.extension=='webm' || file.extension=='avi' )
+		if( file.extension=='mp4' || file.extension=='ogv' || file.extension=='webm' || file.extension=='avi'|| file.extension=='mkv' )
 		{
 			if(fsoExplorerPlayer.video.canPlayType(file.mime))
 			{
 				let elem = document.createElement('a');
 				let span = document.createElement('span');
 				elem.href='../player/index.php?file='+file.link+"&data-mode=video";
-				span.classList.add('fsoexplorer-icon','fsoplayer-icon-video');
+				elem.target='_blank';
+				span.classList.add('fsoexplorer-icon','fsoplayer-icon-video','w3-button');
 				elem.appendChild(span);
 				toolbox.appendChild(elem);
 				this.canPlayVideos=true;

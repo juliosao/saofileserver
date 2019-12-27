@@ -15,16 +15,10 @@ class CurrentUserCfg {
 
 	start(src)
 	{
-        this.mainToolBar = document.createElement('span');
-
-        let elem = document.createElement('a');
-        let span = document.createElement('span');
-        elem.href='../user/index.php'
-        span.classList.add('fsoexplorer-icon','fsoexplorer-icon-user');
-        elem.appendChild(span);
-        this.mainToolBar.appendChild(elem);
-
-		src.extraTools.appendChild(this.mainToolBar);
+		let btn = document.createElement('button');
+		btn.classList.add('fsoexplorer-icon','fsoexplorer-icon-user','w3-button');
+		btn.onclick=(() => window.open('../user/index.php'));
+		src.extraTools.appendChild(btn);
 	}
 }
 

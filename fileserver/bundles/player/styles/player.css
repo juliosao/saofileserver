@@ -1,27 +1,6 @@
-div.fsoplayer-toolbar{
-	left:0px;
-	top: 0px;
-	width: 100%;
-	padding: 5px;
-	background-color: gainsboro;
-	box-shadow: 0px 5px 2px darkgrey;
-	margin-bottom: 1em;
-}
-
 .fso-player audio{
 	background-color: gainsboro;
 	width: 100%;
-}
-
-.fso-player tr td:first-child {
-	width: 53px;
-	min-width: 53px;
-	max-width: 53px;
-	word-break: break-all;
-}
-
-.fso-player tr {
-	cursor: pointer;
 }
 
 .fso-player-playlist .selected{
@@ -29,48 +8,3 @@ div.fsoplayer-toolbar{
 	background: blue !important;
 	margin-right: 5px;
 }
-
-/*
-body{
-    background: black;
-    color:green;
-    width: 100%;
-    padding: 5px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;    
-}
-
-li{       
-    font-size: x-large;
-}
-
-li:pre{
-    color: green;
-}
-
-.fso-player{
-	width: 100%;
-	background: black;
-	color: green;
-}
-
-.fso-player-controls{
-	width: 100%;
-}
-
-.fso-player-playlist{
-	margin-right: 5px;
-	cursor: pointer;
-}
-
-.fso-player-playlist li{
-	font-size: larger;
-	margin: 10px 5px 5px 5px;
-
-}
-
-.fso-player-playlist .selected{
-	color: black;
-	background: green;
-	margin-right: 5px;
-}
-*/

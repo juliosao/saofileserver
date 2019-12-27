@@ -6,17 +6,87 @@ require_once('../../lib/Util.php');
 	<head>
 		<?php HTMLApp::putHeaders('SAO-Player'); ?>		
 		<script type="text/javascript" src="js/user.js"></script>
-		<link rel="stylesheet"  href="../../styles/main/main.css">
-		<link rel="stylesheet" href="styles/player.css">
 		<script type="text/javascript">
-		function loadUsers()
+		async function loadUsers()
 		{
-			User.list(null);
+			let users = await User.list(null);
+
+			let tbl = document.createElement('table');
+			tbl.classList.add('w3-table','w3-bordered','w3-striped','w3-border','w3-hoverable',);
+			let grp = document.createElement('thead');
+			let row = document.createElement('tr');
+			
+			for(let txt of ['Usuario','Correo','Opciones'])
+			{
+				cell = document.createElement('th');
+				cell.appendChild(document.createTextNode(txt));
+				row.appendChild(cell);
+			}
+			grp.appendChild(row);
+			tbl.appendChild(grp);
+
+			grp=document.createElement('tbody');
+
+			row = document.createElement('tr');
+			for(let prop of ['name','mail'])
+			{
+				cell = document.createElement('td');
+				let input = document.createElement('input');
+				input.classList.add('w3-input');
+				cell.appendChild(input);
+				row.appendChild(cell);
+			}
+
+			cell = document.createElement('td');
+			btn = document.createElement('button');
+			btn.classList.add('w3-button');
+			img = document.createElement('img');
+			img.src = "../../styles/toolbar/user-add.svg"
+			btn.appendChild(img);
+			cell.appendChild(btn);
+			row.appendChild(cell);
+			grp.appendChild(row);
+
+			for(let user of users)
+			{
+				row = document.createElement('tr');
+				for(let prop of ['name','mail'])
+				{
+					cell = document.createElement('td');
+					cell.appendChild(document.createTextNode(user[prop]));
+					row.appendChild(cell);
+				}
+				cell = document.createElement('td');
+
+				let btn = document.createElement('button');
+				btn.classList.add('w3-button');
+				let img = document.createElement('img');
+				img.src = "../../styles/toolbar/config.svg"
+				btn.appendChild(img);
+				cell.appendChild(btn);
+
+				btn = document.createElement('button');
+				btn.classList.add('w3-button');
+				img = document.createElement('img');
+				img.src = "../../styles/toolbar/user-del.svg"
+				btn.appendChild(img);
+				cell.appendChild(btn);
+				
+				row.appendChild(cell);
+				grp.appendChild(row);
+			}
+			
+			tbl.appendChild(grp);
+
+			document.getElementById("users").appendChild(tbl);
 		}
 		</script>
 	</head>
 	<body onload="loadUsers()">
-		<h1>Usuarios</h1>
-		
+		<h1>Usuarios</h1>	
+		<div class="w3-container">
+			<div id="users" class="w3-responsive">
+			</div>
+		</div>
 	</body>
 </html>

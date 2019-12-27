@@ -1,7 +1,7 @@
 .fsoplayer-icon-audio{
-	 background-image: url('toolbar/audio.svg');
+	 background-image: url('../../../styles/toolbar/audio.svg');
  }
 
 .fsoplayer-icon-video{
-	background-image: url('toolbar/video.svg');
+	background-image: url('../../../styles/toolbar/video.svg');
 }

@@ -11,7 +11,7 @@ $mode=isset($_REQUEST['data-mode']) ? $_REQUEST['data-mode'] : 'audio';
 		<link rel="stylesheet" href="styles/player.css">
 	</head>
 	<body>
-		<div class="fso-player" id="player" data-src="<?=htmlentities($file)?>" data-mode="<?=$mode ?>">
+		<div class="w3-container fso-player" id="player" data-src="<?=htmlentities($file)?>" data-mode="<?=$mode ?>">
 		</div>
 	</body>
 </html>

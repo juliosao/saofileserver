@@ -9,11 +9,11 @@ class listUsers extends JSONApp
         parent::__construct(1);
     }
 
-    function main()
+    function main($args)
     {
         $filter=array();
-        if(isset($_REQUEST['id']))
-            $filter['id']=$_REQUEST['id'];
+        if(isset($args['id']))
+            $filter['id']=$args['id'];
 
         $users=User::select($filter);
         for($i=0; $i<count($users); $i++)

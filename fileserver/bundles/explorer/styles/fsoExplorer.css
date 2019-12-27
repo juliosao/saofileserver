@@ -1,111 +1,73 @@
-.fsoexplorer-list li:hover{
-	background-color: #C7EFFC;
+.fsoexplorer-list > li{
+	display: flex;
+}
+
+.fsoexplorer-tools{
+	display: table-cell;
+	vertical-align: middle;
+	flex-shrink: 0;
+}
+
+.fsoexplorer-name{
+	display: table-cell;
+	word-wrap:break-word;
+	vertical-align: middle;
+	flex-grow: 1;
+	margin: auto 10px;
 }
 
 /* Icons in file explorer area */
 .fsoexplorer-icon{
-	display: inline-block;
+	display: table-cell;
 	background-repeat: no-repeat;
-	height:48px;
-	width:48px;
+	height:48px!important;
+	width:48px!important;
 	background-size: 100% 100%;
-	margin-right: 1em;
-}
-
-.fsoexplorer-object{
-	font-size: 150%;
-}
-
-.fsoexplorer th{
-	padding: 5px;
-	font-size: 300%;
-	font-weight: bold;
-}
-
-.fsoexplorer-toolbar span{
-	padding: 5px 20px 5px 10px;
-	font-size: 150%;
 }
 
 /* Folder icons */
 .folder{
-	background-image: url('icons/folder.svg');
+	background-image:url('../../../styles/icons/folder.svg');
 }
 
 /* Icons by filetypes */
 .file{
-	background-image: url('icons/file.svg');
+	background-image:url('../../../styles/icons/file.svg');
 }
 
 .avi, .mp4, .mpg, .divx, .xvid, .mkv, .mov, .ogv, .webm{
-	background-image: url('icons/mov.svg')!important;
+	background-image: url('../../../styles/icons/mov.svg')!important;
 
 }
 
 .mp3, .flac, .wav, .pcm, .aac, .ogg{
-	background-image: url('icons/mp3.svg')!important;
+	background-image: url('../../../styles/icons/mp3.svg')!important;
 }
 
 .txt, .doc, .docx, .odt{
-	background-image: url('icons/doc.svg')!important;
+	background-image: url('../../../styles/icons/doc.svg')!important;
 }
 
 .epub{
-	background-image: url('icons/epub.svg')!important;
+	background-image: url('../../../styles/icons/epub.svg')!important;
 }
 
 .ini, .url{
-	background-image: url('icons/ini.svg')!important;
+	background-image: url('../../../styles/icons/ini.svg')!important;
 }
 
 .jpeg, .jpg, .gif, .svg, .png{
-	background-image: url('icons/jpg.svg')!important;
-}
-
-.fso-explorer table{
-	width: 100%;
-}
-
-/* Item actions for each file */
-.fsoexplorer-toolbar{
-	display: block;
-	min-width: 32px;
-}
-
-div.fsoexplorer-toolbar{
-	left:0px;
-	top: 0px;
-	width: 100%;
-	padding: 5px;
-	background-color: gainsboro;
-	box-shadow: 0px 5px 2px darkgrey;
-	margin-bottom: 1em;
-}
-
-.fsoexplorer-toolbar .fsoexplorer-icon{
-	width: 32px;
-	height: 32px;
+	background-image: url('../../../styles/icons/jpg.svg')!important;
 }
 
 .fsoexplorer-del{
-	background-image: url('toolbar/delete.svg');
+	background-image: url('../../../styles/toolbar/delete.svg');
 }
 
 .fsoexplorer-folder-add{
-	background-image: url('toolbar/folder-add.svg');
-}
-
-.fso-explorer tr td:first-child {
-	width: 53px;
-	min-width: 53px;
-	max-width: 53px;
-	word-break: break-all;
-}
-
-.fso-explorer tr {
-	cursor: pointer;
+	background-image: url('../../../styles/toolbar/folder-add.svg');
 }
 
 .fsoexplorer-home {
-	background-image: url('toolbar/home.svg');
+	background-image: url('../../../styles/toolbar/home.svg');
 }
