@@ -51,6 +51,7 @@ class Database {
 
         
             $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            $this->db->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC)
         }
         catch(Exception $ex)
         {
@@ -83,11 +84,14 @@ class Database {
      * Dentro de la consulta podemos usar el caracter '?' para indicar un parametro de $campos (Se buscará por posición)
      * o bien :nombreCampo para indicarlo (En este caso se buscara la clave 'nombreCampo'		
      */
-    function query($consulta, $campos = array()) 
+    function query($consulta, $campos = array(),$className=null) 
     {	
         try
         {
             $stm = $this->db->prepare($consulta);
+            if($className!==null)
+                $stm->setFetchMode(PDO::FETCH_CLASS, $className);
+            
             $stm->execute($campos);
             $res=$stm->fetchAll();
             $stm->closeCursor();
@@ -123,116 +127,6 @@ class Database {
         {
             throw new DatabaseException($ex->getMessage());
         }
-    }
-
-	/**
-	 * \fn insertObj($table, $obj)
-	 * \brief Inserta una fila en la tabla
-	 * \param $table Tabla donde insertar la fila
-	 * \param $obj Array asociativo con los valores a insertar, las claves seran los nombres de columna y los valores los valores de la fila
-	 * \retval Siempre debería devolver 1
-	 */
-    function insertObj($table, $obj) 
-    {
-        $campos = "";
-        $valores = "";
-
-        $sep = "";
-        foreach ($obj as $clave => $valor) {
-            $campos.=$sep . $clave;
-            $valores.=$sep . ':' . $clave;
-            $sep = ',';
-        }
-
-        $consulta = 'INSERT INTO ' . $table . ' (' . $campos . ') VALUES (' . $valores . ')';        
-
-        return $this->execute($consulta,$obj);
-    }
-
-	/**
-	 * \fn replaceObj($table, $obj)
-	 * \brief Inserta una fila en la tabla, si el objeto ya existiera lo modificaría
-	 * \param $table Tabla donde insertar la fila
-	 * \param $obj Array asociativo con los valores a insertar, las claves seran los nombres de columna y los valores los valores de la fila
-	 * \retval 0 Si no se modificó el registro
-	 * \retval 1 Si se modificó el registro
-	 */
-	function replaceObj($table, $obj) 
-	{
-        $campos = "";
-        $valores = "";
-
-        $sep = "";
-        foreach ($obj as $clave => $valor) {
-            $campos.=$sep . $clave;
-            $valores.=$sep . ':' . $clave;
-            $sep = ',';
-        }
-
-        $consulta = 'REPLACE INTO ' . $table . ' (' . $campos . ') VALUES (' . $valores . ')';
-
-        return $this->execute($consulta,$obj);
-    }
-
-	/**
-	 * \fn replaceObj($table, $obj, $condition=array())
-	 * \brief Actualiza filas en la tabla
-	 * \param $table Tabla donde insertar la fila
-	 * \param $obj Array asociativo con los valores a actualizar, las claves seran los nombres de columna y los valores los valores de la fila
-	 * \param $condition Array asociativo con las condiciones a cumplir por los registros a modificar. Las claves seran los nombres de columna y los valores los valores de la fila
-	 * \return Numero de filas actualizadas
-	 */
-    function updateObj($table, $obj, $condition=array()) 
-    {
-		$dict=array();
-		
-        $consulta = 'UPDATE ' . $table . ' SET ';
-        $sep = '';
-        
-        // Nuevos valores
-        foreach ($obj as $clave => $valor) {
-				$dict['new_'.$clave]=$valor;
-                $consulta.=$sep . $clave . '=:new_' . $clave;
-                $sep = ',';
-        }
-
-		// Condicion
-        if (count($condition) > 0) {
-            $consulta.=' WHERE ';
-            $sep = '';
-            foreach ($condition as $clave => $valor) {
-				$dict['cond_'.$clave]=$valor;
-                $consulta.=$sep . $clave . '=:cond_' . $clave;
-                $sep = ' AND ';
-            }
-        }
-		
-        return $this->execute($consulta,$dict);
-    }
-
-	/**
-	 * \fn deleteObj($table, $condition=array())
-	 * \brief Borra filas de la tabla
-	 * \param $table Tabla donde insertar la fila
-	 * \param $condition Array asociativo con las condiciones a cumplir por los registros a eliminar. Las claves seran los nombres de columna y los valores los valores de la fila
-	 * * \return Numero de filas borradas
-	 */
-    function deleteObj($table, $condition) 
-    {
-        $consulta = 'DELETE FROM ' . $table;
-        
-		// Condicion
-        if (count($condition) > 0) {
-            $consulta.=' WHERE ';
-            $sep = '';
-            foreach ($condition as $clave => $valor) {
-				$dict['cond_'.$clave]=$valor;
-                $consulta.=$sep . $clave . '=:cond_' . $clave;
-                $sep = ' AND ';
-            }
-        }
-		
-        return $this->execute($consulta,$dict);
     }
 
 	/**

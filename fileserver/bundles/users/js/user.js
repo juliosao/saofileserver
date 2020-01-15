@@ -46,6 +46,10 @@ class User
         return result;		
     }
 
+    async create()
+    {
+        
+    }
 
 }
 

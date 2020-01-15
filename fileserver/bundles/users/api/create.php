@@ -12,9 +12,23 @@ class createUser extends JSONApp
 
     function main()
     {
+        Auth::checkSession();
+        $currentUsr = Auth::get();   
+        if(!$currentUsr->isFromGroup('admin'))
+        {
+            throw new InvalidRequestException("You are not an admin");
+        }
+
 		$name=getParam('name');
-		$name=getParam('mail');
-		$pw=getParam('pw');
-        $pw2=getParam('pw2');
+		$mail=getParam('mail');
+
+        $users=User::select(array('name'=>$name));
+        if(count($users)!=0)
+        {
+            throw new UserExistsException();
+        }
+
+        
+        
 	}
 }

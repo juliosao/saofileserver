@@ -21,7 +21,7 @@ class User extends DBObject
     function __construct($src)
     {
         parent::__construct($src);        
-    }
+    }    
 
     function equals($obj)
     {
@@ -81,9 +81,12 @@ class User extends DBObject
     function save()
     {
         $res=parent::replace();
-        error_log("Usuario Guardado:".$res);
+        if( !isset($this->id) || $this->id==null )
+        {
+            $this->id=$this->id=static::$db->getInsertId();
+        }
+        error_log("Usuario Guardado:".$this);
     }
-
 }
 
 User::init();

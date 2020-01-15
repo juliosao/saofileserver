@@ -6,48 +6,18 @@
  */
 abstract class DBObject
 {
-	// Claves con las que se construyó el objeto, para casos de actualizacion
-	protected $oldKeys=array();
-	
-	/**
-	 * \fn __construct($args)
-	 * \brief Constructor de clase
-	 * \param args Un array asociativo con los campos del objeto
-	 */	
-	protected function __construct($args)
-	{
-		//print_r($args);
-		$this->oldKeys=array();
-		foreach($args as $argkey => $argval)
-		{						
-			if(in_array($argkey,static::$fields,TRUE))
-			{
-				$this->$argkey=$argval;
 
-				if(array_search($argkey,static::$keys)!==FALSE)
-				{					
-					$this->oldKeys[$argkey]=$argval;				
-				}
-			}
-		}
-	}
-	
-	/**
-	 * Devuelve un nuevo objeto DBObjetct
-	 * Se le debe pasar una lista de argumentos variable en el mismo orden que el campo estatico "$fields" de la clase que herede de esta.
-	 */
-	static function create()
-	{
-		$args=func_get_args();
-		$fields=array();
 
-		$M = min(count($args,static::$fields));
-		for($i=0; $i<$m; $i++)
+	public function __toString()
+	{
+		$attr=array();
+		foreach(static::$keys as $key)
 		{
-			$fields[static::$fields[$i]]=$args[$i];
+			$attr[]=$key.':'.$this-$key;
 		}
-		return new static($fields);
+		return __CLASS__.'{'.implode(', ',$attr).'}';
 	}
+	
 
 	/**
 	 * \fn select($args)

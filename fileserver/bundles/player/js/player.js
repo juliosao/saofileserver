@@ -105,25 +105,16 @@ class fsoPlayer
 	putPlayList()
 	{
 		//Paint dirs and files
-		let lst=document.createElement('table');
-		lst.classList.add('w3-striped','w3-responsive','w3-large')		
+		let lst=document.createElement('ul');
+		lst.classList.add('w3-striped','w3-ul','w3-large');
 		lst.classList.add('fso-player-playlist');
 
-		// Table header
-		let hdr = document.createElement('thead');
-		let td = document.createElement('th');
-		td.appendChild(document.createTextNode('Nombre'));
-		td.classList.add('w3-padding');
-		td.colSpan=2;
-		hdr.appendChild(td);
-		lst.appendChild(hdr);
-
 		// Table body
-		let tbody=document.createElement('tbody');
 		for(let i in this.playlist)
 		{
 			let me=this;
-			let tr = document.createElement('tr');
+			let tr = document.createElement('li');
+			tr.classList.add('w3-padding');
 			tr.id=this.tag+'-playitem-'+i;
 			tr.setAttribute('data-idx',i);
 			tr.onclick=function(e){
@@ -131,20 +122,18 @@ class fsoPlayer
 			};
 
 			// Number
-			td = document.createElement('td');
+			let td = document.createElement('div');
 			td.appendChild(document.createTextNode(''+(parseInt(i)+1)));
-			td.classList.add('w3-padding');
 			tr.appendChild(td);
 
 			// Name
-			td = document.createElement('td');
+			td = document.createElement('div');
 			td.appendChild(document.createTextNode(decodeURIComponent(this.playlist[i].name)));
-			td.classList.add('w3-padding');
 			tr.appendChild(td);
 
-			tbody.appendChild(tr);
+			lst.appendChild(tr);
 		}
-		lst.appendChild(tbody);
+		
 		this.container.appendChild(lst);
 	}
 
