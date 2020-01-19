@@ -4,24 +4,19 @@ class User extends DBObject
 {
     static $db=null;
 	static $keys=array('id');
-	static $fields=array('id','name','session','auth','mail');
+    static $fields=array('id','name','session','auth','mail');
 	static $table='users';
-	
-	// Mandatory
-	static $select=null;
-	static $insert=null;
-	static $update=null;
-	static $delete=null;    
+    
+    public $id;
+    public $name;    
+    public $mail;
+    protected $session;
+    protected $auth;
 
-    static function init()
-    {
-        self::$db=Database::getInstance();
+	static function init()
+	{
+		User::$db = Database::getInstance();
 	}
-
-    function __construct($src)
-    {
-        parent::__construct($src);        
-    }    
 
     function equals($obj)
     {
@@ -67,9 +62,19 @@ class User extends DBObject
             return false;
         
         $usr->session=session_id();
-        $usr->save();
+        $usr->update();
 
         return $usr;
+    }
+
+    function checkSession($id)
+    {
+        return $this->session===$id;
+    }
+
+    function setSession($id)
+    {
+        $this->session=$id;
     }
 
     function setPw($pw)
@@ -78,14 +83,16 @@ class User extends DBObject
         $this->auth=$auth;
     }
 
-    function save()
+    function insert()
+    {
+        $res=parent::insert();
+        error_log("Usuario Guardado:".$this);
+    }
+
+    function replace()
     {
         $res=parent::replace();
-        if( !isset($this->id) || $this->id==null )
-        {
-            $this->id=$this->id=static::$db->getInsertId();
-        }
-        error_log("Usuario Guardado:".$this);
+        error_log("Usuario Actualizado:".$this);
     }
 }
 

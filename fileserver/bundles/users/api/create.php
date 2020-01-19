@@ -1,6 +1,6 @@
 <?php
 
-require('../../lib/Util.php');
+require('../../../lib/Util.php');
 
 
 class createUser extends JSONApp
@@ -10,7 +10,7 @@ class createUser extends JSONApp
         parent::__construct(1);
     }
 
-    function main()
+    function main($argv)
     {
         Auth::checkSession();
         $currentUsr = Auth::get();   
@@ -19,16 +19,29 @@ class createUser extends JSONApp
             throw new InvalidRequestException("You are not an admin");
         }
 
-		$name=getParam('name');
-		$mail=getParam('mail');
-
+		$name=$this->getParam('name');
+		$mail=$this->getParam('mail');
+        
+        if($name=='' || $mail=='')
+        {
+            throw new InvalidRequestException('Name and mail cannot be empty');
+        }
+        
         $users=User::select(array('name'=>$name));
         if(count($users)!=0)
         {
             throw new UserExistsException();
         }
 
-        
+        error_log('Vamos a crear el usuario');
+        $usr = new User();
+        $usr->name=$name;
+        $usr->mail=$mail;
+        $usr->insert();
+        return $usr;
         
 	}
 }
+
+$l = new createUser();
+$l->run();

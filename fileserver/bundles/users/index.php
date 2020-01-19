@@ -7,6 +7,21 @@ require_once('../../lib/Util.php');
 		<?php HTMLApp::putHeaders('SAO-Player'); ?>		
 		<script type="text/javascript" src="js/user.js"></script>
 		<script type="text/javascript">
+		async function createUser()
+		{
+			let name = document.getElementById('_name').value;
+			let mail = document.getElementById('_mail').value;
+			let user = new User(null,name,mail);
+			await user.insert();
+			await loadUsers();
+		}
+
+		async function deleteUser(who)
+		{
+			if(!confirm('Delete user '+who.name+'?'))
+				return;
+		}
+
 		async function loadUsers()
 		{
 			let users = await User.list(null);
@@ -32,6 +47,7 @@ require_once('../../lib/Util.php');
 			{
 				cell = document.createElement('td');
 				let input = document.createElement('input');
+				input.id = '_'+prop;
 				input.classList.add('w3-input');
 				cell.appendChild(input);
 				row.appendChild(cell);
@@ -40,6 +56,7 @@ require_once('../../lib/Util.php');
 			cell = document.createElement('td');
 			btn = document.createElement('button');
 			btn.classList.add('w3-button');
+			btn.onclick=createUser;
 			img = document.createElement('img');
 			img.src = "../../styles/toolbar/user-add.svg"
 			btn.appendChild(img);
@@ -62,11 +79,13 @@ require_once('../../lib/Util.php');
 				btn.classList.add('w3-button');
 				let img = document.createElement('img');
 				img.src = "../../styles/toolbar/config.svg"
+				btn.onclick = ()=>{window.open('views/details.php?id='+user.id)};
 				btn.appendChild(img);
 				cell.appendChild(btn);
 
 				btn = document.createElement('button');
 				btn.classList.add('w3-button');
+				btn.onclick = ()=>{deleteUser(user)};
 				img = document.createElement('img');
 				img.src = "../../styles/toolbar/user-del.svg"
 				btn.appendChild(img);
@@ -78,7 +97,7 @@ require_once('../../lib/Util.php');
 			
 			tbl.appendChild(grp);
 
-			document.getElementById("users").appendChild(tbl);
+			UI.clear("users").appendChild(tbl);
 		}
 		</script>
 	</head>

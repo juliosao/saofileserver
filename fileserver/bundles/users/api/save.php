@@ -58,7 +58,7 @@ class saveUser extends JSONApp
             $saveUsr->setPw($pw);
         }
 
-        $saveUsr->save();
+        $saveUsr->update();
     
         return $users[0];
     }

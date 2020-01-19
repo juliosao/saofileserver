@@ -23,8 +23,6 @@ class loadUser extends JSONApp
             throw new UserNotFoundException($filter['id']);
         }
 
-        unset($users[0]->auth);
-        unset($users[0]->session);
         return($users[0]);
     }
 }

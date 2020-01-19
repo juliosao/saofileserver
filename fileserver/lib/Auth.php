@@ -21,13 +21,12 @@ class Auth
             return false;
         }
             
-        $lst = User::select(array('id'=>$_SESSION['usr']));
-
+        $lst = User::select(array('id'=>$_SESSION['usr'],'session'=>session_id()));
+        
         if(count($lst)!=1)
+        {
             return false;
-
-        if($lst[0]->session!=session_id())
-            return false;
+        }
 
         self::set($lst[0]);
         return true;
@@ -45,6 +44,8 @@ class Auth
         }
 
         self::set($usr);
+        $usr->setSession(session_id());
+        $usr->update();
 
         return $usr;
     }
@@ -54,7 +55,7 @@ class Auth
         session_unset();
         session_destroy();
         self::$current->session=null;
-        self::$current->save();
+        self::$current->update();
         self::$current=null;
     }
 
@@ -66,9 +67,7 @@ class Auth
     static function set($c)
     {
         $_SESSION['usr']=$c->id;
-        self::$current=$c;
-        $c->session=session_id();
-        $c->save();
+        self::$current=$c;        
     }
 }
 

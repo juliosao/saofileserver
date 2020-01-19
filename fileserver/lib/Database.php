@@ -51,7 +51,8 @@ class Database {
 
         
             $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-            $this->db->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC)
+            $this->db->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
+            //$this->db->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE);
         }
         catch(Exception $ex)
         {
@@ -69,11 +70,6 @@ class Database {
         $this->db = null;
     }
 
-	function prepare($qry)
-    {
-        $stmt=$this->db->prepare($qry);
-		return $stmt;
-    }
 
     /**
      * \fn consultar($consulta,&$campos=-1,$pagina=-1)
@@ -84,13 +80,13 @@ class Database {
      * Dentro de la consulta podemos usar el caracter '?' para indicar un parametro de $campos (Se buscará por posición)
      * o bien :nombreCampo para indicarlo (En este caso se buscara la clave 'nombreCampo'		
      */
-    function query($consulta, $campos = array(),$className=null) 
+    function query($consulta, $campos = array(),$className=null,$ctorArgs=array()) 
     {	
         try
         {
             $stm = $this->db->prepare($consulta);
             if($className!==null)
-                $stm->setFetchMode(PDO::FETCH_CLASS, $className);
+                $stm->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, $className, $ctorArgs);
             
             $stm->execute($campos);
             $res=$stm->fetchAll();
@@ -121,10 +117,12 @@ class Database {
             $stm->execute($campos);
             $res=$stm->rowCount();	
             $stm->closeCursor();
+            error_log($consulta.':'.$res);
             return $res;
         }
         catch(Exception $ex)
         {
+            error_log($consulta);
             throw new DatabaseException($ex->getMessage());
         }
     }
