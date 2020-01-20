@@ -12,6 +12,7 @@ Julio A. García López (juliosao@gmail.com)
 - Create folders
 - Navigate into a base directory childs
 - Delete files into server
+- Manage users
 - Play some video files (Depending on codec of video)
 - Play .mp3 and .ogg files (if browser supports)
 - LGPL License
