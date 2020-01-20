@@ -82,18 +82,6 @@ class User extends DBObject
         $auth=hash('sha256',$pw);
         $this->auth=$auth;
     }
-
-    function insert()
-    {
-        $res=parent::insert();
-        error_log("Usuario Guardado:".$this);
-    }
-
-    function replace()
-    {
-        $res=parent::replace();
-        error_log("Usuario Actualizado:".$this);
-    }
 }
 
 User::init();

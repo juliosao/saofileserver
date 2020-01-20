@@ -17,7 +17,7 @@ class User
 
     static async get(id)
     {       
-        let data = await App.jsonRemoteCall("../users/api/load.php",{'id':id});
+        let data = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/load.php",{'id':id});
         if( data != null )
         {
             let user = new User();
@@ -28,7 +28,7 @@ class User
 
     static async list()
     {        
-        let data = await App.jsonRemoteCall("../users/api/list.php");
+        let data = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/list.php");
         let result=[];
         for(let i in data)
         {
@@ -41,18 +41,24 @@ class User
 
     async save()
     {        
-        let result = await App.jsonRemoteCall("../users/api/save.php",this);
+        let result = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/save.php",this);
         this.parse(result);
         return this;
     }
 
     async insert()
     {
-        let result = await App.jsonRemoteCall("../users/api/create.php",this);
+        let result = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/create.php",this);
         this.parse(result);
         return this;
     }
 
+    async delete()
+    {
+        let result = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/delete.php",this);
+        this.parse(result);
+        return this;
+    }
 }
 
 

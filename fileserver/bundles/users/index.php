@@ -9,17 +9,36 @@ require_once('../../lib/Util.php');
 		<script type="text/javascript">
 		async function createUser()
 		{
-			let name = document.getElementById('_name').value;
-			let mail = document.getElementById('_mail').value;
-			let user = new User(null,name,mail);
-			await user.insert();
+			try
+			{
+				let name = document.getElementById('_name').value;
+				let mail = document.getElementById('_mail').value;
+				let user = new User(null,name,mail);
+				await user.insert();
+			}
+			catch(ex)
+			{
+				alert(ex);
+			}
+
 			await loadUsers();
 		}
 
-		async function deleteUser(who)
+		async function deleteUser(user)
 		{
-			if(!confirm('Delete user '+who.name+'?'))
-				return;
+			try
+			{
+				if(!confirm('Delete user '+user.name+'?'))
+					return;
+				await user.delete();
+			}
+			catch(ex)
+			{
+				alert(ex);
+			}			
+			
+			await loadUsers();
+
 		}
 
 		async function loadUsers()

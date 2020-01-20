@@ -104,6 +104,33 @@ abstract class DBObject
 		return static::$db->getInsertId();
 		
 	}
+
+	public function delete()
+	{		
+		if(static::$delete==NULL)
+		{
+			$conditions=array();	
+
+			foreach(static::$fields as $key)
+			{  
+				if(in_array($key,static::$keys))
+					$conditions[]= $key.' = :'.$key;				
+			}
+
+			static::$delete='DELETE FROM '.static::$table.' WHERE '.implode(' AND ',$conditions);
+		}
+
+		$dict=array();
+		foreach(static::$fields as $key)
+		{
+			if(in_array($key,static::$keys))
+				$dict[$key]=$this->$key;
+		}
+
+		error_log(static::$delete);
+		error_log(json_encode($dict));
+		return static::$db->execute(static::$delete,$dict);
+	}
 }
 
 

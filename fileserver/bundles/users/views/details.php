@@ -1,7 +1,7 @@
 <?php
 require_once('../../../lib/Util.php');
 Auth::checkSession();
-
+$id=isset($_GET['id']) ? $_GET['id'] : Auth::$current->id;
 ?>
 <!DOCTYPE html>
 <html>
@@ -17,7 +17,7 @@ Auth::checkSession();
 		{
             try
             {
-                usr=await User.get("<?=Auth::$current->id?>");
+                usr=await User.get("<?=$id?>");
                 document.getElementById('name').value=usr.name;
                 document.getElementById('mail').value=usr.mail;
                 document.getElementById('pw').value="";
