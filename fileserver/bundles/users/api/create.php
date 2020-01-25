@@ -4,7 +4,8 @@ require('../../../lib/Util.php');
 
 use app\JSONApp;
 use auth\AUth;
-use autn\UserExistsException;
+use auth\User;
+use auth\UserExistsException;
 
 class createUser extends JSONApp
 {
@@ -33,7 +34,7 @@ class createUser extends JSONApp
         $users=User::select(array('name'=>$name));
         if(count($users)!=0)
         {
-            throw new UserExistsException();
+            throw new UserExistsException($name);
         }
 
         error_log('Vamos a crear el usuario');

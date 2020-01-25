@@ -1,6 +1,6 @@
 <?php
 
-class InvalidRequestException extends SfsException
+class MethodNotAllowedException extends SfsException
 {
 	static $errNumber=405;
 

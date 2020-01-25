@@ -3,6 +3,7 @@ require('../../../lib/Util.php');
 
 use app\JSONApp;
 use auth\Auth;
+use auth\User;
 use auth\UserNotFoundException;
 use database\DatabaseException;
 
@@ -32,7 +33,7 @@ class deleteUser extends JSONApp
         $users=User::select(array('id'=>$argv['id']));
         if(count($users)==0)
         {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException($argv['id']);
         }
         $deleteUsr=$users[0];
                 

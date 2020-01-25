@@ -2,6 +2,7 @@
 
 require('../../../lib/Util.php');
 
+use database\Database;
 use app\JSONApp;
 use auth\UnauthorizedException;
 

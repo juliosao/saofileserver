@@ -1,8 +1,13 @@
 <?php
 
-class SfsException extends Exception
+class SfsException extends \Exception
 {
 	static $errNumber=500;
+
+	public function __construct($msg)
+	{
+		parent::__construct($msg);
+	}
 
 	public function abort($debug)
 	{

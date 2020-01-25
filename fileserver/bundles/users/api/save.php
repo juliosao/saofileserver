@@ -2,6 +2,7 @@
 require('../../../lib/Util.php');
 
 use app\JSONApp;
+use auth\Auth;
 use auth\User;
 use auth\UserNotFoundException;
 
@@ -24,7 +25,7 @@ class saveUser extends JSONApp
             $users=User::select(array('id'=>$argv['id']));
             if(count($users)==0)
             {
-                throw new UserNotFoundException();
+                throw new UserNotFoundException($argv['id']);
             }
             $saveUsr=$users[0];
         }        
@@ -45,7 +46,7 @@ class saveUser extends JSONApp
         // Modify mail?
         if(isset($argv['mail']))
         {
-            $usr->mail=$argv['mail'];        
+            $saveUsr->mail=$argv['mail'];        
         }        
 
         // Modify Passwords?

@@ -2,6 +2,7 @@
 require('../../../lib/Util.php');
 
 use app\JSONApp;
+use auth\Auth;
 use auth\User;
 use auth\UserNotFoundException;
 

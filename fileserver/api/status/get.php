@@ -45,7 +45,7 @@ class MyApp extends JSONApp{
 		$result['disk_free']=$parentDir->getFreeSpace();
 		$result['disk_total']=$parentDir->getTotalSpace();
 
-		$this->setResult('status',$result);
+		return $result;
     }
 }
 

@@ -1,6 +1,14 @@
 <?php
 require_once('../../../lib/Util.php');
-    
+
+use SfsException;
+use app\App;
+use filesystem\FileExistsException;
+use filesystem\Directory;
+use filesystem\RegularFile;
+use filesystem\FileSystemObject;
+use filesystem\NotFoundException;
+
 class Upload extends App
 {
     
@@ -17,7 +25,7 @@ class Upload extends App
         error_log(json_encode($_FILES));
         if(count($_POST)==0)
         {
-            $this->exitError(413,"File too long");
+            throw new SfsException("File too long");
         }
 
         $path= urldecode($_POST["path"]);
@@ -29,7 +37,7 @@ class Upload extends App
 
         if(!$dir->exists())
         {
-            $this->exitErro(404,$path." not found");
+            throw new NotFoundException($path);
         }
 
         $files=$_FILES['files'];
@@ -38,14 +46,14 @@ class Upload extends App
             if($err != null)
             {
                 //$this->exitApp(false,"Cannot upload ".$files['name'][$idx]);
-                throw SfsException("Cannot upload:".$files['name'][$idx]);
+                throw new SfsException("Cannot upload:".$files['name'][$idx]);
             }
 
             $newPath = FileSystemObject::joinPath($dest,$files['name'][$idx]);
             $fsoFile=new RegularFile($newPath);
             if($fsoFile->exists()) 
             {
-                throw InvalidRequestException("File exists:".$files['name'][$idx]);
+                throw new FileExistsException($files['name'][$idx]);
             }
 
             error_log("TMPNAME:".json_encode($files['tmp_name'][$idx]));
@@ -54,7 +62,7 @@ class Upload extends App
             
             if(!move_uploaded_file($files['tmp_name'][$idx],$newPath))
 		    {
-                throw SfsException("Cannot move:".$files['name'][$idx]);
+                throw new SfsException("Cannot move:".$files['name'][$idx]);
 		    }
 		}            
         

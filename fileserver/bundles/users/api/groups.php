@@ -29,7 +29,7 @@ class loadUser extends JSONApp
            throw new UserNotFoundException($filter['id']);
         }
 
-        $this->setResult('grps',$user->groups());
+        return $users[0]->groups();
     }
 }
 
