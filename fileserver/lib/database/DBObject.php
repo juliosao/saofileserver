@@ -2,6 +2,8 @@
 
 namespace database;
 
+use auth\Group;
+
 /**
  * \fn DBObject
  * \brief Clase generica para objetos guardados en bases de datos
@@ -44,8 +46,11 @@ abstract class DBObject
 			return static::$db->query(static::$selectQry, $filters,$className=static::class,$ctorArgs);
 		else
 			return static::$db->query(static::$selectQry.' WHERE '.implode(' AND ',$where), $filters,$className=static::class,$ctorArgs);
+	}
 
-		return $ret;
+	public function getGroups()
+	{
+		return Group::fromUser($this);
 	}
 
 	public function __toString()

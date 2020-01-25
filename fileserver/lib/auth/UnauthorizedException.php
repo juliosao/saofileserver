@@ -2,6 +2,8 @@
 
 namespace auth;
 
+use \SfsException;
+
 class UnauthorizedException extends SfsException
 {
 	static $errNumber=401;

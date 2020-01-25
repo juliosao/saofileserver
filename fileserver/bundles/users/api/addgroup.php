@@ -2,7 +2,6 @@
 require('../../../lib/Util.php');
 
 use app\JSONApp;
-use auth\Group;
 use auth\User;
 use auth\UserNotFoundException;
 
@@ -13,15 +12,15 @@ class loadUser extends JSONApp
         parent::__construct(1);
     }
 
-    function main($args)
+    function main()
     {
-        if(!isset($args['id']))
+        if(!isset($_REQUEST['id']))
         {
             throw new InvalidRequestException();
         }
 
         $filter=array();
-        $filter['id']=$args['id'];
+        $filter['id']=$_REQUEST['id'];
 
         $users=User::select($filter);
 
@@ -30,7 +29,7 @@ class loadUser extends JSONApp
            throw new UserNotFoundException($filter['id']);
         }
 
-        return Group::fromUser($users[0]);
+        return $users[0]->groups();
     }
 }
 

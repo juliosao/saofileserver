@@ -5,12 +5,15 @@ use app\HTMLApp;
 
 Auth::checkSession();
 $id=isset($_GET['id']) ? $_GET['id'] : Auth::$current->id;
+$imAdmin = Auth::$current->isFromGroup('admin');
+
 ?>
 <!DOCTYPE html>
 <html>
 	<head>
 		<?php HTMLApp::putHeaders('Usuario actual'); ?>		
-		<script type="text/javascript" src="../js/user.js"></script>
+        <script type="text/javascript" src="../js/user.js"></script>
+        <script type="text/javascript" src="../../groups/js/group.js"></script>
         <script rel="stylesheet" href="../../../styles/main/main.css"></script>
 		<script type="text/javascript">
 
@@ -25,6 +28,7 @@ $id=isset($_GET['id']) ? $_GET['id'] : Auth::$current->id;
                 document.getElementById('mail').value=usr.mail;
                 document.getElementById('pw').value="";
                 document.getElementById('pw2').value="";
+                putGroups(usr);
             }
             catch(ex)
             {
@@ -32,6 +36,71 @@ $id=isset($_GET['id']) ? $_GET['id'] : Auth::$current->id;
             }
         }
         
+        async function putGroups(usr)
+        {
+            let grps = await usr.getGroups();
+
+            let tbl = document.createElement('table');
+			tbl.classList.add('w3-table','w3-bordered','w3-striped','w3-border','w3-hoverable',);
+			let grp = document.createElement('thead');
+            let row = document.createElement('tr');
+            
+            cell = document.createElement('th');
+			cell.appendChild(document.createTextNode("Grupo"));
+            row.appendChild(cell);
+<?php if($imAdmin) { ?>
+            cell = document.createElement('th');
+			cell.appendChild(document.createTextNode(""));
+            row.appendChild(cell);
+<?php } ?>
+            grp.appendChild(row);
+            tbl.appendChild(grp);
+
+            grp = document.createElement('tbody');
+<?php if($imAdmin) { ?>         
+            row = document.createElement('tr');
+            cell = document.createElement('td');
+            let input = document.createElement('input');
+            input.id="new_group";
+            input.classList.add('w3-input');
+			cell.appendChild(input);
+            row.appendChild(cell);
+            
+            cell = document.createElement('td');
+            let btn = document.createElement('button');
+            btn.classList.add('w3-button')
+            let img = document.createElement('img');
+			img.src = "../../../styles/toolbar/plus.svg"
+			btn.appendChild(img);
+			cell.appendChild(btn);
+            row.appendChild(cell);
+            grp.appendChild(row);
+<?php } ?>
+
+            for(g of grps)
+            {
+                row = document.createElement('tr');
+                cell = document.createElement('td');
+                cell.appendChild(document.createTextNode(g.name));
+                row.appendChild(cell);
+<?php if($imAdmin) { ?> 
+                cell = document.createElement('td');
+                btn = document.createElement('button');
+                btn.classList.add('w3-button')
+                img = document.createElement('img');
+                img.src = "../../../styles/toolbar/delete.svg"
+                btn.appendChild(img);
+                cell.appendChild(btn);
+                row.appendChild(cell);
+<?php } ?>
+                grp.appendChild(row);
+            }
+
+            tbl.appendChild(grp);
+
+			UI.clear("groups").appendChild(tbl);
+        }
+
         async function save()
         {
             try
@@ -87,6 +156,9 @@ $id=isset($_GET['id']) ? $_GET['id'] : Auth::$current->id;
                 <div class="w3-row w3-margin">
                     <button class="w3-btn w3-blue" onclick=save()>Guardar</button>
                 </div>
+            </div>
+            <h2>Grupos</h2>
+            <div id="groups" class="w3-responsive">
             </div>
         </div>
 	</body>

@@ -2,6 +2,8 @@
 
 namespace auth;
 
+use \SfsException;
+
 class UserExistsException extends SfsException
 {
 	static $errNumber=404;

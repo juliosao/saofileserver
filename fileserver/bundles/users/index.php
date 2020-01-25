@@ -15,7 +15,9 @@ use app\HTMLApp;
 			{
 				let name = document.getElementById('_name').value;
 				let mail = document.getElementById('_mail').value;
-				let user = new User(null,name,mail);
+				let user = new User();
+				user.name = name;
+				user.mail = mail;
 				await user.insert();
 			}
 			catch(ex)

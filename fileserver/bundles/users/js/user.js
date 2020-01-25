@@ -1,12 +1,5 @@
 class User
-{
-	constructor(id,name,mail)
-	{
-        this.id = id;
-        this.name = name;
-        this.mail = mail;
-    }
-    
+{   
     parse(data)
     {
         this.id = data.id;
@@ -30,10 +23,10 @@ class User
     {        
         let data = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/list.php");
         let result=[];
-        for(let i in data)
+        for(let u of data)
         {
             let user = new User();
-            result.push(user.parse(data[i]));
+            result.push(user.parse(u));
         }
 
         return result;
@@ -58,6 +51,18 @@ class User
         let result = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/delete.php",this);
         this.parse(result);
         return this;
+    }
+
+    async getGroups()
+    {
+        let data = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/groups.php",this);
+        let result=[];
+        for(let g of data)
+        {
+            let grp = new Group();
+            result.push(grp.parse(g));
+        }
+        return result;
     }
 }
 

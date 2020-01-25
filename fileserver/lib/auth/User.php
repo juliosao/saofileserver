@@ -34,17 +34,6 @@ class User extends DBObject
         return true;
     }
 
-    function getGroups()
-    {
-        $res=array();
-        $groups = self::$db->query("SELECT grp FROM user2groups INNER JOIN groups ON user2groups.grp = groups.id WHERE user=?", array($this->id));
-        foreach($groups as $grp)
-        {
-            $res[]=new Group($grp);
-        }
-        return $res;
-    }
-
     function isFromGroup($groupName)
     {
         $groups = self::$db->query("SELECT grp FROM user2groups INNER JOIN groups ON user2groups.grp = groups.id WHERE user=? AND groups.name=?", array($this->id,$groupName));
