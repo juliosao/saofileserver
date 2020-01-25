@@ -21,7 +21,7 @@ class play extends App
             die("play what?");
         }
 
-        $this->file=new FSOFile(FSO::joinPath($basedir,$filename));
+        $this->file=new RegularFile(FileSystemObject::joinPath($basedir,$filename));
         if(!$this->file->exists()) 
         {
             error_log("Fichero no encontrado");            

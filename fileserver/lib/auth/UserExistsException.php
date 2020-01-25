@@ -1,6 +1,8 @@
 <?php
 
-class UserExistsException extends FsoException
+namespace auth;
+
+class UserExistsException extends SfsException
 {
 	static $errNumber=404;
 

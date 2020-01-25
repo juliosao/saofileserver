@@ -1,6 +1,10 @@
 <?php
 require_once('lib/Util.php');
 
+use app\App;
+use app\HTMLApp;
+use database\Database;
+
 try
 {
     Database::getInstance();

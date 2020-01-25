@@ -18,9 +18,9 @@ class App
 		if(!response.ok)
 		{
 			if(response.status == 401) //Unauthorized
-				App.login();
+				App.login(response.statusText);
 
-			throw new RemoteException(response.status,response.statusText);
+			throw response.statusText;
 		}
 	
 		return response.json();
@@ -43,8 +43,8 @@ class App
 		if(!response.ok)
 		{
 			if(response.status == 401) //Unauthorized
-				App.login();
-			throw new RemoteException(response.status,response.statusText);
+				App.login(response.statusText);
+			throw response.status,response.statusText;
 		}
 	
 		return response.blob();
@@ -67,9 +67,9 @@ class App
 		if(!response.ok)
 		{
 			if(response.status == 401) //Unauthorized
-				App.login();
+				App.login(response.statusText);
 
-			throw new RemoteException(response.status,response.statusText);
+			throw response.status,response.statusText;
 		}
 	
 		return response.text();
@@ -81,9 +81,9 @@ class App
 	App.main = "<?=App::getAppURL(Cfg::get()->app->main);?>";			
 	App.loginUrl = "<?=App::getAppURL(Cfg::get()->app->loginUrl);?>";
 	*/
-	static login()
+	static login(err)
 	{
-		window.location.href = App.baseUrl;
+		window.location.href = App.baseUrl+'?err='+encodeURIComponent(err);
 	}
 
 	static setup()
@@ -96,20 +96,6 @@ class App
 	static goBundle(bundle)
 	{
 		window.location.href = App.baseUrl+"bundles/"+bundle;
-	}
-}
-
-class RemoteException 
-{
-	constructor(code,msg)
-	{
-		this.code=code;
-		this.msg=msg;
-	}
-
-	toString()
-	{
-		return "Error "+this.code+":"+this.msg;
 	}
 }
 

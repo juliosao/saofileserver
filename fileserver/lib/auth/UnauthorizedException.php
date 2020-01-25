@@ -1,6 +1,8 @@
 <?php
 
-class UnauthorizedException extends FsoException
+namespace auth;
+
+class UnauthorizedException extends SfsException
 {
 	static $errNumber=401;
 

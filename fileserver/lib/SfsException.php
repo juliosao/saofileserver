@@ -1,6 +1,6 @@
 <?php
 
-class FsoException extends Exception
+class SfsException extends Exception
 {
 	static $errNumber=500;
 

@@ -1,6 +1,9 @@
 <?php
 require('../../../lib/Util.php');
 
+use app\JSONApp;
+use auth\User;
+use auth\UserNotFoundException;
 
 class saveUser extends JSONApp
 {

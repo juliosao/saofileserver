@@ -1,5 +1,8 @@
 <?php
 require_once('../../lib/Util.php');
+
+use app\HTMLApp;
+
 $file=urldecode($_REQUEST['file']);
 $mode=isset($_REQUEST['data-mode']) ? $_REQUEST['data-mode'] : 'audio';
 ?>

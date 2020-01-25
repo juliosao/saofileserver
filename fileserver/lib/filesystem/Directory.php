@@ -1,16 +1,13 @@
 <?php
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
+namespace filesystem;
 
 /**
  * Description of Directory
  *
  * @author julio
  */
-class FSODir extends FSO {
+class Directory extends FileSystemObject {
     //put your code here
     public function __construct($path)
     {
@@ -19,27 +16,26 @@ class FSODir extends FSO {
     
     public function mkdir($newdir,$force=false)
     {
-        $newPath=FSO::joinPath($this->path,$newdir,true);
-        error_log("resultado: $newPath");
+        $newPath=FileSystemObject::joinPath($this->path,$newdir,true);
 
-        $present=FSO::fromPath($newPath);
+        $present=FileSystemObject::fromPath($newPath);
         if($present!==null)
         {
-            if($force==false || !$present instanceof FSODir)
+            if($force==false || !$present instanceof Directory)
             {
-                throw new FsoException(error_get_last());
+                throw new SfsException(error_get_last());
             }
 
-            return true;
+            return new Directory($newPath);;
         }
 
         $res= mkdir($newPath,0777,true);
         if($res==false)
         {
-            throw new FsoException(error_get_last()['message']);
+            throw new SfsException($newPath);
         }
 
-        return true;
+        return new Directory($newPath);
     }
     
     public function exists()
@@ -63,9 +59,9 @@ class FSODir extends FSO {
             if($nombre=='.'||$nombre=='..')
                 continue;
             
-            $p=fso::joinPath($this->path,$nombre);
+            $p=FileSystemObject::joinPath($this->path,$nombre);
             if(is_dir($p)){
-                $result[]=new FSODir($p);            
+                $result[]=new Directory($p);            
             }
         }
         
@@ -84,9 +80,9 @@ class FSODir extends FSO {
         
         while(false !== $nombre=readdir($r))
         {          
-            $p=fso::joinPath($this->path,$nombre);
+            $p=FileSystemObject::joinPath($this->path,$nombre);
             if(is_file($p)){
-                $result[]=new FSOFile($p);            
+                $result[]=new RegularFile($p);            
             }
         }
         
@@ -132,7 +128,7 @@ class FSODir extends FSO {
 	/**
 		\fn isChild($fso)
 		\briefs Returns if $fso is descendant of current dir
-		\param fso FSO Object to check
+		\param fso FileSystemObject Object to check
 		\return true fi fso is inside the current dir
 	*/
 	public function isChild($fso)

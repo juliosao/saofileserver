@@ -2,6 +2,10 @@
 
 require('../../../lib/Util.php');
 
+use app\JSONApp;
+use database\Database;
+use auth\UnauthorizedException;
+
 class Setup extends JSONApp
 {
     function main($args)
@@ -19,19 +23,19 @@ class Setup extends JSONApp
         $res=$db->execute('DROP DATABASE IF EXISTS saofileserver');
         if($res<0)
         {
-            throw new FsoException("Clean database");
+            throw new SfsException("Clean database");
         }
 
         $res=$db->execute("CREATE DATABASE saofileserver CHARSET=latin1; USE saofileserver");
         if($res<=0)
         {
-            throw new FsoException("Create database");
+            throw new SfsException("Create database");
         }
 
         $res=$db->execute("GRANT DELETE,UPDATE,INSERT,SELECT ON saofileserver.* TO saofileserver@localhost IDENTIFIED BY 'saofileserver' WITH GRANT OPTION");
         if($res<0)
         {
-            throw new FsoException("Create system user");
+            throw new SfsException("Create system user");
         }
 
         return True;

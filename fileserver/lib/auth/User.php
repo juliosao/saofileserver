@@ -1,5 +1,10 @@
 <?php
 
+namespace auth;
+
+use \database\Database;
+use \database\DBObject;
+
 class User extends DBObject
 {
     static $db=null;

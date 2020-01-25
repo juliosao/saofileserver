@@ -1,5 +1,7 @@
 <?php
 
+namespace filesystem;
+
 define('FSODIR',0);
 define('FSOFILE',1);
 
@@ -8,7 +10,7 @@ define('FSOFILE',1);
  *
  * @author julio
  */
-abstract class FSO {
+abstract class FileSystemObject {
     public static $dirSeparator;
     public $path;
     public $error;
@@ -29,7 +31,7 @@ abstract class FSO {
 
 	/**
 		\fn getName();
-		\brief Gets the name of a FSO Object
+		\brief Gets the name of a FileSystemObject Object
 	*/
     public function getName()
     {
@@ -38,12 +40,12 @@ abstract class FSO {
 
 	/**
 		\fn getParent()
-		\brief Gets the parent dir of a FSO Object
-		\return A FSODir representing the parent dir of a FSO Object
+		\brief Gets the parent dir of a FileSystemObject Object
+		\return A Directory representing the parent dir of a FileSystemObject Object
 	*/
     public function getParent()
     {
-        return new FSODir(dirname($this->path));
+        return new Directory(dirname($this->path));
     }
 
 	/**
@@ -113,9 +115,9 @@ abstract class FSO {
 
 	/**
 		\fn relativePath($from)
-		\brief Returns the relative path of a FSO from a base path
+		\brief Returns the relative path of a FileSystemObject from a base path
 		\param $basePath Base path to obtain the relative path of the object
-		\return The path of the FSO, searching from $basePath
+		\return The path of the FileSystemObject, searching from $basePath
 	*/
 	public function relativePath($basePath,$force=true)
 	{
@@ -156,18 +158,18 @@ abstract class FSO {
 
 	/**
 		\fn fromPath($path)
-		\brief gets an FSO objecto from a filesystem path
+		\brief gets an FileSystemObject objecto from a filesystem path
 		\param $path The path to use
-		\return a FSO Object representing the path
+		\return a FileSystemObject Object representing the path
 	*/
     public static function fromPath($path)
     {
         error_log("Buscando $path");
 
         if(is_dir($path))
-            return new FSODir($path);
+            return new Directory($path);
         else if(is_file($path))
-            return new FSOFile($path);
+            return new RegularFile($path);
         else
             return null;
     }
@@ -175,6 +177,6 @@ abstract class FSO {
 
 }
 
-FSO::init();
+FileSystemObject::init();
 
 

@@ -22,8 +22,8 @@ class Upload extends App
 
         $path= urldecode($_POST["path"]);
 
-        $dest= FSO::joinPath($basedir,$path);
-        $dir= new FSODir($dest);
+        $dest= FileSystemObject::joinPath($basedir,$path);
+        $dir= new Directory($dest);
 
         error_log("DEST:".$dest);
 
@@ -38,11 +38,11 @@ class Upload extends App
             if($err != null)
             {
                 //$this->exitApp(false,"Cannot upload ".$files['name'][$idx]);
-                throw FsoException("Cannot upload:".$files['name'][$idx]);
+                throw SfsException("Cannot upload:".$files['name'][$idx]);
             }
 
-            $newPath = FSO::joinPath($dest,$files['name'][$idx]);
-            $fsoFile=new FSOFile($newPath);
+            $newPath = FileSystemObject::joinPath($dest,$files['name'][$idx]);
+            $fsoFile=new RegularFile($newPath);
             if($fsoFile->exists()) 
             {
                 throw InvalidRequestException("File exists:".$files['name'][$idx]);
@@ -54,7 +54,7 @@ class Upload extends App
             
             if(!move_uploaded_file($files['tmp_name'][$idx],$newPath))
 		    {
-                throw FsoException("Cannot move:".$files['name'][$idx]);
+                throw SfsException("Cannot move:".$files['name'][$idx]);
 		    }
 		}            
         

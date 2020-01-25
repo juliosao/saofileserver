@@ -1,5 +1,11 @@
 <?php
 
+namespace app;
+
+use \SfsException;
+use \auth\Auth;
+use \auth\UnauthorizedException;
+
 //Represents a http callable mini-application
 abstract class App {
 	private static $appDir = null;
@@ -22,7 +28,7 @@ abstract class App {
 			$this->result=array();
 			$this->buffered=False;
 		}
-		catch(FsoException $fsex)
+		catch(SfsException $fsex)
 		{
 			$fsex->abort(App::$debug);
 			die();
@@ -51,7 +57,7 @@ abstract class App {
 			if($this->buffered)
 				ob_flush();
 		}
-		catch(FsoException $fsex)
+		catch(SfsException $fsex)
 		{
 			$fsex->abort(App::$debug);
 		}
@@ -64,22 +70,10 @@ abstract class App {
 		return isset($_REQUEST[$param]) ? $_REQUEST[$param] : $default;
 	}
 
-	/*
-	public function exitError($errNumber=500,$msg='')
-	{
-		ob_clean();
-		http_response_code($errNumber);
-		if($msg!='')
-			echo $msg;
-		ob_flush();
-		die();
-	}
-	*/
-
 	public static function getAppPath($file='')
 	{
 		if(self::$appDir===null)
-			self::$appDir = dirname(__DIR__).DIRECTORY_SEPARATOR;
+			self::$appDir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR;
 		return self::$appDir.$file;
 	}
 	

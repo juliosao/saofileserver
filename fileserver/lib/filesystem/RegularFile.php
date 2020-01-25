@@ -1,17 +1,12 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
+namespace filesystem;
 /**
  * Description of File
  *
  * @author julio
  */
-class FSOFile extends FSO{
+class RegularFile extends FileSystemObject{
     function __construct($path) {
         parent::__construct(realpath($path));
     }
@@ -41,7 +36,6 @@ class FSOFile extends FSO{
             while(!feof($f))
             {
                 $r=fread($f,$len);
-                //error_log('RECALCULANDO:+'.$len);
                 $st = bcadd($st, $len);                
             }
             $st = bcsub($st, $len);
@@ -84,9 +78,7 @@ class FSOFile extends FSO{
             $res= unlink($this->path);
             if($res==false)
             {
-                $e=error_get_last();
-                $this->error=json_encode($e);
-                return false;
+                throw new FileSystemException($this->path);
             }
             return true;
         } else {

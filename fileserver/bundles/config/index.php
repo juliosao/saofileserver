@@ -1,5 +1,9 @@
 <?php
 require_once('../../lib/Util.php');
+
+use auth\Auth;
+use app\HTMLApp;
+
 Auth::checkSession();
 
 ?>

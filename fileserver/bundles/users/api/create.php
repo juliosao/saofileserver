@@ -2,6 +2,9 @@
 
 require('../../../lib/Util.php');
 
+use app\JSONApp;
+use auth\AUth;
+use autn\UserExistsException;
 
 class createUser extends JSONApp
 {

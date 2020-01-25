@@ -1,5 +1,8 @@
 <?php
 require_once('../../lib/Util.php');
+
+use app\HTMLApp;
+
 ?>
 <!DOCTYPE html>
 <html>

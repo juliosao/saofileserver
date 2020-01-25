@@ -1,6 +1,10 @@
 <?php
 require_once('../../../lib/Util.php');
 
+use app\App;
+use filesystem\FileSystemObject;
+use filesystem\RegularFile;;
+
 class download extends App
 {
     private $buffer = 102400;
@@ -21,7 +25,7 @@ class download extends App
             die("what?");
         }
 
-        $this->file=new FSOFile(FSO::joinPath($basedir,$filename));
+        $this->file=new RegularFile(FileSystemObject::joinPath($basedir,$filename));
         if(!$this->file->exists()) 
         {
             error_log("Fichero no encontrado");            

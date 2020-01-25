@@ -1,6 +1,8 @@
 <?php
 
-class DatabaseException extends FsoException
+namespace database;
+
+class DatabaseException extends SfsException
 {
 	static $errNumber=500;
 

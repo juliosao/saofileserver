@@ -1,5 +1,9 @@
 <?php
 
+namespace app;
+
+use \Cfg;
+
 //Represents a HTMLApp extends App
 abstract class HTMLApp extends App
 {

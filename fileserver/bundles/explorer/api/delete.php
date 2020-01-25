@@ -1,6 +1,9 @@
 <?php
 require_once('../../../lib/Util.php');
     
+use app\JSONApp;
+use filesystem\FileSystemObject;
+
 class delete extends JSONApp{
     public function __construct()
     {
@@ -33,11 +36,11 @@ class delete extends JSONApp{
         foreach($paths as $path)
         {   
             $p=urldecode($path);
-            $obj=FSO::fromPath(FSO::joinPath($basedir,$p));        
+            $obj=FileSystemObject::fromPath(FileSystemObject::joinPath($basedir,$p));        
 
             if($obj==null)
             {
-                throw new FSONotFoundException($p);
+                throw new NotFoundException($p);
             }
             else if(!$obj->delete())
             {

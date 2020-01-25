@@ -1,6 +1,10 @@
 <?php
 require_once('../../../lib/Util.php');
-    
+
+use app\JSONApp;
+use filesystem\FileSystemObject;
+use filesystem\Directory;
+
 class MyApp extends JSONApp{
     public function __construct()
     {
@@ -20,7 +24,7 @@ class MyApp extends JSONApp{
         $p=urldecode($path);
         $n=urldecode($name);
 
-        $parent=new FSODir(FSO::joinPath($basedir,$p));
+        $parent=new Directory(FileSystemObject::joinPath($basedir,$p));
         $parent->mkdir($n,false);
         
         return true;

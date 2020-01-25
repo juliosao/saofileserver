@@ -1,5 +1,10 @@
 <?php
 
+namespace database;
+
+use \PDO;
+use \Cfg;
+
 /**
  * \class Database
  * \brief Clase manejadora de la base de datos
@@ -14,14 +19,14 @@ class Database {
 
     static function init()
     {  
-        if(isset(\Cfg::get()->bbdd->database))
-            Database::$defaultPath=\Cfg::get()->bbdd->database;
+        if(isset(Cfg::get()->bbdd->database))
+            Database::$defaultPath=Cfg::get()->bbdd->database;
 
-        if(isset(\Cfg::get()->bbdd->user))
-            Database::$defaultUser=\Cfg::get()->bbdd->user;
+        if(isset(Cfg::get()->bbdd->user))
+            Database::$defaultUser=Cfg::get()->bbdd->user;
 
-        if(isset(\Cfg::get()->bbdd->pass))
-            Database::$defaultPass=\Cfg::get()->bbdd->pass;                    
+        if(isset(Cfg::get()->bbdd->pass))
+            Database::$defaultPass=Cfg::get()->bbdd->pass;                    
         
     }
 
@@ -45,14 +50,14 @@ class Database {
 
         try
         {
-            $this->db = new \PDO($path,$usr,$passw,
-                    array( \PDO::ATTR_PERSISTENT => true )
+            $this->db = new PDO($path,$usr,$passw,
+                    array( PDO::ATTR_PERSISTENT => true )
                     );
 
         
-            $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-            $this->db->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
-            //$this->db->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE);
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+            //$this->db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE);
         }
         catch(Exception $ex)
         {

@@ -1,6 +1,6 @@
 <?php
 
-class InvalidRequestException extends FsoException
+class InvalidRequestException extends SfsException
 {
 	static $errNumber=400;
 

@@ -1,6 +1,10 @@
 <?php
 	require_once('../../../lib/Util.php');
-		
+
+	use app\JSONApp;
+	use filesystem\FileSystemObject;
+	use filesystem\Directory;
+	
 	class Explore extends JSONApp{
 		
 		public function __construct()
@@ -19,22 +23,22 @@
 			}
 			error_log("Buscando ".$dirname);
 			
-			$dirpath=FSO::joinPath($basedir,$dirname);
-			$fso=FSO::fromPath($dirpath);
+			$dirpath=FileSystemObject::joinPath($basedir,$dirname);
+			$fso=FileSystemObject::fromPath($dirpath);
 
 			if(!$fso===null) {
 				error_log("Not found:".$dirname);
-				throw new FSONotFoundException($dirname);
+				throw new NotFoundException($dirname);
 			}
 
-			// Basic data of the FSO
+			// Basic data of the FileSystemObject
 			$result['name']=$fso->getName();
 			$result['link']=urlencode($fso->relativePath($basedir));			
 
 			$dirs=array();
 			$files=array();			
 			
-			if( $fso instanceof FSODir)
+			if( $fso instanceof Directory)
 			{
 				$result['free']=$fso->getFreeSpace();
 				$result['total']=$fso->getTotalSpace();

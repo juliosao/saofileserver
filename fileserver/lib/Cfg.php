@@ -1,5 +1,7 @@
 <?php
 
+use app\App;
+
 class Cfg
 {
     static $default=null;

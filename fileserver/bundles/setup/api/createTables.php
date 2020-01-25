@@ -2,6 +2,10 @@
 
 require('../../../lib/Util.php');
 
+use app\JSONApp;
+use database\Database;
+use auth\UnauthorizedException;
+
 class Setup extends JSONApp
 {
     function main($args)

@@ -1,5 +1,7 @@
 <?php
 
+namespace database;
+
 /**
  * \fn DBObject
  * \brief Clase generica para objetos guardados en bases de datos

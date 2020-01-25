@@ -1,6 +1,10 @@
 <?php
 require('../../../lib/Util.php');
 
+use app\JSONApp;
+use auth\Auth;
+use auth\UserNotFoundException;
+use database\DatabaseException;
 
 class deleteUser extends JSONApp
 {

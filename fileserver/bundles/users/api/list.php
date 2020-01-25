@@ -1,6 +1,8 @@
 <?php
 require('../../../lib/Util.php');
 
+use app\JSONApp;
+use auth\User;
 
 class listUsers extends JSONApp
 {

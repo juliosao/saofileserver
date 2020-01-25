@@ -1,7 +1,11 @@
 <?php
 
 require_once('../../../lib/Util.php');
-    
+
+use app\JSONApp;
+use auth\Auth;
+use auth\UnauthorizedException;
+
 class myApp extends JSONApp
 {
     public function __construct()
