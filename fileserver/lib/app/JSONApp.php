@@ -2,6 +2,8 @@
 
 namespace app;
 
+use SfsException;
+
 //Represents a http callable mini-application
 abstract class JSONApp extends App{
     public function __construct($doAuth=false)

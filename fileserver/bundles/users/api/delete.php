@@ -5,6 +5,7 @@ use app\JSONApp;
 use auth\Auth;
 use auth\User;
 use auth\UserNotFoundException;
+use auth\CannotModifyYourselfException;
 use database\DatabaseException;
 
 class deleteUser extends JSONApp
@@ -41,7 +42,7 @@ class deleteUser extends JSONApp
         // Check for authorization to modify the user
         if($currentUsr->id == $deleteUsr->id )
         {
-            throw new InvalidRequestException("Cannot delete yourself!");
+            throw new CannotModifyYourselfException("Cannot delete yourself!");
         }     
 
         if($deleteUsr->delete()!=1)

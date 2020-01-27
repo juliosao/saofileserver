@@ -93,6 +93,11 @@ class User extends DBObject
     
     public function addGroup(Group $g)
     {
+        if($this == Auth::get())
+        {
+            throw new CannotModifyYourselfException();
+        }
+
         if(User2Group::get(null,$this->id,$g->id))
             return true;
 
@@ -105,6 +110,11 @@ class User extends DBObject
 
     public function removeGroup(Group $g)
     {
+        if($this == Auth::get())
+        {
+            throw new CannotModifyYourselfException();
+        }
+
         $del = User2Group::get(null,$this->id,$g->id);
         if($del === null)
             return true;

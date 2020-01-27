@@ -6,6 +6,6 @@ class MethodNotAllowedException extends SfsException
 
 	public function __construct()
 	{
-		parent::__construct("Invalid request");
+		parent::__construct("Method not allowed");
 	}
 }
