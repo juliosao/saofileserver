@@ -10,6 +10,6 @@ class GroupNotFoundException extends SfsException
 
 	public function __construct($usr)
 	{
-		parent::__construct("User exists: $usr");
+		parent::__construct("Group not found: $usr");
 	}
 }

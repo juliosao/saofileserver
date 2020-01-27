@@ -100,8 +100,8 @@ class Database {
         }
         catch(\Exception $ex)
         {
-            error_log($consulta);
-            error_log(json_encode($campos));
+            error_log("Consulta causante:".$consulta);
+            error_log("Argumentos:".json_encode($campos));
             throw new DatabaseException($ex->getMessage());
         }
 
@@ -124,12 +124,12 @@ class Database {
             $stm->execute($campos);
             $res=$stm->rowCount();	
             $stm->closeCursor();
-            error_log($consulta.':'.$res);
             return $res;
         }
-        catch(Exception $ex)
+        catch(\Exception $ex)
         {
-            error_log($consulta);
+            error_log("Consulta causante:".$consulta);
+            error_log("Argumentos:".json_encode($campos));
             throw new DatabaseException($ex->getMessage());
         }
     }

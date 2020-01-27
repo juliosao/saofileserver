@@ -54,6 +54,15 @@ $imAdmin = Auth::$current->isFromGroup('admin');
             
             let btn = UI.button(UI.image("../../../styles/toolbar/plus.svg"));
             btn.classList.add('w3-button');
+            btn.onclick = async () => { 
+                    try{
+                        await usr.addGroup(input.value); 
+                    }
+                    catch (ex){
+                        alert(ex)
+                    }
+                    putGroups(usr); 
+                };
 
             row.appendChild(UI.cell(btn));
             grp.appendChild(row);
@@ -68,6 +77,15 @@ $imAdmin = Auth::$current->isFromGroup('admin');
                 
                 btn = UI.button(UI.image("../../../styles/toolbar/delete.svg"));
                 btn.classList.add('w3-button');
+                btn.onclick = async () => { 
+                        try{
+                            await usr.removeGroup(g.id); 
+                        }
+                        catch (ex){
+                            alert(ex)
+                        }
+                        putGroups(usr);
+                    };
                 row.appendChild(UI.cell(btn));
 <?php } ?>
                 grp.appendChild(row);

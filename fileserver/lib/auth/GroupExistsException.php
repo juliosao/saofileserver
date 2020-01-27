@@ -10,6 +10,6 @@ class GroupExistsException extends SfsException
 
 	public function __construct($usr)
 	{
-		parent::__construct("User exists: $usr");
+		parent::__construct("Group exists: $usr");
 	}
 }

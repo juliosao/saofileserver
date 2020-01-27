@@ -4,7 +4,6 @@ require('../../../lib/Util.php');
 use app\JSONApp;
 use auth\Auth;
 use auth\User;
-use auth\UserNotFoundException;
 
 class loadUser extends JSONApp
 {
@@ -15,19 +14,11 @@ class loadUser extends JSONApp
 
     function main($args)
     {
-        error_log('PETICION:'.json_encode($_REQUEST));
+        $id= isset($args['id']) ? $args['id'] : Auth::get()->id;
 
-        $filter=array();
-        $filter['id']= isset($args['id']) ? $args['id'] : Auth::get()->id;
+        $user=User::get(null,$id);        
 
-        $users=User::select($filter);
-
-        if(count($users)==0)
-        {
-            throw new UserNotFoundException($filter['id']);
-        }
-
-        return($users[0]);
+        return $user;
     }
 }
 

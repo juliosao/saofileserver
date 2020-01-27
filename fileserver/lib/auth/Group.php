@@ -2,27 +2,16 @@
 
 namespace auth;
 
-use \database\Database;
 use \database\DBObject;
+use \MethodNotAllowedException;
 
 class Group extends DBObject
 {
 	static $keys=array('id');
 	static $fields=array('id','name');
-	static $table='groups';
+    static $table='groups';
+    static $onNotFound='auth\GroupNotFoundException';
 	
-    //Mandatory
-    static $selectQry = null;
-	static $fieldsEnum = null;
-	static $insert=null;
-	static $update=null;
-	static $delete=null;
-
-    static function init()
-    {
-        self::$db=Database::getInstance();
-	}
-
     function equals($obj)
     {
         if( $obj instanceof User && $obj->id == $this->id)
@@ -39,7 +28,6 @@ class Group extends DBObject
 
     static function fromUser(User $u)
     {
-        $res=array();
         $groups = self::$db->query('SELECT id,name FROM user2groups 
                                         INNER JOIN groups 
                                             ON user2groups.grp = groups.id 
@@ -47,11 +35,30 @@ class Group extends DBObject
                                         static::class);
         return $groups;
     }
-
-    function save()
+    
+    static  function selectQry()
     {
-        $res=parent::update();
-        error_log("Grupo Guardado:".$res);
+        return "SELECT id,name FROM groups";
+    }
+
+    static function getQry()
+    {
+        return "SELECT id,name FROM groups WHERE id=? LIMIT 1";
+    }
+    	
+    static function insertQry()
+    {
+        return "INSERT INTO groups (id,name) VALUES (:id, :name)";
+    }
+
+    static function deleteQry()
+    {
+        return "DELETE FROM groups WHERE id=:id";
+    }
+
+    static function updateQry()
+    {
+        throw new MethodNotAllowedException();
     }
 }
 

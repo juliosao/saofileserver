@@ -10,6 +10,7 @@ class User extends DBObject
 	static $keys=array('id');
     static $fields=array('id','name','session','auth','mail');
     static $table='users';
+    static $onNotFound='auth\UserNotFoundException';
     //Mandatory
     static $selectQry = null;
 	static $fieldsEnum = null;
@@ -39,13 +40,7 @@ class User extends DBObject
         return true;
     }
 
-    function isFromGroup($groupName)
-    {
-        $groups = self::$db->query("SELECT grp FROM user2groups INNER JOIN groups ON user2groups.grp = groups.id WHERE user=? AND groups.name=?", array($this->id,$groupName));
-        return count($groups)>0;
-    }
-
-    static function checkPassw($usr,$pw)
+        static function checkPassw($usr,$pw)
     {
         $auth=hash('sha256',$pw);
 
@@ -82,10 +77,63 @@ class User extends DBObject
         $this->auth=$auth;
     }
 
+    function isFromGroup($groupName)
+    {
+        $group = Group::select(array('name'=>$groupName));
+        if(count($group)==0)
+            throw new GroupNotFoundException($groupName);
+        
+        return User2Group::get(null,$this->id,$group[0]->id) !== null;
+    }
+
     public function getGroups()
 	{
 		return Group::fromUser($this);
-	}
+    }
+    
+    public function addGroup(Group $g)
+    {
+        if(User2Group::get(null,$this->id,$g->id))
+            return true;
+
+        $u2g = new User2Group();
+        $u2g->user = $this->id;
+        $u2g->grp = $g->id;
+        $u2g->insert();
+        return;
+    }
+
+    public function removeGroup(Group $g)
+    {
+        $del = User2Group::get(null,$this->id,$g->id);
+        if($del === null)
+            return true;
+        
+        $del->delete();
+    }
+
+    static  function selectQry()
+    {
+        return "SELECT id,name,auth,session,mail FROM users";
+    }
+
+    static function getQry()
+    {
+        return "SELECT id,name,auth,session,mail FROM users WHERE id=? LIMIT 1";
+    }
+    	
+    static function insertQry()
+    {
+        return "INSERT INTO users (id,name,auth,session,mail) VALUES (:id, :name, :auth, :session, :mail)";
+    }
+
+    static function updateQry()
+    {
+        return "UPDATE users SET name=:name, auth=:auth, session=:session, mail=:mail WHERE id=:id";
+    }
+    static function deleteQry()
+    {
+        return "DELETE FROM users WHERE id=:id";
+    }
 }
 
-User::init();

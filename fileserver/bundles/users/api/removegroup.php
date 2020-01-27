@@ -25,7 +25,7 @@ class addGroup extends JSONApp
         $user=User::get(null,$argv['id']);
         $group=Group::get(null,$argv['group']);
 
-        $user->addGroup($group);
+        $user->removeGroup($group);
 
         return $user->getGroups();
     }

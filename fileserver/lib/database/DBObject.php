@@ -2,6 +2,7 @@
 
 namespace database;
 
+use NotFoundException;
 
 /**
  * \fn DBObject
@@ -32,11 +33,6 @@ abstract class DBObject
 
 	public static function select($filters=array(),$ctorArgs=array())
 	{
-		if(static::$selectQry === null)
-		{
-			static::$selectQry = 'SELECT '.implode(',',static::$fields).' FROM '.static::$table;
-		}
-
 		$where=array();
 		foreach($filters as $key => $unused)
 		{
@@ -44,9 +40,22 @@ abstract class DBObject
 		}
 
 		if(count($where)==0)
-			return static::$db->query(static::$selectQry, $filters,static::class,$ctorArgs);
+			return static::$db->query(static::selectQry(), $filters,static::class,$ctorArgs);
 		else
-			return static::$db->query(static::$selectQry.' WHERE '.implode(' AND ',$where), $filters,static::class,$ctorArgs);
+			return static::$db->query(static::selectQry().' WHERE '.implode(' AND ',$where), $filters,static::class,$ctorArgs);
+	}
+
+	public static function get($ctorArgs=array())
+	{
+		$args=func_get_args();
+		$argv=array_shift($args);
+		error_log(static::class.':'.json_encode($argv));
+		$res = static::$db->query(static::getQry(),$args,static::class,$ctorArgs);
+		if(count($res)!==1)
+		{
+			return static::onNotFound($argv);
+		}
+		return $res[0];
 	}
 
 	public function __toString()
@@ -56,82 +65,34 @@ abstract class DBObject
 
 	public function update()
 	{		
-		if(static::$update===NULL)
-		{
-			$conditions=array();
-			$values=array();			
-
-			foreach(static::$fields as $key)
-			{  
-				if(in_array($key,static::$keys))
-					$conditions[]= $key.' = :'.$key;
-				else
-					$values[]= $key.' = :'.$key;
-			}
-
-			static::$update='UPDATE '.static::$table.' SET '.implode(',',$values).' WHERE '.implode(' AND ',$conditions);
-		}
-
-		$dict=array();
-		foreach(static::$fields as $key)
-		{
-			$dict[$key]=$this->$key;
-		}
-
-
-		return static::$db->execute(static::$update,$dict);
+		return static::$db->execute(static::updateQry(),get_object_vars($this));
 	}
 
 	public function insert()
 	{
-		$fields=array();
-		$values=array();
-		$dict=array();
-
-		if(static::$insert===NULL)
-		{
-			foreach(static::$fields as $fieldName)
-			{
-				if(!in_array($fieldName,static::$keys))
-				{
-					$fields[]=$fieldName;
-					$values[]=':'.$fieldName;
-					$dict[$fieldName]=$this->$fieldName;
-				}
-			}
-			static::$insert='INSERT INTO '.static::$table.' ('.implode(',',$fields).') VALUES ';
-		}
-		
-
-		$ret= static::$db->execute(static::$insert.'('.implode(',',$values).')',$dict);
-		return static::$db->getInsertId();
+		$ret = static::$db->execute(static::insertQry(),get_object_vars($this));
+		if($ret==1)
+			return static::$db->getInsertId();
+		else
+			throw new DatabaseException("Cannot insert ".static::class);
 		
 	}
 
 	public function delete()
 	{		
-		if(static::$delete==NULL)
-		{
-			$conditions=array();	
-
-			foreach(static::$fields as $key)
-			{  
-				if(in_array($key,static::$keys))
-					$conditions[]= $key.' = :'.$key;				
-			}
-
-			static::$delete='DELETE FROM '.static::$table.' WHERE '.implode(' AND ',$conditions);
-		}
-
-		$dict=array();
-		foreach(static::$fields as $key)
-		{
-			if(in_array($key,static::$keys))
-				$dict[$key]=$this->$key;
-		}
-
-		return static::$db->execute(static::$delete,$dict);
+		return static::$db->execute(static::deleteQry(),get_object_vars($this));
 	}
+
+	static function onNotFound($args)
+	{
+		throw new \NotFoundException(static::class);
+	}
+
+	abstract static function selectQry();
+	abstract static function getQry();	
+	abstract static function insertQry();
+	abstract static function updateQry();
+	abstract static function deleteQry();
 }
 
 

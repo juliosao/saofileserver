@@ -1,9 +1,6 @@
 <?php
-namespace filesystem;
 
-use \SfsException;
-
-class NotFoundException extends FileSystemException
+class NotFoundException extends SfsException
 {
 	static $errNumber=404;
 

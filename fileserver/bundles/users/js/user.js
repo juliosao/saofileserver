@@ -64,6 +64,30 @@ class User
         }
         return result;
     }
+
+    async addGroup(group)
+    {
+        let data = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/addgroup.php",{'id':this.id,'group':group});
+        let result=[];
+        for(let g of data)
+        {
+            let grp = new Group();
+            result.push(grp.parse(g));
+        }
+        return result;
+    }
+
+    async removeGroup(group)
+    {
+        let data = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/removegroup.php",{'id':this.id,'group':group});
+        let result=[];
+        for(let g of data)
+        {
+            let grp = new Group();
+            result.push(grp.parse(g));
+        }
+        return result;
+    }
 }
 
 
