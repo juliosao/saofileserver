@@ -59,7 +59,7 @@ class Database {
             $this->db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
             //$this->db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE);
         }
-        catch(Exception $ex)
+        catch(\Exception $ex)
         {
             error_log($ex);
             throw new DatabaseException($ex->getMessage());
@@ -91,15 +91,17 @@ class Database {
         {
             $stm = $this->db->prepare($consulta);
             if($className!==null)
-                $stm->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, $className, $ctorArgs);
-            
+                $stm->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, $className, $ctorArgs);                    
+
             $stm->execute($campos);
             $res=$stm->fetchAll();
             $stm->closeCursor();
             return $res;
         }
-        catch(Exception $ex)
+        catch(\Exception $ex)
         {
+            error_log($consulta);
+            error_log(json_encode($campos));
             throw new DatabaseException($ex->getMessage());
         }
 

@@ -38,68 +38,53 @@ $imAdmin = Auth::$current->isFromGroup('admin');
         
         async function putGroups(usr)
         {
-            let grps = await usr.getGroups();
-
-            let tbl = document.createElement('table');
-			tbl.classList.add('w3-table','w3-bordered','w3-striped','w3-border','w3-hoverable',);
-			let grp = document.createElement('thead');
-            let row = document.createElement('tr');
+			let grp = UI.clear('groups-editor');
             
-            cell = document.createElement('th');
-			cell.appendChild(document.createTextNode("Grupo"));
-            row.appendChild(cell);
-<?php if($imAdmin) { ?>
-            cell = document.createElement('th');
-			cell.appendChild(document.createTextNode(""));
-            row.appendChild(cell);
-<?php } ?>
-            grp.appendChild(row);
-            tbl.appendChild(grp);
-
-            grp = document.createElement('tbody');
 <?php if($imAdmin) { ?>         
-            row = document.createElement('tr');
-            cell = document.createElement('td');
-            let input = document.createElement('input');
+            let row = document.createElement('tr');
+            let cell = document.createElement('td');
+            let input = document.createElement('select');
+
             input.id="new_group";
-            input.classList.add('w3-input');
+            input.classList.add('w3-select');
+            groupsCombo(input);
+
 			cell.appendChild(input);
             row.appendChild(cell);
             
-            cell = document.createElement('td');
-            let btn = document.createElement('button');
-            btn.classList.add('w3-button')
-            let img = document.createElement('img');
-			img.src = "../../../styles/toolbar/plus.svg"
-			btn.appendChild(img);
-			cell.appendChild(btn);
-            row.appendChild(cell);
+            let btn = UI.button(UI.image("../../../styles/toolbar/plus.svg"));
+            btn.classList.add('w3-button');
+
+            row.appendChild(UI.cell(btn));
             grp.appendChild(row);
 <?php } ?>
-
+            let grps = await usr.getGroups();
             for(g of grps)
             {
                 row = document.createElement('tr');
-                cell = document.createElement('td');
-                cell.appendChild(document.createTextNode(g.name));
-                row.appendChild(cell);
+                
+                row.appendChild(UI.cell(g.name));
 <?php if($imAdmin) { ?> 
-                cell = document.createElement('td');
-                btn = document.createElement('button');
-                btn.classList.add('w3-button')
-                img = document.createElement('img');
-                img.src = "../../../styles/toolbar/delete.svg"
-                btn.appendChild(img);
-                cell.appendChild(btn);
-                row.appendChild(cell);
+                
+                btn = UI.button(UI.image("../../../styles/toolbar/delete.svg"));
+                btn.classList.add('w3-button');
+                row.appendChild(UI.cell(btn));
 <?php } ?>
                 grp.appendChild(row);
             }
-
-            tbl.appendChild(grp);
-
-			UI.clear("groups").appendChild(tbl);
         }
+
+<?php if($imAdmin) { ?>
+        async function groupsCombo(input)
+        {
+            let grps = await Group.list();
+            for(let grp of grps)
+            {
+                let option = UI.option(grp.name,grp.id);
+                input.appendChild(option);
+            }
+        }
+<?php } ?>
 
         async function save()
         {
@@ -158,7 +143,18 @@ $imAdmin = Auth::$current->isFromGroup('admin');
                 </div>
             </div>
             <h2>Grupos</h2>
-            <div id="groups" class="w3-responsive">
+            <div class="w3-responsive">
+                <table class="w3-table w3-bordered w3-striped w3-border w3-hoverable">
+                    <thead>
+                        <tr>
+                        <th>Group</th>
+<?php if($imAdmin) { ?><th>Action</th><?php } ?>
+                        </tr>
+                    </thead>
+                    <tbody id="groups-editor">
+
+                    </tbody>
+                </table>
             </div>
         </div>
 	</body>

@@ -7,10 +7,15 @@ use \database\DBObject;
 
 class User extends DBObject
 {
-    static $db=null;
 	static $keys=array('id');
     static $fields=array('id','name','session','auth','mail');
-	static $table='users';
+    static $table='users';
+    //Mandatory
+    static $selectQry = null;
+	static $fieldsEnum = null;
+	static $insert=null;
+	static $update=null;
+	static $delete=null;
     
     public $id;
     public $name;    
@@ -76,6 +81,11 @@ class User extends DBObject
         $auth=hash('sha256',$pw);
         $this->auth=$auth;
     }
+
+    public function getGroups()
+	{
+		return Group::fromUser($this);
+	}
 }
 
 User::init();

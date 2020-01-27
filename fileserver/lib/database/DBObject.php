@@ -2,7 +2,6 @@
 
 namespace database;
 
-use auth\Group;
 
 /**
  * \fn DBObject
@@ -10,17 +9,19 @@ use auth\Group;
  */
 abstract class DBObject
 {
+	/*
 	static $fields=array();
 	static $keys=array();
 	static $table='';
+	// Mandatory
 	static $selectQry = null;
 	static $fieldsEnum = null;
-	// Mandatory
 	static $insert=null;
 	static $update=null;
 	static $delete=null;
-	
+	*/
 	static $db;
+
 	
 	static function init()
 	{
@@ -37,20 +38,15 @@ abstract class DBObject
 		}
 
 		$where=array();
-		foreach($filters as $key => $value)
+		foreach($filters as $key => $unused)
 		{
 			$where[]=$key.'= :'.$key;
 		}
 
 		if(count($where)==0)
-			return static::$db->query(static::$selectQry, $filters,$className=static::class,$ctorArgs);
+			return static::$db->query(static::$selectQry, $filters,static::class,$ctorArgs);
 		else
-			return static::$db->query(static::$selectQry.' WHERE '.implode(' AND ',$where), $filters,$className=static::class,$ctorArgs);
-	}
-
-	public function getGroups()
-	{
-		return Group::fromUser($this);
+			return static::$db->query(static::$selectQry.' WHERE '.implode(' AND ',$where), $filters,static::class,$ctorArgs);
 	}
 
 	public function __toString()
@@ -60,7 +56,7 @@ abstract class DBObject
 
 	public function update()
 	{		
-		if(static::$update==NULL)
+		if(static::$update===NULL)
 		{
 			$conditions=array();
 			$values=array();			
@@ -92,7 +88,7 @@ abstract class DBObject
 		$values=array();
 		$dict=array();
 
-		if(static::$insert==NULL)
+		if(static::$insert===NULL)
 		{
 			foreach(static::$fields as $fieldName)
 			{
@@ -134,8 +130,6 @@ abstract class DBObject
 				$dict[$key]=$this->$key;
 		}
 
-		error_log(static::$delete);
-		error_log(json_encode($dict));
 		return static::$db->execute(static::$delete,$dict);
 	}
 }

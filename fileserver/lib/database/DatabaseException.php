@@ -2,6 +2,8 @@
 
 namespace database;
 
+use \SfsException;
+
 class DatabaseException extends SfsException
 {
 	static $errNumber=500;

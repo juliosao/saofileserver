@@ -7,18 +7,16 @@ use \database\DBObject;
 
 class Group extends DBObject
 {
-    static $db=null;
 	static $keys=array('id');
 	static $fields=array('id','name');
-	static $table='users';
+	static $table='groups';
 	
-	// Mandatory
-	static $select=null;
+    //Mandatory
+    static $selectQry = null;
+	static $fieldsEnum = null;
 	static $insert=null;
 	static $update=null;
 	static $delete=null;
-
-    static $current=null;
 
     static function init()
     {
