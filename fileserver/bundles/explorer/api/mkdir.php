@@ -12,19 +12,19 @@ class MyApp extends JSONApp{
     }
 
     public function main($args) {   
-        $basedir=Cfg::get()->fso->basedir;
+       
+        if(!isset($args["path"]) || !isset($args["name"])) {
+            throw new InvalidRequestException('mkdir what?');
+        }
+
+        $basedir=FileSystemObject::fromPath(Cfg::get()->fso->basedir);
         $path= $args["path"];
         $name= $args["name"];
-
         
-        if(is_null($path)) {
-            $this->exitError(400,"Mkdir what?");
-        }
-            
         $p=urldecode($path);
         $n=urldecode($name);
 
-        $parent=new Directory(FileSystemObject::joinPath($basedir,$p));
+        $parent=$basedir->getChild($p);
         $parent->mkdir($n,false);
         
         return true;

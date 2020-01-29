@@ -2,6 +2,8 @@
 
 namespace filesystem;
 
+use MethodNotAllowedException;
+
 define('FSODIR',0);
 define('FSOFILE',1);
 
@@ -10,23 +12,21 @@ define('FSOFILE',1);
  *
  * @author julio
  */
-abstract class FileSystemObject {
+class FileSystemObject {
     public static $dirSeparator;
     public $path;
-    public $error;
-    public $type;
 
-    public abstract function exists();
-    public abstract function delete();
 
 	/**
-		\brief Constructor
-		\warning DO NOT use directly
+	 * \brief Constructor
+	 * \warning DO NOT use directly
 	*/
-    protected function __construct($path) {
-        $this->path=$path;
-        $this->error=null;
-        $this->type=is_dir($path) ? FSODIR : FSOFILE;
+    protected function __construct($path) 
+    {
+        if($path instanceof FileSystemObject)
+            $this->path=$path->path;
+        else
+            $this->path=FileSystemObject::realPath($path);
     }
 
 	/**
@@ -48,20 +48,97 @@ abstract class FileSystemObject {
         return new Directory(dirname($this->path));
     }
 
-	/**
-		\fn init()
-		\brief Initializes lib
+    /**
+     * \fn isChildOF(Directory $fso)
+     * \brief Returns true when current FSO is child of given directory
+     */
+    public function isChildOF(Directory $fso)
+	{
+        $len=strlen($fso->path);
+        return substr($this->path,0,$len)==$fso->path;
+    }
+
+    /**
+		\fn relativePath($from)
+		\brief Returns the relative path of a FileSystemObject from a base path
+		\param $basePath Base path to obtain the relative path of the object
+		\return The path of the FileSystemObject, searching from $basePath
 	*/
-    static function init()
-    {
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            self::$dirSeparator='\\';
-        } else {
-            self::$dirSeparator='/';
+	public function getRelativePath($basePath)
+	{
+        if($basePath instanceof FileSystemObject)
+            $basePath = $basePath->$path;
+        else
+            $basePath = FileSystemObject::realPath($basePath);
+
+        $pos = strlen($basePath);
+        if(substr($this->path,0,$pos)!==$basePath)
+        {
+            throw new FileSystemException("Path {$this->path} is not a child of $basePath");
         }
+        return '.'.substr($this->path,$pos);
+    }
+
+    public function moveTo($newPath)
+    {
+        rename($this->path,$newPath);
+    }
+
+    public function exists()
+    {
+        return file_exists($this->path);
+    }
+
+    public function delete()
+    {
+        throw new MethodNotAllowedException();
+    }
+
+    public function copyTo($unused)
+    {
+        throw new MethodNotAllowedException();
+    }
+
+
+    public static function realPath($path)
+    {
+        $tmp=explode(FileSystemObject::$dirSeparator,$path);
+        $tmp2=array();
+
+        foreach($tmp as $component)
+        {
+            if($component=='..')
+            {
+                if(count($tmp2)==0)
+                    throw new FileSystemException($path);
+
+                array_pop($tmp2);
+            }
+            else if($component!='')
+            {
+                array_push($tmp2,$component);
+            }
+        }
+        return FileSystemObject::$dirSeparator.implode(FileSystemObject::$dirSeparator,$tmp2);
     }
 
 	/**
+		\fn fromPath($path)
+		\brief gets an FileSystemObject objecto from a filesystem path
+		\param $path The path to use
+		\return a FileSystemObject Object representing the path
+	*/
+    public static function fromPath($path)
+    {
+        if(is_dir($path))
+            return new Directory($path);
+        else if(is_file($path))
+            return new RegularFile($path);
+        else
+            return new FileSystemObject($path);
+    }
+
+    /**
 		\fn joinPath($path1,$path2)
 		\brief Join two path components
 		\param $path1 The "parent" path
@@ -73,107 +150,18 @@ abstract class FileSystemObject {
         return $path1.self::$dirSeparator.$path2;
     }
 
-	/**
-		\fn pathFromPath($path, $ori, $force=true)
-		\brief Returns the relative path of path from ori.
-		\param $path The path to process
-		\param $ori The base path
-		\param $force If true, forces the result of the function to be in ori
-		\return The relative path of path from ORI
+    /**
+		\fn init()
+		\brief Initializes lib
 	*/
-    public static function pathFromPath($path, $ori, $force=true)
+    static function init()
     {
-        $prep = array();
-        $realp= explode(self::$dirSeparator,realpath($path));
-        $realo= explode(self::$dirSeparator,realpath($ori));
-
-		// While paths components are equal unshift them
-        while(count($realp) && count($realo) && $realp[0]== $realo[0] )
-        {
-            array_shift($realp);
-            array_shift($realo);
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            self::$dirSeparator='\\';
+        } else {
+            self::$dirSeparator='/';
         }
-
-        // If not force we need to add the '..' dir any times we need it
-        if(count($realo)>0 && $force==false)
-        {
-            while(count($realo)>0 )
-            {
-                array_unshift($prep, '..');
-                array_shift($realo);
-            }
-
-
-            foreach($prep as $p)
-            {
-                array_unshift($realp, $p);
-            }
-        }
-
-        return implode(self::$dirSeparator,$realp);
     }
-
-	/**
-		\fn relativePath($from)
-		\brief Returns the relative path of a FileSystemObject from a base path
-		\param $basePath Base path to obtain the relative path of the object
-		\return The path of the FileSystemObject, searching from $basePath
-	*/
-	public function relativePath($basePath,$force=true)
-	{
-		$prep = array();
-        $realp= explode(self::$dirSeparator,$this->path);
-        $realo= explode(self::$dirSeparator,realpath($basePath));
-
-		// While paths components are equal unshift them
-        while(count($realp) && count($realo) && $realp[0]== $realo[0] )
-        {
-            array_shift($realp);
-            array_shift($realo);
-        }
-
-        // If not force we need to add the '..' dir any times we need it
-        if(count($realo)>0 && $force==false)
-        {
-            while(count($realo)>0 )
-            {
-                array_unshift($prep, '..');
-                array_shift($realo);
-            }
-
-
-            foreach($prep as $p)
-            {
-                array_unshift($realp, $p);
-            }
-        }
-
-        return implode(self::$dirSeparator,$realp);
-	}
-
-    public function moveTo($newPath)
-    {
-        rename($path,$newPath);
-    }
-
-	/**
-		\fn fromPath($path)
-		\brief gets an FileSystemObject objecto from a filesystem path
-		\param $path The path to use
-		\return a FileSystemObject Object representing the path
-	*/
-    public static function fromPath($path)
-    {
-        error_log("Buscando $path");
-
-        if(is_dir($path))
-            return new Directory($path);
-        else if(is_file($path))
-            return new RegularFile($path);
-        else
-            return null;
-    }
-
 
 }
 

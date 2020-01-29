@@ -8,7 +8,7 @@ namespace filesystem;
  */
 class RegularFile extends FileSystemObject{
     function __construct($path) {
-        parent::__construct(realpath($path));
+        parent::__construct($path);
     }
 
     function exists()
@@ -83,6 +83,16 @@ class RegularFile extends FileSystemObject{
             return true;
         } else {
             return true;
+        }
+    }
+
+    
+    public function copyTo($newPath)
+    {
+        $res=copy($this->path,$newPath);
+        if($res==false)
+        {
+            throw new FileExistsException($this->path);
         }
     }
 }

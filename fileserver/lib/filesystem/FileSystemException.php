@@ -13,7 +13,7 @@ class FileSystemException extends SfsException
 		error_clear_last();
 		if($err!==null)
 		{
-			parent::construct($err['message'].' at '.$path);
+			parent::__construct($err['message'].' at '.$path);
 			return;
 		}
 		parent::__construct("FileSystemObject Error at $path");

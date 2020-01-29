@@ -2,6 +2,7 @@
 require_once('../../../lib/Util.php');
 
 use app\App;
+use filesystem\FileSystemException;
 use filesystem\FileSystemObject;
 use filesystem\RegularFile;;
 
@@ -13,24 +14,18 @@ class download extends App
     {
         parent::__construct(0);
 
-        $basedir=Cfg::get()->fso->basedir;
-        
-        if(isset($_REQUEST['path'])) 
+        if(!isset($_REQUEST['path']))
         {
-            $filename=str_replace('..','.', urldecode($_REQUEST['path']));
-        }
-        else
-        {
-            error_log("Fichero no definido");            
-            die("what?");
+            throw new InvalidRequestException("Download what?");
         }
 
-        $this->file=new RegularFile(FileSystemObject::joinPath($basedir,$filename));
-        if(!$this->file->exists()) 
+        $basedir=FileSystemObject::fromPath(Cfg::get()->fso->basedir);
+        $this->file = $basedir->getChild($filename);
+        if(!$this->file instanceof RegularFile)
         {
-            error_log("Fichero no encontrado");            
-            die($filename." not found in ".$basedir);
+            throw new FileSystemException($this->file->path);
         }
+ 
 
         if (!($this->stream = fopen($this->file->path, 'rb'))) 
         {

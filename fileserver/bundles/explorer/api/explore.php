@@ -33,7 +33,7 @@
 
 			// Basic data of the FileSystemObject
 			$result['name']=$fso->getName();
-			$result['link']=urlencode($fso->relativePath($basedir));			
+			$result['link']=urlencode($fso->getRelativePath($basedir));			
 
 			$dirs=array();
 			$files=array();			
@@ -50,7 +50,7 @@
 				{
 					$dirs['..']=array('name'=>'..',
 						'name'=>'..',
-						'link'=>$parent->relativePath($basedir),					
+						'link'=>$parent->getRelativePath($basedir),					
 						);
 				}				
 
@@ -59,7 +59,7 @@
 				{
 					$dirs[$d->getName()]=array(
 						'name'=>$d->getName(),
-						'link'=>urlencode($d->relativePath($basedir)),
+						'link'=>urlencode($d->getRelativePath($basedir)),
 					);
 				}
 				
@@ -69,7 +69,7 @@
 				{
 					$files[$f->getName()]=array(
 						'name'=>$f->getName(),
-						'link'=>urlencode($f->relativePath($basedir)),
+						'link'=>urlencode($f->getRelativePath($basedir)),
 						'extension'=>$f->extension(),
 						'mime'=>$f->mime());
 				}

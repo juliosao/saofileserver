@@ -2,6 +2,8 @@
 
 namespace filesystem;
 
+use SfsException;
+
 /**
  * Description of Directory
  *
@@ -11,31 +13,28 @@ class Directory extends FileSystemObject {
     //put your code here
     public function __construct($path)
     {
-        parent::__construct(realpath($path));
+        parent::__construct($path);
     }
     
     public function mkdir($newdir,$force=false)
     {
-        $newPath=FileSystemObject::joinPath($this->path,$newdir,true);
-
-        $present=FileSystemObject::fromPath($newPath);
-        if($present!==null)
+        $objDir = $this->getChild($newdir);
+        if($objDir instanceof RegularFile)
         {
-            if($force==false || !$present instanceof Directory)
-            {
-                throw new SfsException(error_get_last());
-            }
-
-            return new Directory($newPath);;
+            throw new FileExistsException($newdir);
+        }
+        elseif($objDir instanceof Directory)
+        {
+            return $objDir;
         }
 
-        $res= mkdir($newPath,0777,true);
+        $res= mkdir($objDir->path,0777,$force);
         if($res==false)
         {
-            throw new SfsException($newPath);
+            throw new SfsException($objDir->path);
         }
 
-        return new Directory($newPath);
+        return new Directory($objDir);
     }
     
     public function exists()
@@ -131,23 +130,9 @@ class Directory extends FileSystemObject {
 		\param fso FileSystemObject Object to check
 		\return true fi fso is inside the current dir
 	*/
-	public function isChild($fso)
-	{
-		$prep = array();
-        $realo= explode(self::$dirSeparator,$this->path);		
-        $realp= explode(self::$dirSeparator,$fso->getParent()->path);
-
-		// While paths components are equal unshift them
-        while(count($realp) && count($realo) && $realp[0]== $realo[0] )
-        {
-            array_shift($realp);
-            array_shift($realo);
-        }
-		
-		if(count($realo)!=0)
-			return False;
-		
-		return True;
+    public function getChild($relativePath)
+    {
+        return FileSystemObject::fromPath(FileSystemObject::joinPath($this->path,$relativePath));
     }
 
     public function getFreeSpace()
@@ -160,5 +145,23 @@ class Directory extends FileSystemObject {
         return disk_total_space($this->path);
     }
 
-    
+    public function copyTo($newPath)
+    {
+        if ($this->exists()) {
+
+            mkdir($newPath);
+
+            $dirs=$this->childDirs();
+            foreach($dirs as $d)
+            {            
+                $d->copyTo( FileSystemObject::joinPath($newPath,$d->getName()) );
+            }
+
+            $files=$this->childFiles();
+            foreach($files as $f)
+            {
+                $d->copyTo( FileSystemObject::joinPath($newPath,$d->getName()) );
+            }
+        }
+    }
 }

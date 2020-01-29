@@ -7,7 +7,7 @@ use filesystem\FileExistsException;
 use filesystem\Directory;
 use filesystem\RegularFile;
 use filesystem\FileSystemObject;
-use filesystem\NotFoundException;
+use NotFoundException;
 
 class Upload extends App
 {

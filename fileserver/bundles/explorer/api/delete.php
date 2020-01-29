@@ -11,43 +11,15 @@ class delete extends JSONApp{
     }
 
     public function main($args) {   
-        $basedir=Cfg::get()->fso->basedir;
-		$result=array('function'=>'delete');
-		
-        $mal=0;
-        error_log(json_encode($args));
-        $paths= $args["path"];
-        $ok=array();
-        $ko=array();
-        $err=null;
-        $res=array();
-
-        
-        if(is_null($paths)) {
-            $this->exitError(400,"Delete what?");
-        }
-
-        // We support a object list or a single object
-        if(gettype($paths)=='string')
+        if(! isset($args["path"]))
         {
-            $paths=array($paths);
+            throw new InvalidRequestException("Delete what?");
         }
-               
-        foreach($paths as $path)
-        {   
-            $p=urldecode($path);
-            $obj=FileSystemObject::fromPath(FileSystemObject::joinPath($basedir,$p));        
 
-            if($obj==null)
-            {
-                throw new NotFoundException($p);
-            }
-            else if(!$obj->delete())
-            {
-                throw new MethodNotAllowedException($p,'delete');
-            }
-        }        
-
+        $basedir = FileSystemObject::fromPath(Cfg::get()->fso->basedir);
+        $path = $args["path"];
+        $objDel = $basedir->getChild($path);
+        $objDel->delete();
         return true;
     }
 }
