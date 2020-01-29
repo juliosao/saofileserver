@@ -141,9 +141,15 @@ class User extends DBObject
     {
         return "UPDATE users SET name=:name, auth=:auth, session=:session, mail=:mail WHERE id=:id";
     }
+    
     static function deleteQry()
     {
-        return "DELETE FROM users WHERE id=:id";
+        return null;
+    }
+
+    function delete()
+    {
+        return static::$db->execute("DELETE FROM users WHERE id=?",array($this->id));
     }
 }
 

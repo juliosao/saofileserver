@@ -53,7 +53,12 @@ class Group extends DBObject
 
     static function deleteQry()
     {
-        return "DELETE FROM groups WHERE id=:id";
+        return null;
+    }
+
+    function delete()
+    {
+        return static::$db->execute("DELETE FROM groups WHERE id=?",array($this->id));
     }
 
     static function updateQry()
