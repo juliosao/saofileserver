@@ -33,7 +33,7 @@ help:
 clean:
 	-rm -f $(TARNAME)
 	-rm -rf $(DEBTMPPATH)*
-	find . -name '~*' -exec rm -f
+	find . -name '~*' -delete
 
 $(BUILDOUTPUT): $(SOURCES)
 	$(BUILDCMD)
