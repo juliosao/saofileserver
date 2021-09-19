@@ -22,25 +22,25 @@ class Setup extends JSONApp
 
         $db=new Database(null,$usr,$pwd);
 
-        $res=$db->execute("INSERT INTO groups (id,name) VALUES (0,'admin')");
+        $res=$db->execute("INSERT INTO groups (name) VALUES (0,'admin')");
         if($res<0)
         {
             throw new SfsException("Admin group");
         }
 
-        $res=$db->execute("INSERT INTO groups (id,name) VALUES (1,'users')");
+        $res=$db->execute("INSERT INTO groups (name) VALUES (1,'users')");
         if($res<0)
         {
             throw new SfsException("Users group");
         }
         
-        $res=$db->execute("INSERT INTO users (id,name,auth) VALUES (?,?,?)",array(0,$appUsr,hash('sha256',$appPwd)));
+        $res=$db->execute("INSERT INTO users (name,auth) VALUES (?,?)",[$appUsr,hash('sha256',$appPwd)]);
         if($res<0)
         {
             throw new SfsException("First user");
         }
 
-        $res=$db->execute("INSERT INTO user2groups (user,grp) VALUES (0,0),(0,1)",array($appUsr));
+        $res=$db->execute("INSERT INTO user2groups (user,grp) VALUES (?,'admin'),(?,'admin')",[$appUsr,$appUsr]);
         if($res<0)
         {
             throw new SfsException("First user");

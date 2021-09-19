@@ -7,8 +7,8 @@ use \MethodNotAllowedException;
 
 class Group extends DBObject
 {
-	static $keys=array('id');
-	static $fields=array('id','name');
+	static $keys=['name'];
+	static $fields=['name'];
     static $table='groups';
     static $onNotFound='auth\GroupNotFoundException';
 	
@@ -28,27 +28,25 @@ class Group extends DBObject
 
     static function fromUser(User $u)
     {
-        $groups = self::$db->query('SELECT id,name FROM user2groups 
-                                        INNER JOIN groups 
-                                            ON user2groups.grp = groups.id 
-                                        WHERE user=?', array($u->id),
+        $groups = self::$db->query('SELECT grp FROM user2groups d 
+                                        WHERE user=?', [$u->name],
                                         static::class);
         return $groups;
     }
     
     static  function selectQry()
     {
-        return "SELECT id,name FROM groups";
+        return "SELECT name FROM groups";
     }
 
     static function getQry()
     {
-        return "SELECT id,name FROM groups WHERE id=? LIMIT 1";
+        return "SELECT name FROM groups WHERE name=? LIMIT 1";
     }
     	
     static function insertQry()
     {
-        return "INSERT INTO groups (id,name) VALUES (:id, :name)";
+        return "INSERT INTO groups (name) VALUES (:name)";
     }
 
     static function deleteQry()
@@ -58,7 +56,7 @@ class Group extends DBObject
 
     function delete()
     {
-        return static::$db->execute("DELETE FROM groups WHERE id=?",array($this->id));
+        return static::$db->execute("DELETE FROM groups WHERE id=?",[$this->name]);
     }
 
     static function updateQry()

@@ -25,3 +25,13 @@ Julio A. García López (juliosao@gmail.com)
 - Edit fileserver/mod/fso/cfg to set your desired 'basedir' directory
 - Access the saofileserver in order to get a setup screen
 
+## Troubleshooting
+
+### I Get "Access denied for user 'root'@'localhost'" error message at setup
+
+Maybe your root installationg is wrong. Try to execute these queries in mysql in order to repair it:
+```
+CREATE USER 'root'@'localhost' IDENTIFIED BY 'root';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+```

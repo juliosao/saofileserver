@@ -1,5 +1,6 @@
 {
     "app":{
+        "name":"sfs",
         "main":"bundles/explorer/index.php",
         "setup":"bundles/setup/index.php"
     },

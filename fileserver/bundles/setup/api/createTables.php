@@ -21,26 +21,22 @@ class Setup extends JSONApp
         $db=new Database(null,$usr,$pwd);
 
         $res=$db->execute('CREATE TABLE users (
-            id INT PRIMARY KEY AUTO_INCREMENT,
-            name VARCHAR(64) NOT NULL UNIQUE,
+            name VARCHAR(64) PRIMARY KEY NOT NULL,
             auth VARCHAR(256),
             session VARCHAR(256),
             mail VARCHAR(256) )');
 
 
         $res=$db->execute('CREATE TABLE groups (
-            id INT PRIMARY KEY AUTO_INCREMENT,
-            name VARCHAR(64) NOT NULL UNIQUE
+            name VARCHAR(64) PRIMARY KEY NOT NULL UNIQUE
         )');
 
-
         $res=$db->execute('CREATE TABLE `user2groups` (
-            `user` int(11) NOT NULL,
-            `grp` int(11) NOT NULL,
+            `user` VARCHAR(64) NOT NULL,
+            `grp` VARCHAR(64) NOT NULL,
             PRIMARY KEY (`user`,`grp`),
-            KEY `grp` (`grp`),
-            CONSTRAINT `user2groups_ibfk_1` FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-            CONSTRAINT `user2groups_ibfk_2` FOREIGN KEY (`grp`) REFERENCES `grp` (`id`) ON DELETE CASCADE
+            CONSTRAINT `user2groups_ibfk_1` FOREIGN KEY (`user`) REFERENCES `users`(`name`) ON DELETE CASCADE,
+            CONSTRAINT `user2groups_ibfk_2` FOREIGN KEY (`grp`) REFERENCES `groups`(`name`) ON DELETE CASCADE
           )');
                 
         return True;
