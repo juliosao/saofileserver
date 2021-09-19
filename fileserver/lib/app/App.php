@@ -26,7 +26,7 @@ abstract class App {
 					throw new UnauthorizedException();
 				}
 			}
-			$this->result=array();
+			$this->result=[];
 			$this->buffered=False;
 		}
 		catch(SfsException $fsex)
@@ -53,8 +53,9 @@ abstract class App {
 		try
 		{
 			self::$current=$this;
-			ob_start();		
-			$this->main();
+			ob_start();
+			$tmp = json_decode(readfile('php://input'));
+			$this->main($tmp);
 			if($this->buffered)
 				ob_flush();
 		}

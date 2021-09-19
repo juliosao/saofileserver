@@ -85,7 +85,7 @@ class Database {
      * Dentro de la consulta podemos usar el caracter '?' para indicar un parametro de $campos (Se buscará por posición)
      * o bien :nombreCampo para indicarlo (En este caso se buscara la clave 'nombreCampo'		
      */
-    function query($consulta, $campos = array(),$className=null,$ctorArgs=array()) 
+    function query($consulta, $campos = [],$className=null,$ctorArgs=[]) 
     {	
         try
         {
@@ -116,7 +116,7 @@ class Database {
      * Dentro de la consulta podemos usar el caracter '?' para indicar un parametro de $campos (Se buscará por posición)
      * o bien :nombreCampo para indicarlo (En este caso se buscara la clave 'nombreCampo'		
      */
-    function execute($consulta, $campos = array()) 
+    function execute($consulta, $campos = []) 
     {	
         try
         {

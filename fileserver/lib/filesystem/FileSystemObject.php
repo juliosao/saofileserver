@@ -67,7 +67,7 @@ class FileSystemObject {
 	public function getRelativePath($basePath)
 	{
         if($basePath instanceof FileSystemObject)
-            $basePath = $basePath->$path;
+            $basePath = $basePath->path;
         else
             $basePath = FileSystemObject::realPath($basePath);
 
@@ -76,7 +76,7 @@ class FileSystemObject {
         {
             throw new FileSystemException("Path {$this->path} is not a child of $basePath");
         }
-        return '.'.substr($this->path,$pos);
+        return substr($this->path,$pos);
     }
 
     public function moveTo($newPath)
@@ -103,7 +103,7 @@ class FileSystemObject {
     public static function realPath($path)
     {
         $tmp=explode(FileSystemObject::$dirSeparator,$path);
-        $tmp2=array();
+        $tmp2=[];
 
         foreach($tmp as $component)
         {

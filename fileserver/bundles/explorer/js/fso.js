@@ -25,7 +25,7 @@ class fsoDir extends fsoObj
 
 	static async get(path)
 	{
-		var link = encodeURIComponent(path);
+		var link = path;
 		var name = path.split('/').slice(-1)[0];
 		var dir = new fsoDir({link:link, name:name});
 		await dir.explore();
@@ -34,7 +34,7 @@ class fsoDir extends fsoObj
 
 	async explore()
 	{
-		var data = await App.jsonRemoteCall("api/explore.php",{path:this.link});
+		var data = await App.jsonRemoteCall("api/explore.php",{'path':this.link});
 		this.childDirs={};
 		this.childFiles={};
 
@@ -57,7 +57,7 @@ class fsoDir extends fsoObj
 
 	async mkdir(newDir)
 	{
-		await App.jsonRemoteCall("api/mkdir.php",{path:this.link,name:encodeURIComponent(newDir)});
+		await App.jsonRemoteCall("api/mkdir.php",{'path':this.link,'name':newDir});
 	}
 
 	async upload(files,progressCallBack)

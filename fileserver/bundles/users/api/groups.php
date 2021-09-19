@@ -15,19 +15,19 @@ class loadUser extends JSONApp
 
     function main($args)
     {
-        if(!isset($args['id']))
+        if(!isset($args['user']))
         {
             throw new InvalidRequestException();
         }
 
-        $filter=array();
-        $filter['id']=$args['id'];
+        $filter=[];
+        $filter['user']=$args['user'];
 
         $users=User::select($filter);
 
         if(count($users)==0)
         {
-           throw new UserNotFoundException($filter['id']);
+           throw new UserNotFoundException($filter['user']);
         }
 
         return Group::fromUser($users[0]);

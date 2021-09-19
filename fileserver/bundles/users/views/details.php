@@ -4,7 +4,7 @@ use auth\Auth;
 use app\HTMLApp;
 
 Auth::checkSession();
-$id=isset($_GET['id']) ? $_GET['id'] : Auth::$current->id;
+$name=isset($_GET['name']) ? $_GET['name'] : Auth::$current->name;
 $imAdmin = Auth::$current->isFromGroup('admin');
 
 ?>
@@ -23,7 +23,7 @@ $imAdmin = Auth::$current->isFromGroup('admin');
 		{
             try
             {
-                usr=await User.get("<?=$id?>");
+                usr=await User.get("<?=$name?>");
                 document.getElementById('name').value=usr.name;
                 document.getElementById('mail').value=usr.mail;
                 document.getElementById('pw').value="";
@@ -138,7 +138,6 @@ $imAdmin = Auth::$current->isFromGroup('admin');
 	<body onload="loadUser()">
 		<h1>Configuracion de usuario</h1>
 		<div class="w3-container">
-            <input type="hidden" id="id" value="<?=Auth::$current->id?>">
             <div class="form">
                 <div class="w3-row w3-margin">
                     <label class="w3-col m3" for="name">Nombre</label>

@@ -16,13 +16,13 @@ class addGroup extends JSONApp
 
     function main($argv)
     {
-        if(!isset($argv['id']) || !isset($argv['group']))
+        if(!isset($argv['user']) || !isset($argv['group']))
         {
             throw new InvalidRequestException();
         }
 
         // Search for user and group
-        $user=User::get(null,$argv['id']);
+        $user=User::get(null,$argv['user']);
         $group=Group::get(null,$argv['group']);
 
         $user->removeGroup($group);

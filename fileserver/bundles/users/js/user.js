@@ -2,15 +2,14 @@ class User
 {   
     parse(data)
     {
-        this.id = data.id;
         this.name = data.name;
         this.mail = data.mail;
         return this;
     }
 
-    static async get(id)
+    static async get(name)
     {       
-        let data = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/load.php",{'id':id});
+        let data = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/load.php",{'name':name});
         if( data != null )
         {
             let user = new User();
@@ -67,7 +66,7 @@ class User
 
     async addGroup(group)
     {
-        let data = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/addgroup.php",{'id':this.id,'group':group});
+        let data = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/addgroup.php",{'user':this.name,'group':group});
         let result=[];
         for(let g of data)
         {
@@ -79,7 +78,7 @@ class User
 
     async removeGroup(group)
     {
-        let data = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/removegroup.php",{'id':this.id,'group':group});
+        let data = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/removegroup.php",{'user':this.name,'group':group});
         let result=[];
         for(let g of data)
         {

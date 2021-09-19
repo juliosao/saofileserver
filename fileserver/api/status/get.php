@@ -14,7 +14,7 @@ class MyApp extends JSONApp{
 
 	public function main() 
 	{   
-		$result=array();
+		$result=[];
 		$temp=file_get_contents("/sys/class/thermal/thermal_zone0/temp");
 		$result['cpu_temp']=((float)$temp)/1000;
 

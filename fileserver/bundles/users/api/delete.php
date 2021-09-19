@@ -26,21 +26,21 @@ class deleteUser extends JSONApp
         }
 
         // Check for user to modify
-        if(!isset($argv['id']))
+        if(!isset($argv['name']))
         {
             throw new InvalidRequestException("Delete who?");
         }
 
-        $users=User::select(array('id'=>$argv['id']));
+        $users=User::select(['name'=>$argv['name']]);
         if(count($users)==0)
         {
-            throw new UserNotFoundException($argv['id']);
+            throw new UserNotFoundException($argv['name']);
         }
         $deleteUsr=$users[0];
                 
 
         // Check for authorization to modify the user
-        if($currentUsr->id == $deleteUsr->id )
+        if($currentUsr->name == $deleteUsr->name )
         {
             throw new CannotModifyYourselfException("Cannot delete yourself!");
         }     

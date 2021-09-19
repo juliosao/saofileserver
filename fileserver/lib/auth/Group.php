@@ -14,11 +14,11 @@ class Group extends DBObject
 	
     function equals($obj)
     {
-        if( $obj instanceof User && $obj->id == $this->id)
+        if( $obj instanceof Group && $obj->name == $this->name)
         {
             return true;
         }
-        else if ( is_string( $obj ) && $obj == $this->id )
+        else if ( is_string( $obj ) && $obj == $this->name )
         {
             return true;
         }
@@ -56,7 +56,7 @@ class Group extends DBObject
 
     function delete()
     {
-        return static::$db->execute("DELETE FROM groups WHERE id=?",[$this->name]);
+        return static::$db->execute("DELETE FROM groups WHERE name=?",[$this->name]);
     }
 
     static function updateQry()

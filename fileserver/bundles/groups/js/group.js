@@ -2,20 +2,18 @@ class Group
 {
 	constructor()
 	{
-        this.id = id;
         this.name = name;
     }
     
     parse(data)
     {
-        this.id = data.id;
         this.name = data.name;
         return this;
     }
 
-    static async get(id)
+    static async get(name)
     {       
-        let data = await App.jsonRemoteCall(App.baseUrl+"bundles/groups/api/load.php",{'id':id});
+        let data = await App.jsonRemoteCall(App.baseUrl+"bundles/groups/api/load.php",{'name':name});
         if( data != null )
         {
             let group = new Group();

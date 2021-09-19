@@ -13,13 +13,13 @@
 		}
 
 		public function main($args) {
-			$result=array();
+			$result=[];
 			$basedir=Cfg::get()->fso->basedir;
 			
-			$dirname='.';
+			$dirname='';
 			
 			if(isset($args['path'])) {
-				$dirname=str_replace('..','.', urldecode($args['path']));
+				$dirname=str_replace('..','.',$args['path']);
 			}
 			error_log("Buscando ".$dirname);
 			
@@ -33,10 +33,10 @@
 
 			// Basic data of the FileSystemObject
 			$result['name']=$fso->getName();
-			$result['link']=urlencode($fso->getRelativePath($basedir));			
+			$result['link']=$fso->getRelativePath($basedir);
 
-			$dirs=array();
-			$files=array();			
+			$dirs=[];
+			$files=[];			
 			
 			if( $fso instanceof Directory)
 			{
@@ -48,30 +48,31 @@
 				
 				if(strlen($parent->path)>=strlen($basedir))
 				{
-					$dirs['..']=array('name'=>'..',
+					$dirs['..']=[						
 						'name'=>'..',
 						'link'=>$parent->getRelativePath($basedir),					
-						);
+						];
 				}				
 
 				$c=$fso->childDirs();    
 				foreach($c as $d)
 				{
-					$dirs[$d->getName()]=array(
+					$dirs[$d->getName()]=[
 						'name'=>$d->getName(),
-						'link'=>urlencode($d->getRelativePath($basedir)),
-					);
+						'link'=>$d->getRelativePath($basedir)
+						];
 				}
 				
 			
 				$c=$fso->childFiles();
 				foreach($c as $f)
 				{
-					$files[$f->getName()]=array(
+					$files[$f->getName()]=[
 						'name'=>$f->getName(),
-						'link'=>urlencode($f->getRelativePath($basedir)),
+						'link'=>$f->getRelativePath($basedir),
 						'extension'=>$f->extension(),
-						'mime'=>$f->mime());
+						'mime'=>$f->mime()
+						];
 				}
 
 				ksort($dirs);

@@ -17,9 +17,9 @@ class Upload extends App
         parent::__construct(1);
     }
 
-    public function main($argv) {
-	    $ok=array();
-	    $ko=array();
+    public function main($args) {
+	    $ok=[];
+	    $ko=[];
         $basedir=Cfg::get()->fso->basedir;
         error_log("Se quiere subir ficheros");
         error_log(json_encode($_FILES));

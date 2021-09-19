@@ -10,6 +10,6 @@
         "pass":"saofileserver"
     },
     "fso":{
-        "basedir":"/var/shared-data"
+        "basedir":"/mnt/data"
     }
 }

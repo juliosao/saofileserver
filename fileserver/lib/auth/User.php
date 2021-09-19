@@ -7,8 +7,8 @@ use \database\DBObject;
 
 class User extends DBObject
 {
-	static $keys=array('id');
-    static $fields=array('id','name','session','auth','mail');
+	static $keys=array('name');
+    static $fields=array('name','session','auth','mail');
     static $table='users';
     static $onNotFound='auth\UserNotFoundException';
     //Mandatory
@@ -18,7 +18,6 @@ class User extends DBObject
 	static $update=null;
 	static $delete=null;
     
-    public $id;
     public $name;    
     public $mail;
     protected $session;
@@ -34,13 +33,13 @@ class User extends DBObject
         if(! $obj instanceof User )
             return false;
         
-        if($obj->id != $this->id)
+        if($obj->name != $this->name)
             return false;
 
         return true;
     }
 
-        static function checkPassw($usr,$pw)
+    static function checkPassw($usr,$pw)
     {
         $auth=hash('sha256',$pw);
 
@@ -79,11 +78,7 @@ class User extends DBObject
 
     function isFromGroup($groupName)
     {
-        $group = Group::select(array('name'=>$groupName));
-        if(count($group)==0)
-            throw new GroupNotFoundException($groupName);
-        
-        return User2Group::get(null,$this->id,$group[0]->id) !== null;
+        return User2Group::get(null,$this->name,$groupName) !== null;
     }
 
     public function getGroups()
@@ -98,12 +93,12 @@ class User extends DBObject
             throw new CannotModifyYourselfException();
         }
 
-        if(User2Group::get(null,$this->id,$g->id))
+        if(User2Group::get(null,$this->name,$g->name))
             return true;
 
         $u2g = new User2Group();
-        $u2g->user = $this->id;
-        $u2g->grp = $g->id;
+        $u2g->user = $this->name;
+        $u2g->grp = $g->name;
         $u2g->insert();
         return;
     }
@@ -115,7 +110,7 @@ class User extends DBObject
             throw new CannotModifyYourselfException();
         }
 
-        $del = User2Group::get(null,$this->id,$g->id);
+        $del = User2Group::get(null,$this->name,$g->name);
         if($del === null)
             return true;
         
@@ -124,22 +119,22 @@ class User extends DBObject
 
     static  function selectQry()
     {
-        return "SELECT id,name,auth,session,mail FROM users";
+        return "SELECT name,auth,session,mail FROM users";
     }
 
     static function getQry()
     {
-        return "SELECT id,name,auth,session,mail FROM users WHERE id=? LIMIT 1";
+        return "SELECT name,auth,session,mail FROM users WHERE id=? LIMIT 1";
     }
     	
     static function insertQry()
     {
-        return "INSERT INTO users (id,name,auth,session,mail) VALUES (:id, :name, :auth, :session, :mail)";
+        return "INSERT INTO users (name,auth,session,mail) VALUES ( :name, :auth, :session, :mail)";
     }
 
     static function updateQry()
     {
-        return "UPDATE users SET name=:name, auth=:auth, session=:session, mail=:mail WHERE id=:id";
+        return "UPDATE users SET auth=:auth, session=:session, mail=:mail WHERE name=:name";
     }
     
     static function deleteQry()
@@ -149,7 +144,7 @@ class User extends DBObject
 
     function delete()
     {
-        return static::$db->execute("DELETE FROM users WHERE id=?",array($this->id));
+        return static::$db->execute("DELETE FROM users WHERE name=?",array($this->name));
     }
 }
 

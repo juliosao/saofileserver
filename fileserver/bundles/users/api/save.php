@@ -20,18 +20,13 @@ class saveUser extends JSONApp
 
         // Check for user to modify
         $saveUsr=$currentUsr;
-        if(isset($argv['id']))
+        if(isset($argv['name']))
         {
-            $users=User::select(array('id'=>$argv['id']));
-            if(count($users)==0)
-            {
-                throw new UserNotFoundException($argv['id']);
-            }
-            $saveUsr=$users[0];
+            $saveUsr=User::get(array('name'=>$argv['name']));
         }        
 
         // Check for authorization to modify the user
-        if($currentUsr->id == $saveUsr->id )
+        if($currentUsr->name == $saveUsr->name )
         {
             if(!User::checkPassw($saveUsr->name,$argv['cpw']))
             {
@@ -64,7 +59,7 @@ class saveUser extends JSONApp
 
         $saveUsr->update();
     
-        return $users[0];
+        return $saveUsr;
     }
 }
 

@@ -45,7 +45,7 @@ class Directory extends FileSystemObject {
 
     public function childDirs()
     {
-        $result=array();
+        $result=[];
         //error_log("CHILDIRS:".$this->path);
         
         $r=opendir($this->path);
@@ -69,7 +69,7 @@ class Directory extends FileSystemObject {
     
     public function childFiles()
     {
-        $result=array();
+        $result=[];
         //error_log("CHILFILES:".$this->path);
         
         $r=opendir($this->path);

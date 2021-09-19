@@ -13,9 +13,9 @@ class listUsers extends JSONApp
 
     function main($args)
     {
-        $filter=array();
-        if(isset($args['id']))
-            $filter['id']=$args['id'];
+        $filter=[];
+        if(isset($args['name']))
+            $filter['name']=$args['name'];
 
         $users=User::select($filter);
         return($users);

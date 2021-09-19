@@ -11,8 +11,8 @@ use NotFoundException;
 abstract class DBObject
 {
 	/*
-	static $fields=array();
-	static $keys=array();
+	static $fields=[];
+	static $keys=[];
 	static $table='';
 	// Mandatory
 	static $selectQry = null;
@@ -31,9 +31,9 @@ abstract class DBObject
 
 	public function __construct(){}
 
-	public static function select($filters=array(),$ctorArgs=array())
+	public static function select($filters=[],$ctorArgs=[])
 	{
-		$where=array();
+		$where=[];
 		foreach($filters as $key => $unused)
 		{
 			$where[]=$key.'= :'.$key;
@@ -45,7 +45,7 @@ abstract class DBObject
 			return static::$db->query(static::selectQry().' WHERE '.implode(' AND ',$where), $filters,static::class,$ctorArgs);
 	}
 
-	public static function get($ctorArgs=array())
+	public static function get($ctorArgs=[])
 	{
 		$args=func_get_args();
 		$argv=array_shift($args);

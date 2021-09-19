@@ -18,7 +18,9 @@ class delete extends JSONApp{
 
         $basedir = FileSystemObject::fromPath(Cfg::get()->fso->basedir);
         $path = $args["path"];
+        error_log($path);
         $objDel = $basedir->getChild($path);
+        error_log($objDel->path);
         $objDel->delete();
         return true;
     }

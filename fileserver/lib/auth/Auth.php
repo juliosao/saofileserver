@@ -23,7 +23,7 @@ class Auth
             return false;
         }
             
-        $lst = User::select(array('id'=>$_SESSION['usr'],'session'=>session_id()));
+        $lst = User::select(array('name'=>$_SESSION['usr'],'session'=>session_id()));
         
         if(count($lst)!=1)
         {
@@ -66,7 +66,7 @@ class Auth
     
     static function set($c)
     {
-        $_SESSION['usr']=$c->id;
+        $_SESSION['usr']=$c->name;
         self::$current=$c;        
     }
 }
