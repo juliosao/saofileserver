@@ -19,7 +19,7 @@ catch(Exception $ex)
 <html>
     <head>
     <?php HTMLApp::putHeaders('Login'); ?>
-    <script type="text/javascript" src="bundles/auth/js/auth.js"></script>
+    <script type="text/javascript" src="js/auth.js"></script>
     <script type="text/javascript">
     async function login()
     {

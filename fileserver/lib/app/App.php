@@ -85,8 +85,11 @@ abstract class App {
 		{
 			$name = Cfg::get()->app->name;
 			$pos = strpos($_SERVER['PHP_SELF'],$name);
-			self::$appURL = $pos!==false ? substr($_SERVER['PHP_SELF'],0,$pos).$name.'/' : '/';
+			self::$appURL = $pos!==false ? substr($_SERVER['PHP_SELF'],0,$pos).$name : '';
 		}
-		return self::$appURL.$file;
+
+		$file = rtrim($file,'/');
+
+		return self::$appURL.'/'.$file;
 	}
 }

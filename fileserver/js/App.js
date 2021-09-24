@@ -4,7 +4,7 @@ class App
 	static async jsonRemoteCall(url,data)
 	{
 		const response = await fetch(
-			url,
+			App.baseUrl+url,
 			{
 				method:'POST',
 				body: JSON.stringify(data),
@@ -29,7 +29,7 @@ class App
 	static async blobRemoteCall(url,data)
 	{
 		const response = await fetch(
-			url,
+			App.baseUrl+url,
 			{
 				method:'POST',
 				body: data,
@@ -53,7 +53,7 @@ class App
 	static async plainRemoteCall(url,data)
 	{
 		const response = await fetch(
-			url,
+			App.baseUrl+url,
 			{
 				method:'POST',
 				body: data,
@@ -90,13 +90,9 @@ class App
 	{
 		var current = document.currentScript.src;
 		var base = current.split('/').slice(0,-2);
-		App.baseUrl = base.join('/')
+		App.baseUrl = base.join('/')+"/"
 	}
 
-	static goBundle(bundle)
-	{
-		window.location.href = App.baseUrl+"bundles/"+bundle;
-	}
 }
 
 App.setup();

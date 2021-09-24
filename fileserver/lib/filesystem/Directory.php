@@ -96,14 +96,14 @@ class Directory extends FileSystemObject {
             $dirs=$this->childDirs();
             foreach($dirs as $d)
             {
-                error_log("Entrando a ".$d->getName());
+                //error_log("Entrando a ".$d->getName());
                 $ret=$d->delete();
             }
             
             $files=$this->childFiles();
             foreach($files as $f)
             {
-                error_log("Entrando a ".$f->getName());
+                //error_log("Entrando a ".$f->getName());
                 $ret=$f->delete();
                 if($ret==false)
                 {

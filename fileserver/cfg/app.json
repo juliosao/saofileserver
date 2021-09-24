@@ -1,8 +1,8 @@
 {
     "app":{
         "name":"sfs",
-        "main":"bundles/explorer/index.php",
-        "setup":"bundles/setup/index.php"
+        "main":"explorer/index.php",
+        "setup":"setup/index.php"
     },
     "bbdd":{
         "database":"mysql:host=localhost;dbname=saofileserver;charset=utf8",
@@ -10,6 +10,6 @@
         "pass":"saofileserver"
     },
     "fso":{
-        "basedir":"/mnt/data"
+        "basedir":"/mnt/data/kodi"
     }
 }

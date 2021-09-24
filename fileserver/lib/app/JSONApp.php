@@ -28,7 +28,7 @@ abstract class JSONApp extends App{
 			ob_start();
 			$this->params=json_decode(file_get_contents('php://input'),true);
 			$res = json_encode($this->main($this->params, true));
-			error_log("Res:".$res);
+			//error_log("Res:".$res);
 			echo $res;
 			ob_flush();
 		}

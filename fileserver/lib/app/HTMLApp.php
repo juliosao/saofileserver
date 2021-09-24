@@ -9,7 +9,7 @@ abstract class HTMLApp extends App
 {
 
 	//Puts HTMLApp extends App header
-	public function putHeaders($title)
+	public static function putHeaders($title)
 	{
 		?>
 		<title><?=$title ?></title>
@@ -17,7 +17,7 @@ abstract class HTMLApp extends App
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="<?=self::getAppUrl('styles/w3.css');?>" >
-		<link rel="stylesheet" href="<?=self::getAppUrl('main/main.css');?>" >
+		<link rel="stylesheet" href="<?=self::getAppUrl('styles/main.css');?>" >
 		<script src="<?=self::getAppUrl('js/App.js');?>" ></script>
 		<script src="<?=self::getAppUrl('js/Ui.js');?>" ></script>
 		<script type="text/javascript" >
