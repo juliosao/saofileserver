@@ -57,7 +57,7 @@ class fsoDir extends fsoObj
 
 	async mkdir(newDir)
 	{
-		await App.jsonRemoteCall("api/fso/mkdir.php",{'path':this.link,'name':newDir});
+		await App.jsonRemoteCall("api/fso/mkdir.php",{'path':this.link,'name': encodeURIComponent(newDir)});
 	}
 
 	async upload(files,progressCallBack)
@@ -102,7 +102,7 @@ class fsoDir extends fsoObj
 			};
 		}
 
-		xhttp.open("POST", "api/fso/upload.php", false);
+		xhttp.open("POST", App.baseUrl+"api/fso/upload.php", false);
 		xhttp.send(data);
 
 		if(xhttp.status == 200) 
@@ -128,7 +128,7 @@ class fsoFile extends fsoObj
 	explore()
 	{
 		var link = document.createElement('a');
-		link.setAttribute('href', "api/fso/download.php?path="+this.link);
+		link.setAttribute('href', App.baseUrl+"api/fso/download.php?path="+encodeURIComponent(this.link));
 		link.setAttribute('download', 'Filename.jpg');
 		link.setAttribute('target', '_blank');
 		link.style.display = 'none';

@@ -19,7 +19,7 @@
 			$dirname='';
 			
 			if(isset($args['path'])) {
-				$dirname=str_replace('..','.',$args['path']);
+				$dirname=str_replace('..','.',urldecode($args['path']));
 			}
 			error_log("Buscando ".$dirname);
 			
@@ -59,7 +59,7 @@
 				{
 					$dirs[$d->getName()]=[
 						'name'=>$d->getName(),
-						'link'=>$d->getRelativePath($basedir)
+						'link'=>urlencode($d->getRelativePath($basedir))
 						];
 				}
 				
@@ -69,7 +69,7 @@
 				{
 					$files[$f->getName()]=[
 						'name'=>$f->getName(),
-						'link'=>$f->getRelativePath($basedir),
+						'link'=>urlencode($f->getRelativePath($basedir)),
 						'extension'=>$f->extension(),
 						'mime'=>$f->mime()
 						];

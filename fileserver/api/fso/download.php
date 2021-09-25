@@ -20,9 +20,10 @@ class download extends App
         }
 
         $basedir=FileSystemObject::fromPath(Cfg::get()->fso->basedir);
-        $this->file = $basedir->getChild($filename);
+        $this->file = $basedir->getChild(urldecode($_REQUEST['path']));
         if(!$this->file instanceof RegularFile)
         {
+            error_log("No es un fichero: '{$this->file->path}'");
             throw new FileSystemException($this->file->path);
         }
  
@@ -106,7 +107,7 @@ class download extends App
         header('Expires: '.gmdate('D, d M Y H:i:s', time()+60000) . ' GMT'); //2592000
         header("Cache-Control: max-age=60000, public"); //2592000
         header('Pragma: public');
-        header("Accept-Ranges: 0-".$this->size-1);
+        header("Accept-Ranges: 0-".($this->size-1));
 
         $this->setBuffered(false);
     }

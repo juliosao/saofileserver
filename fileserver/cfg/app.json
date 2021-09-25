@@ -1,8 +1,8 @@
 {
     "app":{
         "name":"sfs",
-        "main":"explorer/index.php",
-        "setup":"setup/index.php"
+        "main":"views/explorer/index.php",
+        "setup":"views/setup/index.php"
     },
     "bbdd":{
         "database":"mysql:host=localhost;dbname=saofileserver;charset=utf8",

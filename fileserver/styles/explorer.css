@@ -27,47 +27,47 @@
 
 /* Folder icons */
 .folder{
-	background-image:url('../../../styles/icons/folder.svg');
+	background-image:url('icons/folder.svg');
 }
 
 /* Icons by filetypes */
 .file{
-	background-image:url('../../../styles/icons/file.svg');
+	background-image:url('icons/file.svg');
 }
 
 .avi, .mp4, .mpg, .divx, .xvid, .mkv, .mov, .ogv, .webm{
-	background-image: url('../../../styles/icons/mov.svg')!important;
+	background-image: url('icons/mov.svg')!important;
 
 }
 
 .mp3, .flac, .wav, .pcm, .aac, .ogg{
-	background-image: url('../../../styles/icons/mp3.svg')!important;
+	background-image: url('icons/mp3.svg')!important;
 }
 
 .txt, .doc, .docx, .odt{
-	background-image: url('../../../styles/icons/doc.svg')!important;
+	background-image: url('icons/doc.svg')!important;
 }
 
 .epub{
-	background-image: url('../../../styles/icons/epub.svg')!important;
+	background-image: url('icons/epub.svg')!important;
 }
 
 .ini, .url{
-	background-image: url('../../../styles/icons/ini.svg')!important;
+	background-image: url('icons/ini.svg')!important;
 }
 
 .jpeg, .jpg, .gif, .svg, .png{
-	background-image: url('../../../styles/icons/jpg.svg')!important;
+	background-image: url('icons/jpg.svg')!important;
 }
 
 .fsoexplorer-del{
-	background-image: url('../../../styles/toolbar/delete.svg');
+	background-image: url('toolbar/delete.svg');
 }
 
 .fsoexplorer-folder-add{
-	background-image: url('../../../styles/toolbar/folder-add.svg');
+	background-image: url('toolbar/folder-add.svg');
 }
 
 .fsoexplorer-home {
-	background-image: url('../../../styles/toolbar/home.svg');
+	background-image: url('toolbar/home.svg');
 }
