@@ -2,7 +2,6 @@
 
 require_once('../../lib/Util.php');
 
-use Cfg;
 use app\JSONApp;
 use filesystem\Directory;
 

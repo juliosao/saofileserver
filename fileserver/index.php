@@ -14,28 +14,38 @@ catch(Exception $ex)
     error_log("Tenemos que hacer setup");
     header('Location: '.App::getAppURL().Cfg::get()->app->setup,true,302);   
 }
-?>
-<!DOCTYPE html>
-<html>
-    <head>
-    <?php HTMLApp::putHeaders('Login'); ?>
-    <script type="text/javascript" src="js/auth.js"></script>
-    <script type="text/javascript">
-    async function login()
+
+class Main extends HTMLApp
+{
+    function __construct()
     {
-        try
-        {
-            var auth = await Auth.login(document.getElementById('usr').value,document.getElementById('pwd').value);
-            window.location.href=App.main;
-        }
-        catch(ex)
-        {
-            alert(""+ex);
-        }
-        
+        $this->scripts[]='js/auth.js';
     }
-    </script>
-    <body>
+
+    function header($args)
+    {
+?>
+        <script type="text/javascript">
+        async function login()
+        {
+            try
+            {
+                var auth = await Auth.login(document.getElementById('usr').value,document.getElementById('pwd').value);
+                window.location.href=App.main;
+            }
+            catch(ex)
+            {
+                alert(""+ex);
+            }
+            
+        }
+        </script>
+<?php
+    }
+
+    function body($args)
+    {
+?>
         <div class="w3-animate-opacity w3-modal " style="display:block">
             <div class="w3-modal-content w3-padding w3-border w3-card">
                 <h1>Login</h1>
@@ -55,5 +65,9 @@ catch(Exception $ex)
                 </div>
             </div>            
         </div>
-    </body>
-</html>
+<?php
+    }
+}
+
+$m = new Main();
+$m->run();

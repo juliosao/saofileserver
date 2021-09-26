@@ -1,0 +1,6 @@
+{
+    "explorer":{
+        "scripts":["js/player.js"],
+        "styles":["styles/player.css"]        
+    }
+}

@@ -20,8 +20,13 @@ TARNAME=$(TARGET)-$(VERSION).tgz
 DEBTMPPATH=$(TARGET)-$(VERSION)
 DEBCTRLDIR=$(TARGET)-$(VERSION)/DEBIAN
 DEBCTRLFILE=$(TARGET)-$(VERSION)/DEBIAN/control
+PHPFILES=$(shell find . -name *.php)
 
 .phony:help clean deb
+
+test:
+	for i in $(PHPFILES); do \
+		php -l $$i; if test $$? -ne 0; then exit 1; fi; done
 
 help:
 	@echo "USE:"

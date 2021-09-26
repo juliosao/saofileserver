@@ -7,23 +7,73 @@ use \Cfg;
 //Represents a HTMLApp extends App
 abstract class HTMLApp extends App
 {
+	protected $scripts = ['js/App.js','js/Ui.js'];
+	protected $styles = [ 'styles/w3.css', 'styles/main.css'];
+	protected $title;
+	protected $name;
+
+	public function __construct()
+	{
+		$this->title = static::class;
+		$this->name = static::class;
+	}
+
+	public function header($args)
+	{}
+
+	public abstract function body($args);
 
 	//Puts HTMLApp extends App header
-	public static function putHeaders($title)
+	public function main($args)
 	{
-		?>
-		<title><?=$title ?></title>
+		$bundles = Bundle::select(['enabled'=>true]);
+		foreach($bundles as $bundle)
+		{
+			$cfg = $bundle->load($this->name); 
+			if($cfg != null)
+			{
+				if(isset($cfg->scripts))
+				{
+					foreach($cfg->scripts as $script)
+						$this->$scripts[] = $script;
+				}
+
+				if(isset($cfg->styles))
+				{
+					foreach($cfg->styles as $style)
+						$this->$styles[] = $style;
+				}
+			}
+		}
+?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><?=$this->title ?></title>
 		<meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="<?=self::getAppUrl('styles/w3.css');?>" >
-		<link rel="stylesheet" href="<?=self::getAppUrl('styles/main.css');?>" >
-		<script src="<?=self::getAppUrl('js/App.js');?>" ></script>
-		<script src="<?=self::getAppUrl('js/Ui.js');?>" ></script>
+<?php
+		foreach($this->styles as $style)
+		{
+?>		<link rel="stylesheet" href="<?=self::getAppUrl($style);?>"><?php
+		}
+
+		foreach($this->scripts as $script)
+		{
+?>		<script src="<?=self::getAppUrl($script);?>" ></script><?php
+		}
+?>		
 		<script type="text/javascript" >
 			App.main = "<?=App::getAppURL(Cfg::get()->app->main);?>";
 		</script>
-		<?php
+<?php $this->header($args); ?>		
+	</head>
+	<body>
+<?php $this->body($args); ?>
+	</body>
+</html>
+<?php 
 	}
 
 }
