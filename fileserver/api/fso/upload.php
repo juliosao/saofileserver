@@ -1,13 +1,11 @@
 <?php
 require_once('../../lib/Util.php');
 
-use SfsException;
 use app\App;
 use filesystem\FileExistsException;
 use filesystem\Directory;
 use filesystem\RegularFile;
 use filesystem\FileSystemObject;
-use NotFoundException;
 
 class Upload extends App
 {
@@ -18,8 +16,6 @@ class Upload extends App
     }
 
     public function main($args) {
-	    $ok=[];
-	    $ko=[];
         $basedir=Cfg::get()->fso->basedir;
         error_log("Se quiere subir ficheros");
         error_log(json_encode($_FILES));

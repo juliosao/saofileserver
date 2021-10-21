@@ -29,6 +29,7 @@ class Bundle extends DBObject
 
     function load($for)
     {
+        $for = strtolower($for);
         $path = sprintf('%s/bundles/%s/',App::getAppPath(),$this->bundle);
 
         if(!file_exists($path.'cfg.json'))

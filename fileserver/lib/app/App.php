@@ -13,6 +13,7 @@ abstract class App {
 	private static $appURL = null;
 	protected static $current = null;
 	protected $result;
+	protected $buffered=False;
 	static $debug = True;
 
     public function __construct($doAuth=false)
@@ -27,7 +28,6 @@ abstract class App {
 				}
 			}
 			$this->result=[];
-			$this->buffered=False;
 		}
 		catch(SfsException $fsex)
 		{

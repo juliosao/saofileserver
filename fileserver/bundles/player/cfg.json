@@ -1,6 +1,6 @@
 {
     "explorer":{
-        "scripts":["js/player.js"],
-        "styles":["styles/player.css"]        
+        "scripts":["bundles/player/js/explorer.js"],
+        "styles":["bundles/player/styles/player.css"]        
     }
 }

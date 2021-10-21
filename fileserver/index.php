@@ -3,16 +3,13 @@ require_once('lib/Util.php');
 
 use app\App;
 use app\HTMLApp;
+use auth\User;
 use database\Database;
 
-try
-{
-    Database::getInstance();
-}
-catch(Exception $ex)
+if(!User::created())
 {
     error_log("Tenemos que hacer setup");
-    header('Location: '.App::getAppURL().Cfg::get()->app->setup,true,302);   
+    header('Location: '.App::getAppURL().Cfg::get()->app->setup,true,302);
 }
 
 class Main extends HTMLApp
@@ -37,7 +34,7 @@ class Main extends HTMLApp
             {
                 alert(""+ex);
             }
-            
+
         }
         </script>
 <?php
@@ -63,7 +60,7 @@ class Main extends HTMLApp
                         <input type="reset" class="w3-button w3-row" />
                     </div>
                 </div>
-            </div>            
+            </div>
         </div>
 <?php
     }

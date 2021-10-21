@@ -17,8 +17,8 @@ class User extends DBObject
 	static $insert=null;
 	static $update=null;
 	static $delete=null;
-    
-    public $name;    
+
+    public $name;
     public $mail;
     protected $session;
     protected $auth;
@@ -32,7 +32,7 @@ class User extends DBObject
     {
         if(! $obj instanceof User )
             return false;
-        
+
         if($obj->name != $this->name)
             return false;
 
@@ -53,7 +53,7 @@ class User extends DBObject
 
         if($usr->auth!=$auth && $usr->auth!=null)
             return false;
-        
+
         $usr->session=session_id();
         $usr->update();
 
@@ -85,7 +85,7 @@ class User extends DBObject
 	{
 		return Group::fromUser($this);
     }
-    
+
     public function addGroup(Group $g)
     {
         if($this == Auth::get())
@@ -113,7 +113,7 @@ class User extends DBObject
         $del = User2Group::get(null,$this->name,$g->name);
         if($del === null)
             return true;
-        
+
         $del->delete();
     }
 
@@ -126,7 +126,7 @@ class User extends DBObject
     {
         return "SELECT name,auth,session,mail FROM users WHERE id=? LIMIT 1";
     }
-    	
+
     static function insertQry()
     {
         return "INSERT INTO users (name,auth,session,mail) VALUES ( :name, :auth, :session, :mail)";
@@ -136,7 +136,7 @@ class User extends DBObject
     {
         return "UPDATE users SET auth=:auth, session=:session, mail=:mail WHERE name=:name";
     }
-    
+
     static function deleteQry()
     {
         return null;
@@ -146,5 +146,18 @@ class User extends DBObject
     {
         return static::$db->execute("DELETE FROM users WHERE name=?",array($this->name));
     }
-}
 
+    static function created()
+    {
+        try
+        {
+            $res = static::$db->query('SELECT name FROM users LIMIT 1');
+            return count($res)>0;
+        }
+        catch(Exception $e)
+        {
+            error_log($e);
+            return false;
+        }
+    }
+}

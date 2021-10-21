@@ -29,19 +29,20 @@ abstract class HTMLApp extends App
 		$bundles = Bundle::select(['enabled'=>true]);
 		foreach($bundles as $bundle)
 		{
+			error_log("Buscando elementos para {$this->name}");
 			$cfg = $bundle->load($this->name); 
 			if($cfg != null)
-			{
+			{				
 				if(isset($cfg->scripts))
 				{
 					foreach($cfg->scripts as $script)
-						$this->$scripts[] = $script;
+						$this->scripts[] = $script;
 				}
 
 				if(isset($cfg->styles))
 				{
 					foreach($cfg->styles as $style)
-						$this->$styles[] = $style;
+						$this->styles[] = $style;
 				}
 			}
 		}

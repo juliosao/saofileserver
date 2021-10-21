@@ -8,3 +8,11 @@
 	background: blue !important;
 	margin-right: 5px;
 }
+
+.fsoplayer-icon-audio{
+	background-image: url('img/audio.svg');
+}
+
+.fsoplayer-icon-video{
+	background-image: url('img/video.svg');
+}

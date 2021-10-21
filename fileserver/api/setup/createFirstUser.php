@@ -10,42 +10,23 @@ class Setup extends JSONApp
 {
     function main($args)
     {
-        $usr=isset($args['usr']) ? $args['usr'] : null;
-        $pwd=isset($args['pwd']) ? $args['pwd'] : null;
         $appUsr=isset($args['appUsr']) ? $args['appUsr'] : null;
 		$appPwd=isset($args['appPwd']) ? $args['appPwd'] : null;
 
-        if($usr==null || $pwd==null)
-        {
-            throw new UnauthorizedException();
-        }
+        $db=Database::getInstance();
 
-        $db=new Database(null,$usr,$pwd);
-
-        $res=$db->execute("INSERT INTO groups (name) VALUES ('admin')");
+        $res=$db->execute('INSERT INTO users (name,auth) VALUES (?,?)',[$appUsr,hash('sha256',$appPwd)]);
         if($res<0)
         {
-            throw new SfsException("Admin group");
+            throw new SfsException('First user');
         }
 
-        $res=$db->execute("INSERT INTO groups (name) VALUES ('users')");
+        $res=$db->execute('INSERT INTO user2groups (user,grp) VALUES (?,"admin"),(?,"users")',[$appUsr,$appUsr]);
         if($res<0)
         {
-            throw new SfsException("Users group");
-        }
-        
-        $res=$db->execute("INSERT INTO users (name,auth) VALUES (?,?)",[$appUsr,hash('sha256',$appPwd)]);
-        if($res<0)
-        {
-            throw new SfsException("First user");
+            throw new SfsException('First user');
         }
 
-        $res=$db->execute("INSERT INTO user2groups (user,grp) VALUES (?,'admin'),(?,'users')",[$appUsr,$appUsr]);
-        if($res<0)
-        {
-            throw new SfsException("First user");
-        }
-            
         return True;
     }
 }
