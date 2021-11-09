@@ -36,7 +36,7 @@ class fsoExplorerPlayer {
 		if(this.canPlayAudios)
 		{
 			let btn = document.createElement('button');
-			btn.classList.add('fsoexplorer-icon','fsoplayer-icon-audio','w3-button');
+			btn.classList.add('sfs-icon','fsoplayer-icon-audio','w3-button');
 			btn.onclick=(() => window.open('../player/index.php?file='+dir.link));
 			this.mainToolBar.appendChild(btn);
 		}
@@ -44,7 +44,7 @@ class fsoExplorerPlayer {
 		if(this.canPlayVideos)
 		{
 			let btn = document.createElement('button');
-			btn.classList.add('fsoexplorer-icon','fsoplayer-icon-video','w3-button');
+			btn.classList.add('sfs-icon','fsoplayer-icon-video','w3-button');
 			btn.onclick=(() => window.open('../player/index.php?file='+dir.link+"&data-mode=video"));
 			this.mainToolBar.appendChild(btn);
 		}
@@ -60,7 +60,7 @@ class fsoExplorerPlayer {
 				let span = document.createElement('span');
 				elem.href='../player/index.php?file='+file.link;
 				elem.target='_blank';
-				span.classList.add('fsoexplorer-icon','fsoplayer-icon-audio','w3-button');
+				span.classList.add('sfs-icon','fsoplayer-icon-audio','w3-button');
 				elem.appendChild(span);
 				toolbox.appendChild(elem);
 				this.canPlayAudios=true;
@@ -75,7 +75,7 @@ class fsoExplorerPlayer {
 				let span = document.createElement('span');
 				elem.href='../player/index.php?file='+file.link+"&data-mode=video";
 				elem.target='_blank';
-				span.classList.add('fsoexplorer-icon','fsoplayer-icon-video','w3-button');
+				span.classList.add('sfs-icon','fsoplayer-icon-video','w3-button');
 				elem.appendChild(span);
 				toolbox.appendChild(elem);
 				this.canPlayVideos=true;

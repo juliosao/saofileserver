@@ -34,7 +34,6 @@ class Main extends HTMLApp
             {
                 alert(""+ex);
             }
-
         }
         </script>
 <?php

@@ -79,16 +79,20 @@ class fsoExplorer
 		this.extraTools.classList.add('fso-explorer-toolbar')
 		toolBar.appendChild(this.extraTools);
 
+		let btn = document.createElement('button');
+		btn.classList.add('sfs-icon','fsoexplorer-home','w3-button');
+		btn.onclick = (() => this.goHome());
+		this.extraTools.appendChild(btn);
 
-		let home = document.createElement('button');
-		home.classList.add('fsoexplorer-icon','fsoexplorer-home','w3-button');
-		home.onclick = (() => this.goHome());
-		this.extraTools.appendChild(home);
+		btn = document.createElement('button');
+		btn.classList.add('sfs-icon','fsoexplorer-folder-add','w3-button');
+		btn.onclick = (() => this.mkdir());
+		this.extraTools.appendChild(btn);
 
-		let mkdir = document.createElement('button');
-		mkdir.classList.add('fsoexplorer-icon','fsoexplorer-folder-add','w3-button');
-		mkdir.onclick = (() => this.mkdir());
-		this.extraTools.appendChild(mkdir);
+		btn = document.createElement('button');
+		btn.classList.add('sfs-icon','fsoexplorer-config','w3-button');
+		btn.onclick = (() => window.open('../config/index.php'))  ;
+		this.extraTools.appendChild(btn);
 
 		this.progressBar=document.createElement('progress');
 		this.progressBar.hidden=true;
@@ -121,11 +125,11 @@ class fsoExplorer
 	renderActions(obj)
 	{
 		let td = document.createElement('div');
-		td.classList.add('fsoexplorer-tools');
+		td.classList.add('sfs-tools');
 		if(obj.name!='..')
 		{						
 			let del=document.createElement('button');
-			del.classList.add('fsoexplorer-icon','fsoexplorer-del','w3-button');
+			del.classList.add('sfs-icon','fsoexplorer-del','w3-button');
 
 			let self = this;
 			del.onclick=function()
@@ -140,16 +144,16 @@ class fsoExplorer
 	renderIcon(obj)
 	{	
 		let td = document.createElement('div');
-		td.classList.add('fsoexplorer-tools');
+		td.classList.add('sfs-tools');
 
 		let img = document.createElement('div');
 		if( obj instanceof fsoDir )
 		{
-			img.classList.add('fsoexplorer-icon','folder');
+			img.classList.add('sfs-icon','folder');
 		}
 		else
 		{
-			img.classList.add('fsoexplorer-icon','file');
+			img.classList.add('sfs-icon','file');
 			if(obj.extension!='')
 			{			
 				img.classList.add(obj.extension);
@@ -163,7 +167,7 @@ class fsoExplorer
 	renderName(obj)
 	{
 		let spn = document.createElement('div');
-		spn.classList.add('fsoexplorer-name');
+		spn.classList.add('sfs-icon-name');
 		spn.appendChild(document.createTextNode(obj.name));
 		return spn;
 	}
@@ -224,7 +228,7 @@ class fsoExplorer
 		UI.clear(this.workSpace);
 
 		let list = document.createElement('ul');
-		list.classList.add('w3-ul','w3-border','fsoexplorer-list');		
+		list.classList.add('w3-ul','w3-border','sfs-icon-list');		
 
 		for(let i in this.plugins )
 		{

@@ -124,7 +124,7 @@ class User extends DBObject
 
     static function getQry()
     {
-        return "SELECT name,auth,session,mail FROM users WHERE id=? LIMIT 1";
+        return "SELECT name,auth,session,mail FROM users WHERE name=? LIMIT 1";
     }
 
     static function insertQry()

@@ -14,7 +14,8 @@ class loadUser extends JSONApp
 
     function main($args)
     {
-        $user=isset($args['name']) ? User::get($args['name']) : Auth::$current;        
+        error_log("Nos piden usuario:".json_encode($args));
+        $user=isset($args['user']) ? User::get(null,$args['user']) : Auth::$current;        
 
         return $user;
     }

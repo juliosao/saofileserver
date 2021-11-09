@@ -1,30 +1,3 @@
-.fsoexplorer-list > li{
-	display: flex;
-}
-
-.fsoexplorer-tools{
-	display: table-cell;
-	vertical-align: middle;
-	flex-shrink: 0;
-}
-
-.fsoexplorer-name{
-	display: table-cell;
-	word-wrap:break-word;
-	vertical-align: middle;
-	flex-grow: 1;
-	margin: auto 10px;
-}
-
-/* Icons in file explorer area */
-.fsoexplorer-icon{
-	display: table-cell;
-	background-repeat: no-repeat;
-	height:48px!important;
-	width:48px!important;
-	background-size: 100% 100%;
-}
-
 /* Folder icons */
 .folder{
 	background-image:url('icons/folder.svg');
@@ -70,4 +43,8 @@
 
 .fsoexplorer-home {
 	background-image: url('toolbar/home.svg');
+}
+
+.fsoexplorer-config {
+	background-image: url('toolbar/config.svg');
 }

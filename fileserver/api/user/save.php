@@ -22,7 +22,7 @@ class saveUser extends JSONApp
         $saveUsr=$currentUsr;
         if(isset($argv['name']))
         {
-            $saveUsr=User::get(array('name'=>$argv['name']));
+            $saveUsr=User::get(null,array('name'=>$argv['name']));
         }        
 
         // Check for authorization to modify the user

@@ -1,15 +1,24 @@
 <?php
-require_once('../../lib/Util.php');
+require_once('../../../lib/Util.php');
 
 use app\HTMLApp;
+
+class Main extends HTMLApp
+{
+    function __construct()
+	{
+		parent::__construct();
+		$this->title = 'SAO-Explorer';
+		$this->styles[] = 'styles/config.css';
+		$this->scripts[]='js/user.js';
+	}
+
+
+	function header($args)
+    {
 ?>
-<!DOCTYPE html>
-<html>
-	<head>
-		<?php HTMLApp::putHeaders('SAO-Player'); ?>		
-		<script type="text/javascript" src="js/user.js"></script>
-		<script type="text/javascript">
-		async function createUser()
+        <script type="text/javascript">
+async function createUser()
 		{
 			try
 			{
@@ -78,11 +87,9 @@ use app\HTMLApp;
 
 			cell = document.createElement('td');
 			btn = document.createElement('button');
-			btn.classList.add('w3-button');
 			btn.onclick=createUser;
-			img = document.createElement('img');
-			img.src = "../../styles/toolbar/user-add.svg"
-			btn.appendChild(img);
+			btn.classList.add('sfs-icon', 'sfs-config-button-useradd', 'w3-button')
+						
 			cell.appendChild(btn);
 			row.appendChild(cell);
 			grp.appendChild(row);
@@ -99,19 +106,13 @@ use app\HTMLApp;
 				cell = document.createElement('td');
 
 				let btn = document.createElement('button');
-				btn.classList.add('w3-button');
-				let img = document.createElement('img');
-				img.src = "../../styles/toolbar/config.svg"
-				btn.onclick = ()=>{window.open('views/details.php?id='+user.id)};
-				btn.appendChild(img);
+				btn.classList.add('sfs-icon', 'sfs-config-button-config', 'w3-button')
+				btn.onclick = ()=>{window.open('details.php?user='+user.name)};
 				cell.appendChild(btn);
 
 				btn = document.createElement('button');
-				btn.classList.add('w3-button');
-				btn.onclick = ()=>{deleteUser(user)};
-				img = document.createElement('img');
-				img.src = "../../styles/toolbar/user-del.svg"
-				btn.appendChild(img);
+				btn.classList.add('sfs-icon', 'sfs-config-button-userdel', 'w3-button')
+				btn.onclick = ()=>{deleteUser(user)};				
 				cell.appendChild(btn);
 				
 				row.appendChild(cell);
@@ -122,13 +123,22 @@ use app\HTMLApp;
 
 			UI.clear("users").appendChild(tbl);
 		}
-		</script>
-	</head>
-	<body onload="loadUsers()">
+
+		window.addEventListener('load',loadUsers);
+        </script>
+<?php
+    }
+
+    function body($args)
+    {
+?>
 		<h1>Usuarios</h1>	
 		<div class="w3-container">
 			<div id="users" class="w3-responsive">
 			</div>
 		</div>
-	</body>
-</html>
+<?php
+	}
+}
+$m = new Main();
+$m->run();

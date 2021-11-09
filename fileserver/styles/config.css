@@ -1,3 +1,15 @@
-.config-users {
-	background-image: url('../../../styles/icons/users.svg');
+.sfs-config-icon-users {
+	background-image: url('icons/users.svg');
+}
+
+.sfs-config-button-config {
+	background-image: url('toolbar/config.svg');
+}
+
+.sfs-config-button-useradd {
+	background-image: url('toolbar/user-add.svg');
+}
+
+.sfs-config-button-userdel {
+	background-image: url('toolbar/user-del.svg');
 }

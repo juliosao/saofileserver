@@ -9,7 +9,7 @@ class User
 
     static async get(name)
     {       
-        let data = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/load.php",{'name':name});
+        let data = await App.jsonRemoteCall("api/user/get.php",{'user':name});
         if( data != null )
         {
             let user = new User();
@@ -20,7 +20,7 @@ class User
 
     static async list()
     {        
-        let data = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/list.php");
+        let data = await App.jsonRemoteCall("api/user/list.php");
         let result=[];
         for(let u of data)
         {
@@ -33,28 +33,28 @@ class User
 
     async save()
     {        
-        let result = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/save.php",this);
+        let result = await App.jsonRemoteCall("api/user/save.php",this);
         this.parse(result);
         return this;
     }
 
     async insert()
     {
-        let result = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/create.php",this);
+        let result = await App.jsonRemoteCall("api/user/create.php",this);
         this.parse(result);
         return this;
     }
 
     async delete()
     {
-        let result = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/delete.php",this);
+        let result = await App.jsonRemoteCall("api/user/delete.php",this);
         this.parse(result);
         return this;
     }
 
     async getGroups()
     {
-        let data = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/groups.php",this);
+        let data = await App.jsonRemoteCall("api/user/groups.php",this);
         let result=[];
         for(let g of data)
         {
@@ -66,7 +66,7 @@ class User
 
     async addGroup(group)
     {
-        let data = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/addgroup.php",{'user':this.name,'group':group});
+        let data = await App.jsonRemoteCall("api/user/addgroup.php",{'user':this.name,'group':group});
         let result=[];
         for(let g of data)
         {
@@ -78,7 +78,7 @@ class User
 
     async removeGroup(group)
     {
-        let data = await App.jsonRemoteCall(App.baseUrl+"bundles/users/api/removegroup.php",{'user':this.name,'group':group});
+        let data = await App.jsonRemoteCall("api/user/removegroup.php",{'user':this.name,'group':group});
         let result=[];
         for(let g of data)
         {

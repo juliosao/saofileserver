@@ -1,29 +1,34 @@
 <?php
-require_once('../../lib/Util.php');
+require_once('../../../lib/Util.php');
 use auth\Auth;
 use app\HTMLApp;
 
-Auth::checkSession();
-$name=isset($_GET['name']) ? $_GET['name'] : Auth::$current->name;
-$imAdmin = Auth::$current->isFromGroup('admin');
 
+class Main extends HTMLApp
+{
+    function __construct()
+	{
+        Auth::checkSession();
+        $this->name= $this->getParam('user',Auth::$current->name);
+        $this->imAdmin = Auth::$current->isFromGroup('admin');
+
+        $this->title = 'SAO-Explorer';
+		$this->styles[] = 'styles/config.css';
+		$this->scripts[]='js/user.js';
+        $this->scripts[]='js/group.js';
+    }
+
+    function header($args)
+    {
 ?>
-<!DOCTYPE html>
-<html>
-	<head>
-		<?php HTMLApp::putHeaders('Usuario actual'); ?>		
-        <script type="text/javascript" src="../js/user.js"></script>
-        <script type="text/javascript" src="../../groups/js/group.js"></script>
-        <script rel="stylesheet" href="../../../styles/main.css"></script>
-		<script type="text/javascript">
-
+<script type="text/javascript">
         let usr = null;
 
-		async function loadUser()
-		{
+        async function loadUser()
+        {
             try
             {
-                usr=await User.get("<?=$name?>");
+                usr=await User.get("<?=$this->name?>");
                 document.getElementById('name').value=usr.name;
                 document.getElementById('mail').value=usr.mail;
                 document.getElementById('pw').value="";
@@ -35,12 +40,12 @@ $imAdmin = Auth::$current->isFromGroup('admin');
                 alert(""+ex);
             }
         }
-        
+
         async function putGroups(usr)
         {
-			let grp = UI.clear('groups-editor');
-            
-<?php if($imAdmin) { ?>         
+            let grp = UI.clear('groups-editor');
+    
+<?php if($this->imAdmin) { ?>         
             let row = document.createElement('tr');
             let cell = document.createElement('td');
             let input = document.createElement('select');
@@ -49,7 +54,7 @@ $imAdmin = Auth::$current->isFromGroup('admin');
             input.classList.add('w3-select');
             groupsCombo(input);
 
-			cell.appendChild(input);
+            cell.appendChild(input);
             row.appendChild(cell);
             
             let btn = UI.button(UI.image("../../../styles/toolbar/plus.svg"));
@@ -73,8 +78,8 @@ $imAdmin = Auth::$current->isFromGroup('admin');
                 row = document.createElement('tr');
                 
                 row.appendChild(UI.cell(g.name));
-<?php if($imAdmin) { ?> 
-                
+<?php if($this->imAdmin) { ?> 
+        
                 btn = UI.button(UI.image("../../../styles/toolbar/delete.svg"));
                 btn.classList.add('w3-button');
                 btn.onclick = async () => { 
@@ -92,7 +97,7 @@ $imAdmin = Auth::$current->isFromGroup('admin');
             }
         }
 
-<?php if($imAdmin) { ?>
+<?php if($this->imAdmin) { ?>
         async function groupsCombo(input)
         {
             let grps = await Group.list();
@@ -109,20 +114,20 @@ $imAdmin = Auth::$current->isFromGroup('admin');
             try
             {
                 usr.mail=document.getElementById('mail').value;
-				let pw = document.getElementById('pw').value;
-				let pw2 = document.getElementById('pw2').value;
-				
-				if(pw!=pw2)
-				{
-					alert("Passwords doesnt match!")
-					return;
-				}
+                let pw = document.getElementById('pw').value;
+                let pw2 = document.getElementById('pw2').value;
+                
+                if(pw!=pw2)
+                {
+                    alert("Passwords doesnt match!")
+                    return;
+                }
 
-				if(pw2!='')
-                	usr.pw2=pw2;
+                if(pw2!='')
+                    usr.pw2=pw2;
 
-				if(pw!='')
-                	usr.pw=pw;
+                if(pw!='')
+                    usr.pw=pw;
 
 
                 await usr.save();
@@ -133,10 +138,16 @@ $imAdmin = Auth::$current->isFromGroup('admin');
                 alert(""+ex);
             }
         }
-		</script>
-	</head>
-	<body onload="loadUser()">
-		<h1>Configuracion de usuario</h1>
+
+        window.addEventListener('load',loadUser);
+    </script>
+<?php
+    }
+
+    function body($params)
+    {
+?>
+        <h1>Configuracion de usuario</h1>
 		<div class="w3-container">
             <div class="form">
                 <div class="w3-row w3-margin">
@@ -165,7 +176,7 @@ $imAdmin = Auth::$current->isFromGroup('admin');
                     <thead>
                         <tr>
                         <th>Group</th>
-<?php if($imAdmin) { ?><th>Action</th><?php } ?>
+<?php   if($this->imAdmin) { ?><th>Action</th><?php } ?>
                         </tr>
                     </thead>
                     <tbody id="groups-editor">
@@ -174,5 +185,10 @@ $imAdmin = Auth::$current->isFromGroup('admin');
                 </table>
             </div>
         </div>
-	</body>
-</html>
+<?php   
+           
+    }
+}
+
+$m = new Main();
+$m->run();

@@ -16,7 +16,7 @@ class CurrentUserCfg {
 	start(src)
 	{
 		let btn = document.createElement('button');
-		btn.classList.add('fsoexplorer-icon','fsoexplorer-icon-user','w3-button');
+		btn.classList.add('sfs-icon','sfs-icon-user','w3-button');
 		btn.onclick=(() => window.open('../user/index.php'));
 		src.extraTools.appendChild(btn);
 	}
