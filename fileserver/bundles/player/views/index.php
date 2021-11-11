@@ -1,20 +1,30 @@
 <?php
-require_once('../../lib/Util.php');
+require_once('../../../lib/Util.php');
 
+use app\Bundle;
 use app\HTMLApp;
 
-$file=urldecode($_REQUEST['file']);
-$mode=isset($_REQUEST['data-mode']) ? $_REQUEST['data-mode'] : 'audio';
+class MyApp extends HTMLApp
+{
+	function __construct()
+	{
+		parent::__construct();
+		$this->title = 'SAO-Player';
+		$this->scripts[] = 'js/fso.js';
+		$this->scripts[] = 'bundles/player/js/player.js';
+		$this->styles[] = 'bundles/player/styles/player.css';
+		
+		$this->file=urldecode($_REQUEST['file']);
+		$this->mode=isset($_REQUEST['data-mode']) ? $_REQUEST['data-mode'] : 'audio';
+	}
+
+	function body($args)
+	{
 ?>
-<!DOCTYPE html>
-<html>
-	<head>
-		<?php HTMLApp::putHeaders('SAO-Player'); ?>
-		<script type="text/javascript" src="js/player.js"></script>
-		<link rel="stylesheet" href="styles/player.css">
-	</head>
-	<body>
-		<div class="w3-container fso-player" id="player" data-src="<?=htmlentities($file)?>" data-mode="<?=$mode ?>">
-		</div>
-	</body>
-</html>
+		<div class="w3-container fso-player" id="player" data-src="<?=htmlentities($this->file)?>" data-mode="<?=$this->mode ?>">
+<?php
+	}
+}
+
+$app = new MyApp();
+$app->run();

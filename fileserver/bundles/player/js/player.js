@@ -22,33 +22,27 @@ class fsoPlayer
 	}
 
 	//Gets directory data
-	load(path,mode)
+	async load(path,mode)
 	{
 		this.path=path;
 		this.mode=mode;
+
+		let data = await App.jsonRemoteCall("api/fso/explore.php",{path:this.path})
+		// Clears old data
+		while (this.container.firstChild) {
+			this.container.removeChild(this.container.firstChild);
+		}
+
+		// Puts UI
+		this.loadPlayList(data);
+		this.putToolBar();
+		this.putPlayer(this.mode!='audio');				
 		
-		let self=this;
-
-		App.jsonRemoteCall("../explorer/api/explore.php",{path:this.path}).then(
-			function(data)
-			{		
-				// Clears old data
-				while (self.container.firstChild) {
-					self.container.removeChild(self.container.firstChild);
-				}
-
-				// Puts UI
-				self.loadPlayList(data);
-				self.putToolBar();
-				self.putPlayer(self.mode!='audio');				
-				
-				if(self.playlist.length!=1)
-					self.putPlayList();
-				
-				if(self.playlist.length>0)
-					self.play(self.playIdx);
-			}
-		);
+		if(this.playlist.length!=1)
+			this.putPlayList();
+		
+		if(this.playlist.length>0)
+			this.play(this.playIdx);		
 	}
 
 	loadPlayList(data)
@@ -147,6 +141,7 @@ class fsoPlayer
 			this.player.id=this.tag+'-player';
 			this.player.setAttribute('width','100%');				
 			this.player.setAttribute('controls','true');
+			this.player.setAttribute('autoplay','autoplay');
 			this.container.appendChild(this.player);
 			
 			this.player.className='fso-player-controls';
@@ -178,14 +173,11 @@ class fsoPlayer
 			}
 		}
 
-		this.src.src='../explorer/api/download.php?path='+this.playlist[idx].link;
+		this.src.src=App.baseUrl +  'api/fso/download.php?path='+this.playlist[idx].link;
+		this.player.autoplay = true;
 		this.player.load();
 		this.playIdx=idx;
-		self=this;
-		setTimeout(function() {
-			
-			self.player.play();	
-		}, 500);
+		setTimeout(()=>this.player.play(), 500);
 		
 	}
 }

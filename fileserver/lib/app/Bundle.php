@@ -27,6 +27,39 @@ class Bundle extends DBObject
 		Bundle::$db = Database::getInstance();
 	}
 
+    static function loadAll($for)
+    {
+        $result = [
+            'scripts' => [],
+            'styles' => []
+        ];
+
+        $bundles = Bundle::select(['enabled'=>1]);
+        foreach($bundles as $bundle)
+        {
+            $b = $bundle->load($for);
+            if($b !== null)
+            {
+                if(isset($b->scripts))
+                {
+                    foreach($b->scripts as $s)
+                        $result['scripts'][] = $s;
+                }
+
+                if(isset($b->styles))
+                {
+                    foreach($b->styles as $s)
+                        $result['styles'][] = $s;
+                }
+            }
+        }
+
+        error_log(json_encode($result,true));
+
+        return $result;
+    }
+
+
     function load($for)
     {
         $for = strtolower($for);

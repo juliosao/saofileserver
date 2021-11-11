@@ -57,7 +57,8 @@ class RegularFile extends FileSystemObject{
 
     function mime()
     {
-        //return mime_content_type($this->path);
+        return mime_content_type($this->path);
+        /*
         $fi = finfo_open(FILEINFO_MIME);
         if($fi!==false)
         {
@@ -69,7 +70,7 @@ class RegularFile extends FileSystemObject{
         {
             return 'application/octet-stream';
         }
-	
+        */
     }
 
 	public function delete()

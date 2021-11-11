@@ -1,6 +1,7 @@
 <?php
 require_once('../../lib/Util.php');
-use app\App;
+
+use app\Bundle;
 use app\HTMLApp;
 
 class Explorer extends HTMLApp

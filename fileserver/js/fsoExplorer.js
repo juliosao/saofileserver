@@ -15,7 +15,7 @@
  */
 class fsoExplorer  
 {
-	static async setup()
+	static setup()
 	{		
 		fsoExplorer.units = ['bytes','Kb','Mb','Gb','Tb','Pb','Eb'];
 		fsoExplorer.baseUnit = Math.log(1000);

@@ -10,7 +10,7 @@ class fsoExplorerPlayer {
 		}
 	}
 	//fsoPlayer initialization
-	static async setup() {
+	static setup() {
 		// Adds plugin to the controllers
 		for (var i in fsoExplorer.controllers) 
 		{
@@ -37,7 +37,7 @@ class fsoExplorerPlayer {
 		{
 			let btn = document.createElement('button');
 			btn.classList.add('sfs-icon','fsoplayer-icon-audio','w3-button');
-			btn.onclick=(() => window.open('../player/index.php?file='+dir.link));
+			btn.onclick=(() => window.open(App.baseUrl + 'bundles/player/views/index.php?file='+dir.link));
 			this.mainToolBar.appendChild(btn);
 		}
 
@@ -45,7 +45,7 @@ class fsoExplorerPlayer {
 		{
 			let btn = document.createElement('button');
 			btn.classList.add('sfs-icon','fsoplayer-icon-video','w3-button');
-			btn.onclick=(() => window.open('../player/index.php?file='+dir.link+"&data-mode=video"));
+			btn.onclick=(() => window.open(App.baseUrl + 'bundles/player/views/index.php?file='+dir.link+"&data-mode=video"));
 			this.mainToolBar.appendChild(btn);
 		}
 	}
@@ -56,13 +56,10 @@ class fsoExplorerPlayer {
 		{
 			if(fsoExplorerPlayer.audio.canPlayType(file.mime))
 			{
-				let elem = document.createElement('a');
-				let span = document.createElement('span');
-				elem.href='../player/index.php?file='+file.link;
-				elem.target='_blank';
-				span.classList.add('sfs-icon','fsoplayer-icon-audio','w3-button');
-				elem.appendChild(span);
-				toolbox.appendChild(elem);
+				let btn = document.createElement('button');
+				btn.classList.add('sfs-icon','fsoplayer-icon-audio','w3-button');
+				btn.onclick=(() => window.open(App.baseUrl + 'bundles/player/views/index.php?file='+file.link))
+				toolbox.appendChild(btn);
 				this.canPlayAudios=true;
 			}
 		}
@@ -71,13 +68,10 @@ class fsoExplorerPlayer {
 		{
 			if(fsoExplorerPlayer.video.canPlayType(file.mime))
 			{
-				let elem = document.createElement('a');
-				let span = document.createElement('span');
-				elem.href='../player/index.php?file='+file.link+"&data-mode=video";
-				elem.target='_blank';
-				span.classList.add('sfs-icon','fsoplayer-icon-video','w3-button');
-				elem.appendChild(span);
-				toolbox.appendChild(elem);
+				let btn = document.createElement('button');
+				btn.classList.add('sfs-icon','fsoplayer-icon-video','w3-button');
+				btn.onclick=(() => window.open(App.baseUrl + 'bundles/player/views/index.php?file='+file.link+"&data-mode=video"))
+				toolbox.appendChild(btn);
 				this.canPlayVideos=true;
 			}
 		}
