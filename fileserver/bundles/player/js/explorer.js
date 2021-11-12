@@ -65,6 +65,7 @@ class fsoExplorerPlayer {
 	{
 		if( file.extension=='mp3' || file.extension=='ogg' )
 		{
+			this.playlist.push('#EXTINF:-1,'+file.name);
 			this.playlist.push(App.baseUrl +  'api/fso/download.php?path='+file.link);
 			if(fsoExplorerPlayer.audio.canPlayType(file.mime))
 			{
@@ -78,6 +79,7 @@ class fsoExplorerPlayer {
 		
 		if( file.extension=='mp4' || file.extension=='ogv' || file.extension=='webm' || file.extension=='avi'|| file.extension=='mkv' )
 		{
+			this.playlist.push('#EXTINF:-1,'+file.name);
 			this.playlist.push(App.baseUrl +  'api/fso/download.php?path='+file.link);
 			if(fsoExplorerPlayer.video.canPlayType(file.mime))
 			{
