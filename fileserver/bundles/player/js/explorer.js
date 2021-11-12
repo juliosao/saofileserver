@@ -1,5 +1,6 @@
 class fsoExplorerPlayer {
 	constructor(tag) {
+		this.playlistName = 'playlist';
 		this.playlist = [];
 		this.explorer = document.getElementById(tag);
 		
@@ -26,6 +27,7 @@ class fsoExplorerPlayer {
 
 	beforeRender(src,dir)
 	{
+		this.playlist = [];
 		this.canPlayVideos = false;
 		this.canPlayAudios = false;
 		UI.clear(this.mainToolBar);
@@ -48,12 +50,22 @@ class fsoExplorerPlayer {
 			btn.onclick=(() => window.open(App.baseUrl + 'bundles/player/views/index.php?file='+dir.link+"&data-mode=video"));
 			this.mainToolBar.appendChild(btn);
 		}
+
+		if(this.playlist.length > 0)
+		{
+			this.playlistName = dir.name;
+			let btn = document.createElement('button');
+			btn.classList.add('sfs-icon','fsoplayer-icon-m3u','w3-button');
+			btn.onclick=()=>this.getM3u();
+			this.mainToolBar.appendChild(btn);
+		}
 	}
 
 	onRenderFile(src,toolbox,file)
 	{
 		if( file.extension=='mp3' || file.extension=='ogg' )
 		{
+			this.playlist.push(App.baseUrl +  'api/fso/download.php?path='+file.link);
 			if(fsoExplorerPlayer.audio.canPlayType(file.mime))
 			{
 				let btn = document.createElement('button');
@@ -66,6 +78,7 @@ class fsoExplorerPlayer {
 		
 		if( file.extension=='mp4' || file.extension=='ogv' || file.extension=='webm' || file.extension=='avi'|| file.extension=='mkv' )
 		{
+			this.playlist.push(App.baseUrl +  'api/fso/download.php?path='+file.link);
 			if(fsoExplorerPlayer.video.canPlayType(file.mime))
 			{
 				let btn = document.createElement('button');
@@ -75,6 +88,22 @@ class fsoExplorerPlayer {
 				this.canPlayVideos=true;
 			}
 		}
+	}
+
+	getM3u()
+	{
+		let lines='#EXTM3U\n' + this.playlist.join('\n');
+
+		let obj = document.createElement('a');
+		obj.setAttribute('href', 'data:audio/x-mpequrl;charset=utf-8,' + encodeURIComponent(lines));
+		obj.setAttribute('download', this.playlistName+".m3u");
+	
+		obj.style.display = 'none';
+		document.body.appendChild(obj);
+	
+		obj.click();
+	
+		document.body.removeChild(obj);
 	}
 }
 

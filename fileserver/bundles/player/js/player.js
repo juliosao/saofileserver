@@ -151,10 +151,9 @@ class fsoPlayer
 			this.src.id=this.tag+'-player-src';
 			this.player.appendChild(this.src);
 			
-			// Control for track-end
-			let me=this;
-			this.player.onended=function(){
-				me.play( (me.playIdx+1) % me.playlist.length );
+			// Control for track-end			
+			this.player.onended=()=>{
+				this.play( (this.playIdx+1) % this.playlist.length );
 			};
 		}
 	}
