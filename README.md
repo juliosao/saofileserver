@@ -15,6 +15,7 @@ Julio A. García López (juliosao@gmail.com)
 - Manage users
 - Play some video files (Depending on codec of video)
 - Play .mp3 and .ogg files (if browser supports)
+- Generate .m3u files
 - LGPL License
 - Icon theme:
     - Typicons - by Stephen Hutchings - https://www.iconfinder.com/iconsets/typicons-2
