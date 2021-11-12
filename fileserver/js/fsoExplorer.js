@@ -57,15 +57,17 @@ class fsoExplorer
 
 		view.addEventListener("dragover", fsoExplorer.cancel);
         view.addEventListener("dragenter", fsoExplorer.cancel);
-        view.addEventListener("drop", function(ev){
-			self.upload(ev)
+        view.addEventListener("drop", (ev)=>{
+			ev.preventDefault(ev);
+			ev.stopPropagation(ev);
+			var files = ev.dataTransfer.files;
+			this.upload(files);
 		} );
 		
 	}
 
 	createToolBar()
 	{
-		let self = this;
 		let toolBar = document.createElement('div');
 		toolBar.classList.add('w3-panel');
 
@@ -254,44 +256,36 @@ class fsoExplorer
 		}
 	}
 
-	async upload(e)
+	/**
+	 * Uploads a bunch of files to the server
+	 * @param {*} files Files field as input type=files returns
+	 */
+	async upload(files)
 	{
-		try
-		{
-			e.preventDefault();
-			e.stopPropagation();
+		this.progressBar.hidden=false;
+		this.progressBar.value=50;
+		this.progressBar.max=100;
+		this.progressBar.hidden=false;
+		this.progressBar.value=1;
 
-			this.progressBar.hidden=false;
-			this.progressBar.value=50;
-            this.progressBar.max=100;
-
-			var dt = e.dataTransfer;
-			var files = dt.files;
-
-			this.progressBar.hidden=false;
-			this.progressBar.value=1;
-
-			let self = this;
-			await this.dir.upload(files, function(loaded,total){
-				if(loaded>0 && total>0)
-				{
-					this.progressBar.max=total;
-					this.progressBar.value=loaded;
-				}
-				else
-				{
-					this.progressBar.pulsate();
-				}
-			});
-		}
-		catch(ex)
-		{
+		this.dir.upload(files, (loaded,total)=>{
+			if(loaded>0 && total>0)
+			{
+				this.progressBar.max=total;
+				this.progressBar.value=loaded;
+			}
+			else
+			{
+				this.progressBar.pulsate();
+			}
+		}).catch((ex)=>{
 			alert(""+ex);
-		}
-
-		this.progressBar.hidden=true;
-		this.refresh();
-		return false;
+		}).then(()=>{
+			this.progressBar.max=this.progressBar.value=100;
+		}).finally(()=>{
+			this.refresh();
+			this.progressBar.hidden=true;
+		});
 	}
 
 	goHome()
