@@ -21,7 +21,7 @@ class FileSystemObject {
 	 * \brief Constructor
 	 * \warning DO NOT use directly
 	*/
-    protected function __construct($path) 
+    protected function __construct($path)
     {
         if($path instanceof FileSystemObject)
             $this->path=$path->path;
@@ -99,6 +99,26 @@ class FileSystemObject {
         throw new MethodNotAllowedException();
     }
 
+    /**
+     * Returns FSO Exception
+     */
+    public function extension()
+    {
+        $name = basename($this->path);
+        $pos = strrpos($name,'.');
+        if($pos === false)
+             return '';
+        return substr($name,$pos+1);
+    }
+
+    /**
+     * Returns MIME type from FSO
+     */
+    public function mime()
+    {
+        return mime_content_type($this->path);
+    }
+
 
     public static function realPath($path)
     {
@@ -163,8 +183,8 @@ class FileSystemObject {
         }
     }
 
+
+
 }
 
 FileSystemObject::init();
-
-

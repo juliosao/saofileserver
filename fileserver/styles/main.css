@@ -2,6 +2,10 @@
 	display: flex;
 }
 
+.sfs-icon-list > li:hover{
+	background-color: rgba(0, 191, 255, 0.199);
+}
+
 .sfs-tools{
 	display: table-cell;
 	vertical-align: middle;

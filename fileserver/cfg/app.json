@@ -10,6 +10,6 @@
         "pass":"saofileserver"
     },
     "fso":{
-        "basedir":"/mnt/data/kodi"
+        "basedir":"/mnt/kodi/kodi"
     }
 }

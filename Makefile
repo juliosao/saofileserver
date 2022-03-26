@@ -2,7 +2,7 @@ TARGET=sao-file-server
 VERSION=0.7
 SECTION=Web Software
 ARCHITECTURE=all
-DEPENDS=apache2, php, php-common, php-json, mariadb-server
+DEPENDS=apache2, php, php-common, libapache2-mod-php, php-mysql, php-json, mariadb-server
 DESCRIPTION=SAO File server is a tiny web file server
 MAINTAINER=Julio A. Garcia Lopez
 MAIL=juliosao@gmail.com
@@ -57,7 +57,5 @@ deb: clean $(BUILDOUTPUT)
 	@echo Depends: $(DEPENDS) >> $(DEBCTRLFILE)
 	@echo Maintainer: $(MAINTAINER) $(MAIL)  >> $(DEBCTRLFILE)
 	@echo Description: $(DESCRIPTION)  >> $(DEBCTRLFILE)
-	
+
 	fakeroot dpkg-deb --build $(DEBTMPPATH)
-
-
