@@ -1,3 +1,6 @@
+import { fsoDir, fsoFile } from "./fso.js";
+import * as UI from "./ui.js";
+
 /**
  * Plugin interface:
  * fsoExplorer:
@@ -13,13 +16,14 @@
  *  .onRednderFile(src,file,toolbox) : Called after reder a file
  *  .onRednderDir(src,dir,toolbox) : Called after reder a file
  */
-class fsoExplorer  
+export class fsoExplorer  
 {
 	static setup()
 	{		
 		fsoExplorer.units = ['bytes','Kb','Mb','Gb','Tb','Pb','Eb'];
 		fsoExplorer.baseUnit = Math.log(1000);
 		fsoExplorer.controllers = [];
+		fsoExplorer.touchScreen = window.ontouchstart !== undefined;
 
 		let divs = document.getElementsByClassName('fso-explorer');
 		for(let i = 0; i<divs.length; i++)
@@ -47,7 +51,8 @@ class fsoExplorer
 		this.workSpace = document.createElement('div');	
 		this.workSpace.classList.add('w3-container');
 		this.view.appendChild(this.workSpace);
-		this.plugins=[];
+		this.selectedItems = [];
+		this.plugins=[];	
 
 		var self = this;
 		fsoDir.get('/').then(function (result){
@@ -89,6 +94,16 @@ class fsoExplorer
 		btn = document.createElement('button');
 		btn.classList.add('sfs-icon','fsoexplorer-folder-add','w3-button');
 		btn.onclick = (() => this.mkdir());
+		this.extraTools.appendChild(btn);
+
+		btn = document.createElement('button');
+		btn.classList.add('sfs-icon','fsoexplorer-upload','w3-button');
+		btn.onclick = (() => this.uploadFile());
+		this.extraTools.appendChild(btn);
+
+		btn = document.createElement('button');
+		btn.classList.add('sfs-icon','fsoexplorer-del','w3-button');
+		btn.onclick = () => this.deleteSelected();
 		this.extraTools.appendChild(btn);
 
 		btn = document.createElement('button');
@@ -143,86 +158,6 @@ class fsoExplorer
 		return td;
 	}
 
-	renderIcon(obj)
-	{	
-		let td = document.createElement('div');
-		td.classList.add('sfs-tools');
-
-		let img = document.createElement('div');
-		if( obj instanceof fsoDir )
-		{
-			img.classList.add('sfs-icon','folder');
-		}
-		else
-		{
-			img.classList.add('sfs-icon','file');
-			if(obj.extension!='')
-			{			
-				img.classList.add(obj.extension);
-			}
-		}
-		td.appendChild(img);
-		
-		return td;
-	}
-
-	renderName(obj)
-	{
-		let spn = document.createElement('div');
-		spn.classList.add('sfs-icon-name');
-		spn.appendChild(document.createTextNode(obj.name));
-		return spn;
-	}
-
-	renderDir(dir)
-	{
-		let row = document.createElement('li');
-		row.classList.add('w3-padding');
-		row.appendChild(this.renderIcon(dir));
-		row.appendChild(this.renderName(dir));
-
-		let toolcol = this.renderActions(dir);
-		row.appendChild(toolcol);
-
-		for(let i in this.plugins )
-		{
-			if( typeof this.plugins[i].onRenderDir !== 'undefined' )
-				typeof this.plugins[i].onRenderDir(this,toolcol,dir);
-		}
-
-		let self = this;
-		row.ondblclick=function(){
-			self.goto(dir);
-		};
-
-		return row;
-	}
-
-	renderFile(file)
-	{
-		let row = document.createElement('li');
-		row.classList.add('w3-padding');
-
-		
-		row.appendChild(this.renderIcon(file));
-		row.appendChild(this.renderName(file));
-
-		let toolcol = this.renderActions(file);
-		row.appendChild(toolcol);
-
-		for(let i in this.plugins )
-		{
-			if( typeof this.plugins[i].onRenderFile !== 'undefined' )
-				typeof this.plugins[i].onRenderFile(this,toolcol,file);
-		}
-
-		row.ondblclick=function(){
-			file.explore();
-		};
-
-		return row;
-	}
-
 	render()
 	{
 		this.setTitle("Contenido de "+this.dir.name);
@@ -240,11 +175,13 @@ class fsoExplorer
 
 		for(let i in this.dir.childDirs)
 		{
-			list.appendChild(this.renderDir(this.dir.childDirs[i]));
+			const elem = new fsoExplorerItem(this,this.dir.childDirs[i])
+			list.appendChild(elem.render());
 		}
 		for(let i in this.dir.childFiles)
 		{
-			list.appendChild(this.renderFile(this.dir.childFiles[i]));
+			const elem = new fsoExplorerItem(this,this.dir.childFiles[i])
+			list.appendChild(elem.render());
 		}
 
 		this.workSpace.appendChild(list);
@@ -253,7 +190,84 @@ class fsoExplorer
 		{
 			if( typeof this.plugins[i].onRender !== 'undefined' )
 				typeof this.plugins[i].onRender(this,this.dir);
+		}		
+	}
+
+	select(what, multiple)
+	{		
+		const pos = this.selectedItems.indexOf(what);
+
+		if(multiple == false)
+		{
+			while(this.selectedItems.length > 0)
+			{
+				const e = this.selectedItems[this.selectedItems.length-1];
+				this.selectedItems.pop();
+				e.setSelected(false);
+
+			}
+			
+			what.setSelected(pos<0);
+			if(pos<0)
+				this.selectedItems.push(what);
 		}
+		else
+		{			
+			if(pos>-1)
+			{
+				what.setSelected(false);
+				this.selectedItems.splice(pos,1);
+			}
+			else
+			{
+				what.setSelected(true);
+				this.selectedItems.push(what);
+			}
+		}
+	}
+
+	async deleteSelected()
+	{
+		const count = this.selectedItems.length;
+		if(count == 0)
+		{
+			alert("You need to select some items in order to remove them");
+			return;
+		}
+
+		if(!confirm("Are you sure to remove "+count+" items?"))
+		{
+			return;
+		}
+
+		this.progressBar.hidden = false;
+		this.progressBar.value = 0;
+		this.progressBar.max = count;
+		for(const elem of this.selectedItems)
+		{
+			try
+			{				
+				await elem.src.delete();				
+			}
+			catch(ex)
+			{
+				alert(ex);
+			}
+			this.progressBar.value++;
+		}
+		this.progressBar.hidden = true;
+		this.refresh();
+	}
+
+	uploadFile()
+	{
+		const input = document.createElement('input');
+		input.type = "file";
+		input.onchange = (ev)=>{
+			this.upload(input.files);
+		}
+
+		input.click();
 	}
 
 	/**
@@ -262,8 +276,6 @@ class fsoExplorer
 	 */
 	async upload(files)
 	{
-		this.progressBar.hidden=false;
-		this.progressBar.value=50;
 		this.progressBar.max=100;
 		this.progressBar.hidden=false;
 		this.progressBar.value=1;
@@ -366,8 +378,92 @@ class fsoExplorer
 		if(typeof plugin.start !== 'undefined')
 			plugin.start(this);
 	}
-
-	
 }
 
-window.addEventListener('load',fsoExplorer.setup);
+export class fsoExplorerItem
+{
+	constructor(explorer,src)
+	{
+		this.explorer = explorer;
+		this.src = src;
+		this.row = null;
+		this.selected = false;
+	}
+
+	setSelected(status)
+	{
+		if(status)
+			this.row.classList.add('fsoexplorer-selected');
+		else
+			this.row.classList.remove('fsoexplorer-selected');
+	}
+
+	getSelected()
+	{
+		return this.selected;
+	}
+
+	onclick(ev)
+	{
+		this.explorer.select(this,ev.ctrlKey);
+	}
+
+	getElement()
+	{
+		return this.src;
+	}
+
+	renderIcon()
+	{	
+		let td = document.createElement('div');
+		td.classList.add('sfs-tools');
+
+		let img = document.createElement('div');
+		if( this.src instanceof fsoDir )
+		{
+			img.classList.add('sfs-icon','folder');
+		}
+		else
+		{
+			img.classList.add('sfs-icon','file');
+			if(this.src.extension!='')
+			{			
+				img.classList.add(this.src.extension);
+			}
+		}
+		td.appendChild(img);
+		
+		return td;
+	}
+
+	renderName()
+	{
+		let spn = document.createElement('div');
+		spn.classList.add('sfs-icon-name');
+		spn.appendChild(document.createTextNode(this.src.name));
+		return spn;
+	}
+
+	render()
+	{
+		this.row = document.createElement('li');
+		this.row.classList.add('w3-padding');
+		this.row.appendChild(this.renderIcon());
+		this.row.appendChild(this.renderName());					
+		
+		this.row.onclick = (ev)=>this.onclick(ev);
+
+		if(this.src instanceof fsoDir)
+		{
+			this.row.ondblclick=()=>this.explorer.goto(this.src);
+		}
+		else
+		{
+			this.row.ondblclick=()=>this.src.explore()
+		};
+		
+		return this.row;
+	}
+}
+
+fsoExplorer.setup();

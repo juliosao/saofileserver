@@ -1,27 +1,21 @@
 <?php
 require_once('../../lib/Util.php');
-
-use app\Bundle;
-use app\HTMLApp;
-
-class Explorer extends HTMLApp
-{
-	function __construct()
-	{
-		parent::__construct();
-		$this->title = 'SAO-Explorer';
-		$this->scripts[] = 'js/fso.js';
-		$this->scripts[] = 'js/fsoExplorer.js';
-		$this->styles[] = 'styles/explorer.css';
-	}
-
-	function body($args)
-	{
 ?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>SFServer2</title>
+		<meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../../styles/w3.css">
+        <link rel="stylesheet" href="../../styles/main.css">
+		<link rel="stylesheet" href="../../styles/explorer.css">
+        <script type="module">
+			import {fsoExplorer} from '../../js/fsoExplorer.js';
+		</script>
+	</head>
+	<body>
 		<div id="explorer" class="fso-explorer" ></div>
-<?php
-	}
-}
-
-$app = new Explorer();
-$app->run();
+	</body>
+</html>

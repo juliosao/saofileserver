@@ -1,28 +1,16 @@
-<?php
-require_once('lib/Util.php');
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>SFServer2</title>
+		<meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="styles/w3.css">
+        <link rel="stylesheet" href="styles/main.css">
+        <script type="module">
+        import {App} from './js/app.js';
+        import {Auth} from './js/auth.js';
 
-use app\App;
-use app\HTMLApp;
-use auth\User;
-use database\Database;
-
-if(!User::created())
-{
-    error_log("Tenemos que hacer setup");
-    header('Location: '.App::getAppURL().Cfg::get()->app->setup,true,302);
-}
-
-class Main extends HTMLApp
-{
-    function __construct()
-    {
-        $this->scripts[]='js/auth.js';
-    }
-
-    function header($args)
-    {
-?>
-        <script type="text/javascript">
         async function login()
         {
             try
@@ -35,13 +23,11 @@ class Main extends HTMLApp
                 alert(""+ex);
             }
         }
-        </script>
-<?php
-    }
 
-    function body($args)
-    {
-?>
+        btnLogin.onclick=login;
+        </script>
+    </head>
+    <body>
         <div class="w3-animate-opacity w3-modal " style="display:block">
             <div class="w3-modal-content w3-padding w3-border w3-card">
                 <h1>Login</h1>
@@ -55,15 +41,11 @@ class Main extends HTMLApp
                         <input class="w3-input" type="password" id="pwd" />
                     </div>
                     <div class="w3-margin w3-center">
-                        <button class="w3-button w3-blue w3-row" onclick="login()" >Login</button>
+                        <button id="btnLogin" class="w3-button w3-blue w3-row" >Login</button>
                         <input type="reset" class="w3-button w3-row" />
                     </div>
                 </div>
             </div>
         </div>
-<?php
-    }
-}
-
-$m = new Main();
-$m->run();
+    </body>
+</html>

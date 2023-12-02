@@ -1,0 +1,44 @@
+.sfs-icon-list > li{
+	display: flex;
+}
+
+.sfs-icon-list > li:hover{
+	background-color: rgba(0, 191, 255, 0.199);
+}
+
+.sfs-tools{
+	display: table-cell;
+	vertical-align: middle;
+	flex-shrink: 0;
+}
+
+.sfs-icon-name{
+	display: table-cell;
+	word-wrap:break-word;
+	vertical-align: middle;
+	flex-grow: 1;
+	margin: auto 10px;
+}
+
+/* Icons in file explorer area */
+.sfs-icon{
+	display: table-cell;
+	background-repeat: no-repeat;
+	height:48px!important;
+	width:48px!important;
+	background-size: 100% 100%;
+}
+
+li.option{
+    list-style-type: disc;
+    list-style-position: inside;
+
+}
+
+li.option::before {
+    content: '';
+    display: inline-block;
+    height: 48px;
+    width: 48px;
+    background-image: url();
+}

@@ -1,4 +1,6 @@
-class Auth extends App
+import {App} from './app.js';
+
+export class Auth extends App
 {
     static async login(user,pass)
     {

@@ -37,8 +37,17 @@
 	background-image: url('toolbar/delete.svg');
 }
 
+.fsoexplorer-selected{
+	background-color: blue;
+	color:whitesmoke;
+}
+
 .fsoexplorer-folder-add{
 	background-image: url('toolbar/folder-add.svg');
+}
+
+.fsoexplorer-upload{
+	background-image: url('toolbar/upload.svg');
 }
 
 .fsoexplorer-home {

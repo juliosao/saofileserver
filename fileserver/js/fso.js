@@ -1,5 +1,6 @@
-//Constructor
-class fsoObj
+import {App} from './app.js';
+
+export class fsoObj
 {
 	constructor(data)
 	{
@@ -14,7 +15,7 @@ class fsoObj
 
 }
 
-class fsoDir extends fsoObj
+export class fsoDir extends fsoObj
 {
 	constructor(data)
 	{
@@ -95,7 +96,7 @@ class fsoDir extends fsoObj
 	}
 }
 
-class fsoFile extends fsoObj
+export class fsoFile extends fsoObj
 {
 	constructor(data)
 	{
