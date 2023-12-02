@@ -82,7 +82,7 @@ export class App
 
 	static setup()
 	{
-		App.appName = 'sfs2';		
+		App.appName = 'sfs';		
 		App.main = "views/explorer/index.php";
 		App.loginUrl = "index.php";
 
